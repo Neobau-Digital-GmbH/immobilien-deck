@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projekt-Deck — neubau.marketing</title>
+<script>
+// ════════════════════════════════════════════════════════════════════════
+//
+//  PROJEKT-KONFIGURATION
+//  ► Nur diesen Block anpassen — den Rest nie anfassen.
+//
+// ════════════════════════════════════════════════════════════════════════
+
+// GitHub Pages URL des Projekts (mit trailing slash)
+const BASE = 'https://neobau-digital-gmbh.github.io/immobilien-deck/';
+
+const PROJECT = {
+
+  // ── IDENTITÄT ──────────────────────────────────────────────────────
+  name:       "Kranoldplatz",
+  tagline:    "Substanz trifft Rendite.",
+  subTagline: "Berlin-Lichterfelde \u00b7 12 Eigentumswohnungen",
+  developer:     "BSK Immobilien GmbH",
+  developerLogo: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/logo.png",
+
+  // ── CI (OKLCH-Konverter: https://oklch.com) ────────────────────────
+  accent:    "oklch(0.45 0.22 28)",
+  accentHex: "#E2001A",
+
+  // ── ZIELGRUPPE ─────────────────────────────────────────────────────
+  audience:   "KA",   // "KA" = Kapitalanleger  |  "EN" = Eigennutzer
+  salutation: "Sie",
+
+  // ── PROJEKTDATEN ───────────────────────────────────────────────────
+  location:       "Berlin-Lichterfelde",
+  address:        "Kranoldstra\u00dfe, 12309 Berlin",
+  units:          12,
+  sizesFrom:      36,  sizesTo: 98,
+  rooms:          "1\u20133 Zimmer",
+  priceFrom:      325000,  priceTo: 650000,
+  energyStandard: "KfW\u00a040",
+  completionDate: "Q3\u00a02026",
+  availableUnits: 6,
+
+  // ── BILDER ─────────────────────────────────────────────────────────
+  images: {
+    cover:      "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/cover.jpg",
+    rendering1: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/r1.jpg",
+    rendering2: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/r2.jpg",
+    rendering3: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/r3.jpg",
+    floorplan1: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/fp1.jpg",
+    floorplan2: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/fp2.jpg",
+    mapStatic:  "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/map.jpg",
+  },
+  mapEmbedUrl: "https://www.google.com/maps/embed?pb=PLACEHOLDER",
+
+  // ── LAGE ───────────────────────────────────────────────────────────
+  locationFacts: {
+    transit:   "S-Bahnhof Lichterfelde Ost \u00b7 3 Min. zu Fu\u00df",
+    city:      "Berlin-Mitte \u00b7 25 Min. mit der S-Bahn",
+    shopping:  "Vollsortimenter, Apotheke, Caf\u00e9s im Kiez",
+    schools:   "3 Grundschulen, 2 Gymnasien \u00b7 Umkreis 1\u00a0km",
+    employers: "Teltow Tech-Park, Siemens-Campus, Bundesbeh\u00f6rden",
+    green:     "Parkanlage Lichterfelde \u00b7 5 Min. zu Fu\u00df",
+  },
+
+  // ── KAPITALANLEGER ─────────────────────────────────────────────────
+  ka: {
+    rentPerSqm: 14.50, grossYield: 4.2, netYield: 3.6,
+    multiplier: 24.8,  vacancyRate: 1.2,
+    populationGrowth: "+1,8\u00a0% p.\u202fa.",
+    afaDegressiv: 5, afaSpezial: 5, buildingShare: 85,
+    kfwProgram: "KfW\u00a0297/298", kfwLoan: 100000,
+    kfwRate: 2.85, marketRate: 3.80,
+    usps: [
+      "Neubau au\u00dferhalb der Mietpreisbremse",
+      "KfW\u00a040 \u2014 maximale AfA-Kombination nutzbar",
+      "Struktureller Wohnraummangel sichert Vermietbarkeit",
+    ],
+  },
+
+  // ── EIGENNUTZER ────────────────────────────────────────────────────
+  en: {
+    localRentPerSqm: 16.50, heatingCostNew: 1.20, heatingCostOld: 3.80,
+    usps: [
+      "Barrierearme Grundrisse f\u00fcr alle Lebensphasen",
+      "Tiefgarage, Aufzug, Fahrradkeller inklusive",
+      "Erstbezug \u2014 Ihre Wohnung, keine fremde Geschichte",
+    ],
+  },
+
+  // ── WOHNUNGSTYPEN ──────────────────────────────────────────────────
+  unitTypes: [
+    { type:"1-Zimmer", sqm:"36\u201342\u00a0m\u00b2", priceFrom:"325.000", priceTo:"360.000", available:2, features:["Balkon","Tageslichtbad","Aufzug"], floorplan:null },
+    { type:"2-Zimmer", sqm:"55\u201368\u00a0m\u00b2", priceFrom:"420.000", priceTo:"490.000", available:3, features:["Balkon/Loggia","Offene K\u00fcche","Aufzug"], floorplan:null },
+    { type:"3-Zimmer", sqm:"75\u201398\u00a0m\u00b2", priceFrom:"530.000", priceTo:"650.000", available:1, features:["Terrasse","2 B\u00e4der","Aufzug"], floorplan:null },
+  ],
+
+  // ── BAUTR\u00c4GER ────────────────────────────────────────────────────────
+  developerFacts: {
+    founded:"1998", projects:23, units:487, warranty:"5 Jahre",
+    references: [
+      { name:"Referenz A", location:"Berlin-Mitte",  units:24, year:"2023", image:"" },
+      { name:"Referenz B", location:"Potsdam",       units:16, year:"2022", image:"" },
+      { name:"Referenz C", location:"Berlin-Pankow", units:31, year:"2024", image:"" },
+    ],
+  },
+
+  // ── N\u00c4CHSTE SCHRITTE ────────────────────────────────────────────────
+  nextSteps: {
+    reservationFee:"2.500", reservationDuration:"14 Tage",
+    notaryTimeline:"4\u20138 Wochen nach Reservierung",
+    contactName:"Alex Heigl", contactTitle:"Sales Manager",
+    contactPhone:"+49\u00a0151\u00a0290\u00a042\u00a0396",
+    contactEmail:"alex@neubau.marketing",
+    bookingUrl:"https://meetings.zoho.eu/PLACEHOLDER",
+    contactPhoto:"",
+  },
+};
+
+// Theme sofort anwenden
+document.documentElement.style.setProperty('--accent',     PROJECT.accent);
+document.documentElement.style.setProperty('--accent-hex', PROJECT.accentHex);
+// ════════════════════════════════════════════════════════════════════════
+</script>
+<style>
+:root {
+  --bg:         oklch(0.98 0.005 85);
+  --surface:    oklch(0.995 0.003 85);
+  --ink:        oklch(0.18 0.02 250);
+  --ink-muted:  oklch(0.48 0.02 250);
+  --ink-subtle: oklch(0.72 0.01 250);
+  --border:     oklch(0.88 0.01 85);
+  --accent:     oklch(0.55 0.13 160);
+  --font:       "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius:     20px;
+  --shadow-card: 0 2px 8px oklch(0.2 0.02 250 / 0.06),
+                 0 12px 32px oklch(0.2 0.02 250 / 0.08),
+                 0 24px 48px oklch(0.2 0.02 250 / 0.04);
+  --shadow-sm:   0 1px 2px oklch(0.2 0.02 250 / 0.05),
+                 0 4px 12px oklch(0.2 0.02 250 / 0.07);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100vw; height:100vh; overflow:hidden;
+  background:var(--bg); font-family:var(--font);
+  -webkit-font-smoothing:antialiased; color:var(--ink);
+}
+
+/* ── SLIDES ──────────────────────────────────────────────── */
+#pres-wrap { position:fixed; inset:0; }
+.slide-frame {
+  position:absolute; inset:0; width:100%; height:100%;
+  border:none; opacity:0; pointer-events:none;
+  transition:opacity 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.slide-frame.active { opacity:1; pointer-events:all; }
+
+/* ── SIDEBAR NAV ─────────────────────────────────────────── */
+#slide-nav {
+  position:fixed; left:0; top:50%; transform:translateY(-50%);
+  z-index:60; display:flex; align-items:center;
+  opacity:0; transition:opacity 0.4s;
+}
+#slide-nav.ready { opacity:1; }
+
+/* Der schmale Streifen — immer sichtbar */
+#nav-rail {
+  display:flex; flex-direction:column; align-items:center;
+  gap:7px; padding:14px 10px;
+  cursor:pointer;
+}
+.nav-dot {
+  width:4px; height:4px; border-radius:50%;
+  background:var(--ink-subtle); flex-shrink:0;
+  transition:background 0.25s, transform 0.25s, height 0.25s;
+}
+.nav-dot.active {
+  background:var(--accent);
+  height:16px; border-radius:2px;
+}
+
+/* Das Panel — via JS gesteuert (JS-Timeout verhindert Flackern) */
+#nav-panel {
+  position:absolute; left:28px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:6px 0;
+  box-shadow:var(--shadow-card);
+  min-width:190px;
+  opacity:0; transform:translateX(-6px);
+  pointer-events:none;
+  transition:opacity 0.18s cubic-bezier(0.4,0,0.2,1),
+             transform 0.18s cubic-bezier(0.4,0,0.2,1);
+  white-space:nowrap;
+}
+#nav-panel.open {
+  opacity:1; transform:translateX(0);
+  pointer-events:all;
+}
+
+.nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:7px 14px; cursor:pointer;
+  transition:background 0.15s;
+  border-radius:8px; margin:0 4px;
+}
+.nav-item:hover { background:oklch(0.94 0.005 85); }
+.nav-item.active { background:oklch(from var(--accent) l c h / 0.08); }
+.nav-item.active .nav-item-num { color:var(--accent); }
+.nav-item.active .nav-item-label { color:var(--ink); font-weight:600; }
+
+.nav-item-num {
+  font-size:10px; font-weight:700; letter-spacing:0.06em;
+  color:var(--ink-subtle); min-width:18px; text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+.nav-item-label {
+  font-size:12px; font-weight:400; color:var(--ink-muted);
+  line-height:1.3;
+}
+
+/* Separator im Panel */
+.nav-sep {
+  height:1px; background:var(--border);
+  margin:4px 12px;
+}
+
+/* ── NEXT BUTTON (rechts, subtil) ────────────────────────── */
+#btn-next {
+  position:fixed; right:20px; top:50%; transform:translateY(-50%);
+  z-index:60; width:36px; height:36px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:50%; color:var(--ink-muted); font-size:14px;
+  cursor:pointer; opacity:0; pointer-events:none;
+  box-shadow:var(--shadow-sm);
+  transition:opacity 0.3s, background 0.2s, color 0.2s,
+             transform 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s;
+}
+#btn-next.ready { opacity:1; pointer-events:all; }
+#btn-next.hidden { opacity:0 !important; pointer-events:none !important; }
+#btn-next:hover {
+  background:var(--accent); border-color:transparent; color:#fff;
+  box-shadow:0 4px 16px oklch(from var(--accent) l c h / 0.35);
+  transform:translateY(-50%) scale(1.08);
+}
+
+/* ── INTRO SCREEN ────────────────────────────────────────── */
+#init-screen {
+  position:fixed; inset:0; z-index:200; background:var(--bg);
+  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px, transparent 1.2px);
+  background-size:30px 30px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  transition:opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+#init-screen::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 90% 80% at 50% 50%, var(--bg) 35%, transparent 100%);
+}
+#init-screen.fade-out { opacity:0; pointer-events:none; }
+.i-logo {
+  position:relative; z-index:1;
+  height:clamp(30px,3.2vh,50px); width:auto; object-fit:contain;
+  opacity:0; animation:iUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;
+}
+.i-name {
+  position:relative; z-index:1; text-align:center;
+  font-size:clamp(2.4rem,6vw,6rem); font-weight:900;
+  letter-spacing:-0.03em; line-height:1.0; color:var(--ink);
+  margin-top:clamp(18px,2.8vh,32px);
+  opacity:0; animation:iUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.4s forwards;
+}
+.i-line {
+  position:relative; z-index:1;
+  width:clamp(28px,4vw,52px); height:3px; border-radius:3px; background:var(--accent);
+  margin:clamp(12px,2vh,24px) 0 clamp(10px,1.6vh,18px);
+  opacity:0; animation:iFade 0.5s ease 0.8s forwards;
+}
+.i-tagline {
+  position:relative; z-index:1; text-align:center;
+  font-size:clamp(1rem,1.4vw,1.4rem); font-weight:400; color:var(--ink);
+  opacity:0; animation:iFade 0.5s ease 0.95s forwards;
+}
+.i-sub {
+  position:relative; z-index:1; text-align:center;
+  font-size:clamp(0.65rem,0.78vw,0.88rem); font-weight:500;
+  letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted);
+  margin-top:5px;
+  opacity:0; animation:iFade 0.5s ease 1.05s forwards;
+}
+.i-facts {
+  position:relative; z-index:1;
+  display:flex; gap:clamp(16px,2.8vw,48px); align-items:center;
+  margin-top:clamp(16px,2.8vh,32px);
+  opacity:0; animation:iFade 0.5s ease 1.2s forwards;
+}
+.i-fact { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.i-fv { font-size:clamp(0.8rem,0.95vw,1.02rem); font-weight:700; color:var(--ink); }
+.i-fl { font-size:clamp(0.55rem,0.62vw,0.7rem); font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-subtle); }
+.i-sep { width:1px; height:22px; background:var(--border); }
+.i-bar-wrap {
+  position:relative; z-index:1;
+  width:clamp(90px,13vw,170px); height:2px;
+  background:var(--border); border-radius:2px; overflow:hidden;
+  margin-top:clamp(22px,3.5vh,40px); transition:opacity 0.4s;
+}
+.i-bar { height:100%; width:0; background:var(--accent); border-radius:2px; transition:width 0.2s; }
+#btn-start {
+  position:relative; z-index:1;
+  margin-top:clamp(12px,2vh,24px);
+  padding:clamp(11px,1.3vh,16px) clamp(26px,2.8vw,46px);
+  border-radius:50px; background:var(--accent); border:none; color:#fff;
+  font-family:var(--font); font-size:clamp(12px,1vw,15px);
+  font-weight:700; letter-spacing:0.04em; cursor:pointer;
+  display:none; align-items:center; gap:9px;
+  box-shadow:0 4px 24px oklch(from var(--accent) l c h / 0.30);
+  transition:transform 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s;
+}
+#btn-start:hover {
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 8px 36px oklch(from var(--accent) l c h / 0.45);
+}
+#btn-start:active { transform:scale(0.98); }
+#btn-start.show { display:flex; animation:iUp 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+.i-brand {
+  position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
+  z-index:201; font-size:clamp(10px,0.74vw,12px); font-weight:700;
+  letter-spacing:0.06em; color:var(--ink-subtle);
+  opacity:0; animation:iFade 0.5s ease 1.5s forwards;
+}
+.i-brand span { color:var(--accent); }
+@keyframes iUp   { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
+@keyframes iFade { from{opacity:0}to{opacity:1} }
+@media (prefers-reduced-motion:reduce) {
+  .i-logo,.i-name,.i-line,.i-tagline,.i-sub,.i-facts,.i-brand{animation:none;opacity:1}
+  #btn-start.show{animation:none} .slide-frame{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div id="pres-wrap"></div>
+
+<!-- Sidebar Navigation -->
+<nav id="slide-nav">
+  <div id="nav-rail"></div>
+  <div id="nav-panel"></div>
+</nav>
+
+<!-- Next Button -->
+<button id="btn-next" class="hidden">&#8594;</button>
+
+<!-- Intro Screen -->
+<div id="init-screen">
+  <img  class="i-logo" id="iLogo" src="" alt="">
+  <div  class="i-name"    id="iName"></div>
+  <div  class="i-line"></div>
+  <div  class="i-tagline" id="iTagline"></div>
+  <div  class="i-sub"     id="iSub"></div>
+  <div  class="i-facts"   id="iFacts"></div>
+  <div  class="i-bar-wrap" id="iBarW"><div class="i-bar" id="iBar"></div></div>
+  <button id="btn-start">&#9654; Pr&#228;sentation starten</button>
+</div>
+<div class="i-brand">neubau<span>.</span>marketing</div>
+
+<script>
+// ── SLIDE-DEFINITIONEN ───────────────────────────────────────────
+// { url, label } — label erscheint im Sidebar-Menü
+const SLIDES_KA = [
+  { url:'slide_01.html',     label:'Cover' },
+  { url:'slide_02.html',     label:'Markt 2026' },
+  { url:'slide_03.html',     label:'Standort' },
+  { url:'slide_04.html',     label:'Das Projekt' },
+  { url:'slide_05.html',     label:'Grundrisse' },
+  { url:'slide_06_ka.html',  label:'Renditerechner' },
+  { url:'slide_07_ka.html',  label:'Steuervorteile' },
+  { url:'slide_08.html',     label:'KfW-F\u00f6rderung' },
+  { url:'slide_09.html',     label:'Bautr\u00e4ger' },
+  { url:'slide_10.html',     label:'N\u00e4chste Schritte' },
+];
+const SLIDES_EN = [
+  { url:'slide_01.html',     label:'Cover' },
+  { url:'slide_02_en.html',  label:'Das Leben hier' },
+  { url:'slide_03.html',     label:'Standort' },
+  { url:'slide_04.html',     label:'Das Projekt' },
+  { url:'slide_05.html',     label:'Grundrisse' },
+  { url:'slide_06_en.html',  label:'Miete vs. Kaufen' },
+  { url:'slide_07_en.html',  label:'Energie & Zukunft' },
+  { url:'slide_09.html',     label:'Bautr\u00e4ger' },
+  { url:'slide_10.html',     label:'N\u00e4chste Schritte' },
+];
+const SLIDES = PROJECT.audience === 'EN' ? SLIDES_EN : SLIDES_KA;
+
+// ── INTRO BEFÜLLEN ──────────────────────────────────────────────
+document.getElementById('iLogo').src    = PROJECT.developerLogo;
+document.getElementById('iLogo').alt    = PROJECT.developer;
+document.getElementById('iName').textContent    = PROJECT.name;
+document.getElementById('iTagline').textContent = PROJECT.tagline;
+document.getElementById('iSub').textContent     = PROJECT.subTagline;
+document.title = PROJECT.name + ' \u2014 neubau.marketing';
+
+const fEl = document.getElementById('iFacts');
+[
+  { v:PROJECT.units+'\u00a0WE',          l:'Einheiten' },
+  { v:PROJECT.energyStandard,             l:'Standard' },
+  { v:'ab\u00a0'+(PROJECT.priceFrom/1000).toLocaleString('de')+'\u00a0T\u20ac', l:'Kaufpreis' },
+  { v:PROJECT.completionDate,             l:'Erstbezug' },
+].forEach((f,i)=>{
+  if(i) fEl.insertAdjacentHTML('beforeend','<div class="i-sep"></div>');
+  fEl.insertAdjacentHTML('beforeend',
+    `<div class="i-fact"><div class="i-fv">${f.v}</div><div class="i-fl">${f.l}</div></div>`);
+});
+
+// ── ENGINE ──────────────────────────────────────────────────────
+let cur=0, busy=false, rdy=false, frames=[];
+const wrap   = document.getElementById('pres-wrap');
+const navEl  = document.getElementById('slide-nav');
+const rail   = document.getElementById('nav-rail');
+const panel  = document.getElementById('nav-panel');
+const bNext  = document.getElementById('btn-next');
+const iSc    = document.getElementById('init-screen');
+const iBar   = document.getElementById('iBar');
+const iBarW  = document.getElementById('iBarW');
+const bStart = document.getElementById('btn-start');
+
+// Sidebar aufbauen
+SLIDES.forEach((s,i)=>{
+  // Dot
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot' + (i===0?' active':'');
+  rail.appendChild(dot);
+
+  // Trennlinie vor "Nächste Schritte" (letzte Slide)
+  if(i === SLIDES.length-1) {
+    panel.insertAdjacentHTML('beforeend','<div class="nav-sep"></div>');
+  }
+
+  // Panel-Eintrag
+  const item = document.createElement('div');
+  item.className = 'nav-item' + (i===0?' active':'');
+  item.innerHTML =
+    `<span class="nav-item-num">${String(i+1).padStart(2,'0')}</span>` +
+    `<span class="nav-item-label">${s.label}</span>`;
+  item.addEventListener('click', ()=>rdy && goTo(i));
+  panel.appendChild(item);
+});
+
+// Iframes + postMessage
+let lc=0;
+SLIDES.forEach((s,i)=>{
+  const f = document.createElement('iframe');
+  f.className = 'slide-frame' + (i===0?' active':'');
+  f.src = BASE + s.url;
+  f.onload = ()=>{
+    // PROJECT per postMessage an Slide senden
+    try {
+      f.contentWindow.postMessage({ type:'PROJECT_DATA', data:PROJECT }, '*');
+    } catch(e){}
+    lc++;
+    iBar.style.width = Math.round(lc/SLIDES.length*100)+'%';
+    if(lc === SLIDES.length){
+      rdy=true; iBarW.style.opacity='0';
+      setTimeout(()=>bStart.classList.add('show'), 350);
+    }
+  };
+  wrap.appendChild(f);
+  frames.push(f);
+});
+
+// Start
+bStart.addEventListener('click',()=>{
+  iSc.classList.add('fade-out');
+  setTimeout(()=>iSc.remove(), 700);
+  navEl.classList.add('ready');
+  bNext.classList.remove('hidden'); bNext.classList.add('ready');
+  ui();
+});
+
+function ui(){
+  // Dots + Panel-Items updaten
+  rail.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===cur));
+  panel.querySelectorAll('.nav-item').forEach((d,i)=>d.classList.toggle('active',i===cur));
+  bNext.classList.toggle('hidden', cur===SLIDES.length-1);
+}
+
+function goTo(i){
+  if(i<0||i>=SLIDES.length||i===cur||busy)return;
+  busy=true;
+  frames[cur].style.opacity='0'; frames[cur].style.pointerEvents='none';
+  setTimeout(()=>{
+    frames[cur].classList.remove('active');
+    frames[i].classList.add('active');
+    frames[i].style.opacity='1'; frames[i].style.pointerEvents='all';
+    // PROJECT erneut senden (falls Slide neu geladen)
+    try { frames[i].contentWindow.postMessage({type:'PROJECT_DATA',data:PROJECT},'*'); } catch(e){}
+    cur=i; ui();
+    setTimeout(()=>busy=false, 400);
+  },50);
+}
+
+document.addEventListener('keydown',e=>{
+  if(!rdy)return;
+  if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault();goTo(cur+1);}
+  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();goTo(cur-1);}
+  if(e.key==='Home'){e.preventDefault();goTo(0);}
+  if(e.key==='End'){e.preventDefault();goTo(SLIDES.length-1);}
+});
+bNext.addEventListener('click',()=>goTo(cur+1));
+
+// SIDEBAR HOVER — JS-Timeout verhindert Flackern beim Mauswechsel zwischen Rail und Panel
+let navCloseTimer = null;
+function openNav()  { clearTimeout(navCloseTimer); panel.classList.add('open'); }
+function closeNav() { navCloseTimer = setTimeout(()=>panel.classList.remove('open'), 350); }
+navEl.addEventListener('mouseenter', openNav);
+navEl.addEventListener('mouseleave', closeNav);
+panel.addEventListener('mouseenter', openNav);
+panel.addEventListener('mouseleave', closeNav);
+</script>
+</body>
+</html>
