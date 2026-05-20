@@ -26,9 +26,31 @@ const PROJECT = {
   developer:     "BSK Immobilien GmbH",
   developerLogo: "https://www.bsk-immobilien.de/images/bsk-immobilien_berliner-sparkasse-immobilien_logo.svg",
 
-  // ── 2. CI ────────────────────────────────────────────────────────────
+  // ── 2. CI & TYPOGRAFIE ──────────────────────────────────────────────
+  // Farben
   accent:    "oklch(0.45 0.22 28)",
   accentHex: "#E2001A",
+
+  // Schriften, Logos, Typografie-Skala
+  // Änderung hier wirkt auf alle Slides automatisch
+  ui: {
+    fontSans:   "'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    fontMono:   "ui-monospace, 'SFMono-Regular', Menlo, monospace",
+    logoIndex:  "clamp(40px, 4.5vh, 66px)",    // Intro-Screen-Logo
+    logoHeader: "clamp(22px, 2.6vh, 38px)",    // Slide-Header-Logo
+    // Typografie-Skala → CSS-Variablen --fs-* auf allen Slides
+    type: {
+      eyebrow:  "clamp(9px, 0.75vw, 11px)",      // Labels, uppercase
+      headline: "clamp(1.5rem, 2.5vw, 3rem)",    // Slide-Headline
+      subline:  "clamp(0.9rem, 1.1vw, 1.25rem)", // Subheadline / Intro
+      body:     "clamp(0.85rem, 1vw, 1.12rem)",  // Fließtext
+      label:    "clamp(9px, 0.72vw, 11px)",      // Kachel-Labels
+      kpiLg:    "clamp(1.8rem, 3.2vw, 3.8rem)",  // Große KPI-Zahlen
+      kpiSm:    "clamp(1.1rem, 1.9vw, 2.2rem)",  // Mittlere KPI-Zahlen
+      mono:     "clamp(11px, 0.95vw, 14px)",     // Mono klein
+      monoLg:   "clamp(1.3rem, 2.1vw, 2.6rem)",  // Mono groß (Hero)
+    },
+  },
 
   // ── 3. ZIELGRUPPE & ANSPRACHE ────────────────────────────────────────
   audience:   "KA",   // "KA" | "EN"
@@ -291,6 +313,20 @@ const PROJECT = {
 // Theme sofort anwenden
 document.documentElement.style.setProperty('--accent',     PROJECT.accent);
 document.documentElement.style.setProperty('--accent-hex', PROJECT.accentHex);
+// UI-Tokens anwenden (Index-eigene Elemente)
+if (PROJECT.ui) {
+  const r = document.documentElement;
+  const u = PROJECT.ui;
+  if (u.fontSans)    r.style.setProperty('--font',      u.fontSans);
+  if (u.fontMono)    r.style.setProperty('--font-mono', u.fontMono);
+  if (u.logoIndex)   r.style.setProperty('--logo-index',  u.logoIndex);
+  if (u.logoHeader)  r.style.setProperty('--logo-header', u.logoHeader);
+  if (u.type) {
+    Object.entries(u.type).forEach(([k,v]) =>
+      r.style.setProperty('--fs-' + k, v)
+    );
+  }
+}
 // ════════════════════════════════════════════════════════════════════════
 </script>
 <style>
@@ -337,7 +373,7 @@ html, body {
 /* Der schmale Streifen — immer sichtbar */
 #nav-rail {
   display:flex; flex-direction:column; align-items:center;
-  gap:7px; padding:14px 10px;
+  gap:7px; padding:14px 14px 14px 10px;
   cursor:pointer;
 }
 .nav-dot {
@@ -352,7 +388,7 @@ html, body {
 
 /* Das Panel — via JS gesteuert (JS-Timeout verhindert Flackern) */
 #nav-panel {
-  position:absolute; left:28px;
+  position:absolute; left:14px;
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:14px;
@@ -432,7 +468,7 @@ html, body {
 #init-screen.fade-out { opacity:0; pointer-events:none; }
 .i-logo {
   position:relative; z-index:1;
-  height:clamp(40px,4.5vh,66px); width:auto; object-fit:contain;
+  height:var(--logo-index, clamp(40px,4.5vh,66px)); width:auto; object-fit:contain;
   opacity:0; animation:iUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;
 }
 .i-name {
@@ -618,7 +654,7 @@ SLIDES.forEach((s,i)=>{
   f.onload = ()=>{
     // PROJECT per postMessage an Slide senden
     try {
-      f.contentWindow.postMessage({ type:'PROJECT_DATA', data:PROJECT }, '*');
+      f.contentWindow.postMessage({ type:'PROJECT_DATA', data:PROJECT, ui:PROJECT.ui }, '*');
     } catch(e){}
     lc++;
     iBar.style.width = Math.round(lc/SLIDES.length*100)+'%';
@@ -656,7 +692,7 @@ function goTo(i){
     frames[i].classList.add('active');
     frames[i].style.opacity='1'; frames[i].style.pointerEvents='all';
     // PROJECT erneut senden (falls Slide neu geladen)
-    try { frames[i].contentWindow.postMessage({type:'PROJECT_DATA',data:PROJECT},'*'); } catch(e){}
+    try { frames[i].contentWindow.postMessage({type:'PROJECT_DATA',data:PROJECT,ui:PROJECT.ui},'*'); } catch(e){}
     cur=i; ui();
     setTimeout(()=>busy=false, 400);
   },50);
