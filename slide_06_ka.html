@@ -211,7 +211,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
 .ws-btn:not(.active):hover{background:oklch(from var(--accent) l c h/.1);color:var(--accent)}
 
 /* Waterfall */
-.waterfall{flex:1;min-height:0;background:var(--surface);border:1px solid var(--border);
+.waterfall{flex-shrink:0;background:var(--surface);border:1px solid var(--border);
   border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
 .wr{display:flex;align-items:center;justify-content:space-between;
   padding:clamp(5px,.8vh,9px) clamp(12px,1.3vw,18px);
@@ -248,12 +248,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
   text-transform:uppercase;color:var(--subtle)}
 
 /* Ab-Jahr-5 Trigger */
-.j5-trigger{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+/* Ab-Jahr-5 Wrapper — eine Border, ein Radius, wie Waterfall */
+.j5-wrap{flex-shrink:0;border:1px solid var(--border);border-radius:14px;
+  overflow:hidden}
+/* Trigger: kein eigener Rahmen */
+.j5-trigger{display:flex;align-items:center;justify-content:space-between;
   padding:clamp(6px,.9vh,10px) clamp(12px,1.3vw,18px);
-  background:oklch(0.965 0.005 85);border:1px solid var(--border);border-radius:12px;
-  cursor:pointer;transition:border-color .2s,background .15s}
-.j5-trigger:hover{border-color:oklch(from var(--accent) l c h/.4);
-  background:oklch(from var(--accent) 0.98 0.01 h)}
+  background:oklch(0.965 0.005 85);
+  cursor:pointer;transition:background .15s}
+.j5-trigger:hover{background:oklch(from var(--accent) 0.97 0.012 h)}
 .j5-title{font-size:var(--fs-label);font-weight:700;letter-spacing:.14em;
   text-transform:uppercase;color:var(--muted)}
 .j5-arrow{font-size:10px;color:var(--subtle);transition:transform .25s;flex-shrink:0}
@@ -261,8 +264,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
 .j5-panel{max-height:0;overflow:hidden;
   transition:max-height .4s cubic-bezier(.4,0,.2,1);flex-shrink:0}
 .j5-inner{padding:0;display:flex;flex-direction:column;gap:0;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:0 0 12px 12px;border-top:none;overflow:hidden}
+  border-top:1px solid var(--border);overflow:hidden}
 .j5-hdr{padding:clamp(5px,.7vh,8px) clamp(12px,1.3vw,18px);
   background:oklch(0.965 0.004 85);border-bottom:1px solid var(--border)}
 .j5-note{font-size:clamp(8px,.62vw,10px);color:var(--muted);line-height:1.45}
@@ -287,14 +289,65 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
 .kpi-row{animation:up .6s cubic-bezier(.22,1,.36,1) .34s both}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;opacity:1!important;transform:none!important}}
 
+/* Print-Header (nur im Druck sichtbar) */
+.print-header{display:none}
+
 @media print{
   html,body{overflow:visible;height:auto;width:auto}
   .slide{display:block;height:auto}
   .col-left{display:none}
-  .col-right{display:block;padding:20px;height:auto}
-  .fin-panel,.j5-trigger,.ws-toggle,.print-btn{display:none}
-  .j5-panel{max-height:none!important}
-  @page{margin:1.5cm}
+  .col-right{display:block;padding:0;height:auto}
+  .fin-panel,.ws-toggle,.print-btn{display:none}
+  .j5-panel{max-height:none!important;overflow:visible!important}
+  .j5-trigger{cursor:default;pointer-events:none;background:none;
+    border-color:transparent;padding:8px 0}
+  .j5-arrow{display:none}
+  @page{margin:1.8cm}
+
+  /* Print-Header */
+  .print-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding-bottom:14px;margin-bottom:20px;
+    border-bottom:2px solid #ddd;page-break-inside:avoid
+  }
+  .print-header img{height:36px;width:auto;object-fit:contain}
+  .print-header-right{
+    display:flex;flex-direction:column;align-items:flex-end;gap:2px
+  }
+  .print-header-title{
+    font-size:13px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;color:#2c313c
+  }
+  .print-header-unit{
+    font-size:11px;color:#888;font-weight:400
+  }
+
+  /* Calc-Header */
+  .calc-hdr{margin-bottom:12px!important}
+
+  /* Hero */
+  .hero-block{margin-bottom:18px;border:1.5px solid #ddd;page-break-inside:avoid}
+  .hero-val{font-size:2.8rem!important}
+
+  /* Waterfall */
+  .waterfall{margin-bottom:18px;border:1.5px solid #ddd;
+    page-break-inside:avoid;border-radius:8px}
+  .wr{padding:9px 16px!important}
+  .wr.sub{padding-top:6px!important;padding-bottom:6px!important}
+
+  /* KPI */
+  .kpi-row{gap:10px!important;margin-bottom:16px;page-break-inside:avoid}
+  .kpi{padding:9px 12px!important;border:1.5px solid #ddd!important;border-radius:8px}
+  .kpi-v{font-size:13px!important}
+
+  /* Ab Jahr 5 → immer Seite 2 */
+  .j5-wrap{page-break-before:always;border:1.5px solid #ddd;border-radius:8px;
+    margin-bottom:16px;overflow:visible!important}
+  .j5-inner{border-top:1px solid #ddd;overflow:visible!important}
+
+  /* Disclaimer */
+  .disclaimer{border:1px solid #ddd;padding:8px 14px!important;
+    border-radius:6px;margin-top:12px}
 }
 </style>
 </head>
@@ -454,6 +507,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
     </div>
   </div>
 
+  <!-- Print-Header (nur im Druck) -->
+  <div class="print-header" id="printHeader">
+    <img id="printLogo" src="" alt="">
+    <div class="print-header-right">
+      <span class="print-header-title">Renditerechner &#x2014; Musterrechnung</span>
+      <span class="print-header-unit" id="printUnit"></span>
+    </div>
+  </div>
+
   <!-- RECHTS -->
   <div class="col-right">
 
@@ -560,12 +622,13 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
     </div>
 
     <!-- Ab Jahr 5 -->
-    <div class="j5-trigger" id="j5Trigger">
-      <span class="j5-title">Ab Jahr 5 &#8212; nach Sonder-AfA &#9660;</span>
-      <span class="j5-arrow" id="j5Arrow">&#9660;</span>
-    </div>
-    <div class="j5-panel" id="j5Panel">
-      <div class="j5-inner">
+    <div class="j5-wrap" id="j5Wrap">
+      <div class="j5-trigger" id="j5Trigger">
+        <span class="j5-title">Ab Jahr 5 &#8212; nach Sonder-AfA &#9660;</span>
+        <span class="j5-arrow" id="j5Arrow">&#9660;</span>
+      </div>
+      <div class="j5-panel" id="j5Panel">
+        <div class="j5-inner">
         <div class="j5-hdr">
           <span class="j5-note" id="j5Note">&#8212;</span>
         </div>
@@ -603,6 +666,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
           <span class="wl b">EK-Rendite p.a. (ohne WS)</span>
           <span class="wv" id="j5-ekR">&#8212;</span>
         </div>
+      </div>
       </div>
     </div>
 
@@ -898,7 +962,9 @@ $('j5Trigger').addEventListener('click', () => {
 
 // ── EVENT LISTENERS ───────────────────────────────────────────
 $('unitName').addEventListener('input', () => {
-  $('calcBadge').textContent = $('unitName').value || '\u2014';
+  const v = $('unitName').value || '\u2014';
+  $('calcBadge').textContent = v;
+  $('printUnit').textContent = v;
 });
 
 $('kaufpreisIn').addEventListener('blur', e => {
@@ -957,6 +1023,9 @@ function applyProject(proj) {
   $('devLogo').src = P.developerLogo || '';
   $('devLogo').alt = P.developer     || '';
   $('address').textContent = P.address || '';
+  // Print-Header
+  $('printLogo').src = P.developerLogo || '';
+  $('printLogo').alt = P.developer     || '';
 
   const ka = P.ka || {};
 
