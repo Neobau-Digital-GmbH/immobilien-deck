@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Das Leben hier</title>
+<style>
+:root {
+  --bg:       oklch(0.98 0.005 85);
+  --surface:  oklch(0.995 0.003 85);
+  --ink:      oklch(0.18 0.02 250);
+  --muted:    oklch(0.45 0.02 250);
+  --subtle:   oklch(0.65 0.01 250);
+  --border:   oklch(0.88 0.01 85);
+  --accent:   oklch(0.55 0.13 160);
+  --font:     "Roboto", system-ui, -apple-system, sans-serif;
+  --mono:     ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --logo-header:  clamp(22px, 2.6vh, 38px);
+  --pad-v:        clamp(24px, 3.5vh, 48px);
+  --pad-h:        clamp(28px, 3.5vw, 56px);
+  --header-gap:   clamp(20px, 3.5vh, 44px);
+  --content-gap:  clamp(8px, 1.2vh, 16px);
+  --fs-eyebrow:   clamp(9px, 0.75vw, 11px);
+  --fs-headline:  clamp(1.5rem, 2.5vw, 3rem);
+  --fs-subline:   clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:      clamp(0.85rem, 1vw, 1.12rem);
+  --fs-label:     clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:     clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:     clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:      clamp(11px, 0.95vw, 14px);
+  --fs-monoLg:    clamp(1.3rem, 2.1vw, 2.6rem);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100vw; height:100vh; overflow:hidden; background:var(--bg); font-family:var(--font); -webkit-font-smoothing:antialiased; color:var(--ink); }
+.slide { display:grid; grid-template-columns:38fr 62fr; width:100vw; height:100vh; }
+
+.col-left {
+  display:flex; flex-direction:column;
+  padding:var(--pad-v) var(--pad-h);
+  position:relative; overflow:hidden; border-right:1px solid var(--border);
+}
+.col-left::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px, transparent 1.2px);
+  background-size:28px 28px;
+  mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
+  -webkit-mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
+}
+.col-left::after { content:''; position:absolute; left:0; top:20%; bottom:20%; width:3px; border-radius:0 3px 3px 0; background:var(--accent); opacity:.5; }
+
+.header { position:relative; z-index:1; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--header-gap); }
+.dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
+.slide-label { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
+
+.content { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; gap:var(--content-gap); min-height:0; }
+.eyebrow { display:flex; align-items:center; gap:8px; flex-shrink:0; font-size:var(--fs-eyebrow); font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); }
+.eyebrow::before { content:''; width:clamp(14px,1.6vw,22px); height:2px; background:var(--accent); border-radius:2px; flex-shrink:0; }
+.headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0; }
+.subline  { font-size:var(--fs-subline);  font-weight:400; color:var(--muted); line-height:1.6; flex-shrink:0; }
+
+/* USP-Liste */
+.usp-list { display:flex; flex-direction:column; gap:clamp(7px,1vh,12px); }
+.usp-item {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:clamp(10px,1.3vh,16px) clamp(12px,1.2vw,16px);
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+}
+.usp-check {
+  flex-shrink:0; width:clamp(18px,1.7vw,22px); height:clamp(18px,1.7vw,22px);
+  background:oklch(from var(--accent) l c h / .1);
+  border:1px solid oklch(from var(--accent) l c h / .25);
+  border-radius:50%; display:flex; align-items:center; justify-content:center; margin-top:1px;
+}
+.usp-check svg { width:58%; height:58%; stroke:var(--accent); stroke-width:2.5; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.usp-text { font-size:var(--fs-body); font-weight:500; color:var(--ink); line-height:1.4; }
+
+.footer-left { position:relative; z-index:1; flex-shrink:0; margin-top:clamp(12px,2vh,24px); padding-top:clamp(10px,1.5vh,18px); border-top:1px solid var(--border); }
+.address { font-size:var(--fs-label); color:var(--subtle); }
+
+/* RECHTS: Lifestyle Bento 2×3 */
+.col-right {
+  display:flex; flex-direction:column; padding:var(--pad-v) var(--pad-h);
+  gap:clamp(10px,1.6vh,20px); justify-content:center;
+}
+.bento-grid { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr 1fr; gap:clamp(8px,1.1vh,14px); flex:1; max-height:clamp(340px,60vh,560px); }
+.bento-card {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:clamp(6px,.9vh,10px); text-align:center;
+  padding:clamp(12px,1.5vh,20px) clamp(12px,1.3vw,18px);
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  position:relative; overflow:hidden;
+}
+.bento-card.accent { background:oklch(from var(--accent) 0.98 0.01 h); border-color:oklch(from var(--accent) l c h / .25); }
+.bento-card::before { content:''; position:absolute; top:0; left:10%; right:10%; height:1px; background:linear-gradient(90deg,transparent,oklch(0.84 0.005 85),transparent); }
+.bento-card.accent::before { background:linear-gradient(90deg,transparent,oklch(from var(--accent) l c h / .3),transparent); }
+.bento-icon { width:clamp(24px,2.4vw,34px); height:clamp(24px,2.4vw,34px); flex-shrink:0; }
+.bento-icon svg { width:100%; height:100%; stroke:var(--accent); stroke-width:1.6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.bento-val { font-family:var(--mono); font-size:var(--fs-kpiSm); font-weight:900; color:var(--ink); line-height:1; font-variant-numeric:tabular-nums; }
+.bento-card.accent .bento-val { color:var(--accent); }
+.bento-lbl { font-size:var(--fs-label); font-weight:500; color:var(--muted); line-height:1.3; }
+
+@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+@keyframes fade { from{opacity:0} to{opacity:1} }
+.header      { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
+.eyebrow     { animation:up   .55s cubic-bezier(.22,1,.36,1) .12s both }
+.headline    { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
+.subline     { animation:up   .55s cubic-bezier(.22,1,.36,1) .28s both }
+.usp-list    { animation:up   .55s cubic-bezier(.22,1,.36,1) .34s both }
+.footer-left { animation:fade .4s  ease                       .50s both }
+.bento-grid  { animation:up   .65s cubic-bezier(.22,1,.36,1) .22s both }
+@media(prefers-reduced-motion:reduce){*{animation:none!important;opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="col-left">
+    <div class="header">
+      <img class="dev-logo" id="devLogo" src="" alt="">
+      <span class="slide-label">Wohnlage</span>
+    </div>
+    <div class="content">
+      <div class="eyebrow" id="eyebrow">Das Leben hier</div>
+      <h2 class="headline" id="headline">&#8212;</h2>
+      <p  class="subline"  id="subline">&#8212;</p>
+      <div class="usp-list" id="uspList"></div>
+    </div>
+    <div class="footer-left"><span class="address" id="address">&#8212;</span></div>
+  </div>
+  <div class="col-right">
+    <div class="bento-grid" id="bentoGrid"></div>
+  </div>
+</div>
+<script>
+function applyUITokens(ui) {
+  if (!ui) return;
+  const r = document.documentElement;
+  if (ui.fontSans)   r.style.setProperty('--font',        ui.fontSans);
+  if (ui.fontMono)   r.style.setProperty('--font-mono',   ui.fontMono);
+  if (ui.logoHeader) r.style.setProperty('--logo-header', ui.logoHeader);
+  if (ui.type) Object.entries(ui.type).forEach(([k, v]) => r.style.setProperty('--fs-' + k, v));
+}
+
+const ICONS = {
+  transit:   '<path d="M8 2h8l2 4H6L8 2z"/><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 18v3M16 18v3M9 12h6"/>',
+  city:      '<rect x="3" y="3" width="7" height="18"/><rect x="14" y="8" width="7" height="13"/><path d="M3 21h18"/>',
+  shopping:  '<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>',
+  schools:   '<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
+  employers: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2M12 12v4M10 14h4"/>',
+  green:     '<path d="M12 22V8"/><path d="M5 12C5 7 9 3 12 3s7 4 7 9c0 5-7 10-7 10S5 17 5 12z"/>',
+};
+const CATS = [
+  {key:'transit',l:'Anbindung'},{key:'city',l:'Innenstadt'},
+  {key:'shopping',l:'Nahversorgung'},{key:'schools',l:'Bildung'},
+  {key:'employers',l:'Wirtschaft'},{key:'green',l:'Naherholung'},
+];
+
+function applyProject(P) {
+  const r = document.documentElement;
+  if (P.accent)    r.style.setProperty('--accent', P.accent);
+  if (P.accentHex) r.style.setProperty('--accent-hex', P.accentHex);
+  const $ = id => document.getElementById(id);
+  $('devLogo').src = P.developerLogo||''; $('devLogo').alt = P.developer||'';
+  $('address').textContent = P.address||'';
+  $('eyebrow').textContent = 'Das Leben in ' + (P.location||'');
+  $('headline').textContent = P.en?.headline || '';
+  $('subline').textContent  = P.en?.intro    || '';
+
+  // USPs
+  const uspEl = $('uspList');
+  uspEl.innerHTML = '';
+  (P.en?.usps||[]).forEach(u => {
+    const item = document.createElement('div');
+    item.className = 'usp-item';
+    item.innerHTML =
+      '<div class="usp-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>' +
+      '<span class="usp-text">' + u + '</span>';
+    uspEl.appendChild(item);
+  });
+
+  // Bento aus locationFacts
+  const lf   = P.locationFacts || {};
+  const grid = $('bentoGrid');
+  grid.innerHTML = '';
+  CATS.forEach((c, i) => {
+    if (!lf[c.key]) return;
+    const card = document.createElement('div');
+    card.className = 'bento-card' + (i === 0 ? ' accent' : '');
+    card.innerHTML =
+      '<div class="bento-icon"><svg viewBox="0 0 24 24">' + (ICONS[c.key]||'') + '</svg></div>' +
+      '<div class="bento-val">' + lf[c.key].split('\u00b7')[0].trim() + '</div>' +
+      '<div class="bento-lbl">' + c.l + '</div>';
+    grid.appendChild(card);
+  });
+}
+
+try { if (window.parent?.PROJECT) { applyProject(window.parent.PROJECT); applyUITokens(window.parent.PROJECT?.ui); }} catch(e) {}
+window.addEventListener('message', e => {
+  if (e.data?.type === 'PROJECT_DATA') { applyProject(e.data.data); applyUITokens(e.data.ui); }
+});
+</script>
+</body>
+</html>
