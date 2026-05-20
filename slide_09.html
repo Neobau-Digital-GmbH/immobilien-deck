@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bauträger &amp; Vertrauen</title>
+<title>Bauträger & Vertrauen</title>
 <style>
 :root {
   --bg:       oklch(0.98 0.005 85);
@@ -38,7 +38,7 @@ html, body {
 }
 .slide { display:grid; grid-template-columns:40fr 60fr; width:100vw; height:100vh; }
 
-/* ── LINKE SPALTE ─────────────────────────────────────────── */
+/* ── LINKE SPALTE: Intro ──────────────────────────────────── */
 .col-left {
   display:flex; flex-direction:column;
   padding:var(--pad-v) var(--pad-h);
@@ -57,7 +57,6 @@ html, body {
   width:3px; border-radius:0 3px 3px 0; background:var(--accent); opacity:.5;
 }
 
-/* HEADER — nur einmal Logo */
 .header {
   position:relative; z-index:1; flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between;
@@ -66,7 +65,6 @@ html, body {
 .dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
 .slide-label { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
 
-/* CONTENT */
 .content {
   position:relative; z-index:1;
   flex:1; display:flex; flex-direction:column;
@@ -84,7 +82,52 @@ html, body {
 .headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0; }
 .subline  { font-size:var(--fs-subline);  font-weight:400; color:var(--muted); line-height:1.6; flex-shrink:0; }
 
-/* Bento-Grid: 4 KPI-Kacheln — visuell stark */
+/* Teambild 16:9 */
+.team-photo-wrap {
+  flex-shrink:0; width:100%; aspect-ratio:16/9;
+  border-radius:12px; overflow:hidden;
+  border:1px solid var(--border);
+  background:oklch(0.92 0.01 250);
+  display:none;
+}
+.team-photo-wrap img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
+
+/* Zertifizierungen */
+.certs { display:flex; flex-wrap:wrap; gap:7px; flex-shrink:0; }
+.cert-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:clamp(4px,.6vh,7px) clamp(8px,.9vw,12px);
+  background:var(--surface); border:1px solid var(--border); border-radius:50px;
+}
+.cert-badge svg { width:12px; height:12px; stroke:var(--accent); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+.cert-badge span { font-size:var(--fs-label); font-weight:600; color:var(--muted); }
+
+.footer-left {
+  position:relative; z-index:1; flex-shrink:0;
+  margin-top:clamp(12px,2vh,24px); padding-top:clamp(10px,1.5vh,18px);
+  border-top:1px solid var(--border);
+}
+.address { font-size:var(--fs-label); color:var(--subtle); }
+
+/* ── RECHTE SPALTE: Stats + Referenzen ───────────────────── */
+.col-right {
+  display:flex; flex-direction:column;
+  padding:var(--pad-v) var(--pad-h);
+  gap:clamp(12px, 1.8vh, 24px);
+}
+
+/* Sektion-Trenner */
+.section-hdr {
+  flex-shrink:0; display:flex; align-items:center; gap:10px;
+}
+.section-title {
+  font-size:var(--fs-label); font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--subtle);
+  white-space:nowrap;
+}
+.section-line { flex:1; height:1px; background:var(--border); }
+
+/* Stats Bento 2×2 */
 .stats-bento {
   display:grid; grid-template-columns:1fr 1fr;
   gap:clamp(7px,1vh,12px); flex-shrink:0;
@@ -108,19 +151,16 @@ html, body {
 .stat-tile.accent::before {
   background:linear-gradient(90deg, transparent, oklch(from var(--accent) l c h / .4), transparent);
 }
-/* Icon oben in jeder Kachel */
 .stat-icon {
   width:clamp(28px,3vw,40px); height:clamp(28px,3vw,40px);
   display:flex; align-items:center; justify-content:center; flex-shrink:0;
   background:oklch(from var(--accent) l c h / .1);
-  border:1px solid oklch(from var(--accent) l c h / .2);
-  border-radius:10px;
+  border:1px solid oklch(from var(--accent) l c h / .2); border-radius:10px;
 }
 .stat-icon svg { width:55%; height:55%; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
 .stat-v {
   font-family:var(--mono); font-size:var(--fs-kpiSm); font-weight:900;
-  letter-spacing:-.02em; color:var(--ink); line-height:1;
-  font-variant-numeric:tabular-nums;
+  letter-spacing:-.02em; color:var(--ink); line-height:1; font-variant-numeric:tabular-nums;
 }
 .stat-tile.accent .stat-v { color:var(--accent); }
 .stat-l {
@@ -128,77 +168,20 @@ html, body {
   letter-spacing:.09em; text-transform:uppercase; color:var(--subtle);
 }
 
-/* Teambild */
-.team-photo-wrap {
-  flex-shrink:0;
-  border-radius:12px; overflow:hidden;
-  width:100%;
-  aspect-ratio:16/9;            /* immer 16:9, egal welche Bildgröße */
-  border:1px solid var(--border);
-  background:oklch(0.92 0.01 250);
-  display:none;
-}
-.team-photo-wrap img {
-  width:100%; height:100%; object-fit:cover; object-position:center top; display:block;
-}
-
-/* Zertifizierungen */
-.certs { display:flex; flex-wrap:wrap; gap:7px; flex-shrink:0; }
-.cert-badge {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:clamp(4px,.6vh,7px) clamp(8px,.9vw,12px);
-  background:var(--surface); border:1px solid var(--border); border-radius:50px;
-}
-.cert-badge svg { width:12px; height:12px; stroke:var(--accent); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
-.cert-badge span { font-size:var(--fs-label); font-weight:600; color:var(--muted); }
-
-/* FOOTER */
-.footer-left {
-  position:relative; z-index:1; flex-shrink:0;
-  margin-top:clamp(12px,2vh,24px); padding-top:clamp(10px,1.5vh,18px);
-  border-top:1px solid var(--border);
-}
-.address { font-size:var(--fs-label); color:var(--subtle); }
-
-/* ── RECHTE SPALTE: REFERENZPROJEKTE ─────────────────────── */
-.col-right {
-  display:flex; flex-direction:column;
-  padding:var(--pad-v) var(--pad-h);
-  gap:clamp(10px,1.6vh,20px);
-}
-.right-header {
-  flex-shrink:0; display:flex; align-items:center; justify-content:space-between;
-}
-.right-title { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
-.warranty-badge {
-  display:flex; align-items:center; gap:6px;
-  padding:clamp(5px,.7vh,8px) clamp(10px,1.1vw,16px);
-  background:oklch(from var(--accent) 0.97 0.02 h);
-  border:1px solid oklch(from var(--accent) l c h / .25); border-radius:50px;
-}
-.warranty-badge svg { width:13px; height:13px; stroke:var(--accent); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
-.warranty-txt { font-size:var(--fs-label); font-weight:700; color:var(--ink); }
-.warranty-val { font-size:var(--fs-label); font-weight:900; color:var(--accent); }
-
-/* Referenzkarten */
+/* Referenzkarten Bento */
 .ref-cards {
   flex:1; min-height:0;
   display:grid;
   grid-template-columns:1.4fr 1fr;
   grid-template-rows:1fr 1fr;
   gap:clamp(8px,1vw,14px);
-  max-height:clamp(300px, 57vh, 540px);
 }
-/* Erstes Referenzprojekt als Hero-Kachel: volle Höhe links */
-.ref-card:first-child {
-  grid-row:1 / 3;
-}
+.ref-card:first-child { grid-row:1 / 3; }
+
 .ref-card {
-  flex:1; min-width:0;
   position:relative; border-radius:16px; overflow:hidden;
   display:flex; flex-direction:column; justify-content:flex-end;
 }
-/* Gradient-Platzhalter je Karte */
 .ref-card:nth-child(1) .ref-ph { background:linear-gradient(160deg, oklch(0.78 0.06 70)  0%, oklch(0.64 0.08 50)  100%); }
 .ref-card:nth-child(2) .ref-ph { background:linear-gradient(160deg, oklch(0.74 0.05 215) 0%, oklch(0.62 0.08 225) 100%); }
 .ref-card:nth-child(3) .ref-ph { background:linear-gradient(160deg, oklch(0.76 0.06 155) 0%, oklch(0.62 0.08 165) 100%); }
@@ -207,28 +190,17 @@ html, body {
   position:absolute; inset:0;
   display:flex; align-items:center; justify-content:center;
 }
-.ref-ph svg {
-  width:clamp(28px,3.5vw,48px); height:clamp(28px,3.5vw,48px);
-  stroke:oklch(1 0 0 / .22); stroke-width:1; fill:none;
-  stroke-linecap:round; stroke-linejoin:round;
-}
-.ref-img {
-  position:absolute; inset:0; width:100%; height:100%;
-  object-fit:cover; object-position:center; display:block;
-}
+.ref-ph svg { width:clamp(28px,3.5vw,48px); height:clamp(28px,3.5vw,48px); stroke:oklch(1 0 0 / .22); stroke-width:1; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.ref-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
 .ref-overlay {
   position:absolute; inset:0;
-  background:linear-gradient(to top,
-    oklch(0.12 0.02 250 / .82) 0%,
-    oklch(0.12 0.02 250 / .28) 45%,
-    transparent 72%);
+  background:linear-gradient(to top, oklch(0.12 0.02 250 / .82) 0%, oklch(0.12 0.02 250 / .28) 45%, transparent 72%);
 }
 .ref-year {
   position:absolute; top:clamp(10px,1.5vh,16px); right:clamp(10px,1.2vw,16px);
   padding:2px 9px; border-radius:50px;
   background:oklch(0.995 0 0 / .88);
-  backdrop-filter:blur(12px) saturate(180%);
-  -webkit-backdrop-filter:blur(12px) saturate(180%);
+  backdrop-filter:blur(12px) saturate(180%); -webkit-backdrop-filter:blur(12px) saturate(180%);
   font-size:var(--fs-label); font-weight:700; color:var(--ink);
   border:1px solid oklch(1 0 0 / .4);
 }
@@ -238,11 +210,8 @@ html, body {
   display:flex; flex-direction:column; gap:3px;
 }
 .ref-name     { font-size:var(--fs-body); font-weight:900; color:#fff; line-height:1.2; }
-.ref-location {
-  font-size:var(--fs-label); font-weight:400;
-  color:oklch(1 0 0 / .7); display:flex; align-items:center; gap:4px;
-}
-.ref-location svg { width:10px; height:10px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+.ref-location { font-size:var(--fs-label); color:oklch(1 0 0 / .7); display:flex; align-items:center; gap:4px; }
+.ref-location svg { width:10px; height:10px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; flex-shrink:0; }
 .ref-units {
   display:inline-flex; align-items:center; gap:4px; margin-top:4px;
   padding:2px 8px; border-radius:50px; align-self:flex-start;
@@ -250,20 +219,19 @@ html, body {
   font-size:var(--fs-label); font-weight:700; color:#fff;
 }
 
-/* ── ANIMATIONEN ─────────────────────────────────────────── */
+/* ── ANIMATIONEN ──────────────────────────────────────────── */
 @keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 @keyframes fade { from{opacity:0} to{opacity:1} }
 
-.header       { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
-.eyebrow      { animation:up   .55s cubic-bezier(.22,1,.36,1) .12s both }
-.headline     { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
-.subline      { animation:up   .55s cubic-bezier(.22,1,.36,1) .28s both }
-.team-photo-wrap { animation:up .5s cubic-bezier(.22,1,.36,1) .32s both }
-.stats-bento  { animation:up   .55s cubic-bezier(.22,1,.36,1) .38s both }
-.certs        { animation:up   .55s cubic-bezier(.22,1,.36,1) .40s both }
-.footer-left  { animation:fade .4s  ease                       .50s both }
-.right-header { animation:fade .4s  ease                       .15s both }
-.ref-cards    { animation:up   .7s  cubic-bezier(.22,1,.36,1) .22s both }
+.header          { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
+.eyebrow         { animation:up   .55s cubic-bezier(.22,1,.36,1) .12s both }
+.headline        { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
+.subline         { animation:up   .55s cubic-bezier(.22,1,.36,1) .28s both }
+.team-photo-wrap { animation:up   .55s cubic-bezier(.22,1,.36,1) .34s both }
+.certs           { animation:up   .5s  cubic-bezier(.22,1,.36,1) .40s both }
+.footer-left     { animation:fade .4s  ease                       .50s both }
+.stats-bento     { animation:up   .6s  cubic-bezier(.22,1,.36,1) .18s both }
+.ref-cards       { animation:up   .7s  cubic-bezier(.22,1,.36,1) .28s both }
 
 @media (prefers-reduced-motion:reduce) {
   * { animation:none !important; opacity:1 !important; transform:none !important }
@@ -273,7 +241,7 @@ html, body {
 <body>
 <div class="slide">
 
-  <!-- LINKS -->
+  <!-- LINKS: Intro -->
   <div class="col-left">
     <div class="header">
       <img class="dev-logo" id="devLogo" src="" alt="">
@@ -283,24 +251,27 @@ html, body {
       <div class="eyebrow">Track Record</div>
       <h2 class="headline" id="headline">&#8212;</h2>
       <p  class="subline"  id="subline">&#8212;</p>
-      <div class="team-photo-wrap" id="teamPhotoWrap"><img id="teamPhotoImg" src="" alt="Team"></div>
-      <div class="stats-bento" id="statsBento"></div>
-      <div class="certs"       id="certs"></div>
+      <div class="team-photo-wrap" id="teamPhotoWrap">
+        <img id="teamPhotoImg" src="" alt="Team">
+      </div>
+      <div class="certs" id="certs"></div>
     </div>
     <div class="footer-left">
       <span class="address" id="address">&#8212;</span>
     </div>
   </div>
 
-  <!-- RECHTS -->
+  <!-- RECHTS: Stats + Referenzen -->
   <div class="col-right">
-    <div class="right-header">
-      <span class="right-title">Referenzprojekte</span>
-      <div class="warranty-badge">
-        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span class="warranty-txt">Gew&#228;hrleistung</span>
-        <span class="warranty-val" id="warrantyVal">&#8212;</span>
-      </div>
+    <div class="section-hdr">
+      <span class="section-title">Kennzahlen</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="stats-bento" id="statsBento"></div>
+
+    <div class="section-hdr">
+      <span class="section-title">Referenzprojekte</span>
+      <div class="section-line"></div>
     </div>
     <div class="ref-cards" id="refCards"></div>
   </div>
@@ -318,6 +289,13 @@ function applyUITokens(ui) {
   );
 }
 
+const STAT_ICONS = [
+  '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
+  '<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>',
+  '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>',
+];
+
 function applyProject(P) {
   const r = document.documentElement;
   if (P.accent)    r.style.setProperty('--accent',     P.accent);
@@ -330,10 +308,8 @@ function applyProject(P) {
 
   const df = P.developerFacts || {};
 
-  // Headline = Developer-Name, Subline = Beschreibung
-  $('headline').textContent = P.developer || '';
+  $('headline').textContent = P.developer    || '';
   $('subline').textContent  = df.description || '';
-  $('warrantyVal').textContent = df.warranty || '\u2014';
 
   // Teambild
   if (df.teamPhoto) {
@@ -341,23 +317,30 @@ function applyProject(P) {
     $('teamPhotoWrap').style.display = 'block';
   }
 
-  // Stats-Bento 2×2
+  // Zertifizierungen
+  const certsEl = $('certs');
+  certsEl.innerHTML = '';
+  (df.certifications || []).forEach(c => {
+    const badge = document.createElement('div');
+    badge.className = 'cert-badge';
+    badge.innerHTML =
+      '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' +
+      '<span>' + c + '</span>';
+    certsEl.appendChild(badge);
+  });
+
+  // Stats Bento: Gewährleistung → Teammitglieder
   const founded = df.founded
     ? (new Date().getFullYear() - parseInt(df.founded)) + '\u00a0J.'
     : (df.founded || '\u2014');
+
   const bento = $('statsBento');
   bento.innerHTML = '';
-  const STAT_ICONS = [
-    '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
-    '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    '<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>',
-    '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
-  ];
   [
-    { v:founded,                    l:'Erfahrung', accent:true },
-    { v:(df.projects||'\u2014')+'', l:'Projekte' },
-    { v:(df.units||'\u2014')+'',    l:'Wohneinheiten' },
-    { v: df.warranty || '\u2014',   l:'Gew\u00e4hrleistung' },
+    { v: founded,                                      l: 'Erfahrung',     accent: true },
+    { v: (df.projects || '\u2014') + '',               l: 'Projekte' },
+    { v: (df.units    || '\u2014') + '',               l: 'Wohneinheiten' },
+    { v: (df.teamMembers || '\u2014') + '',             l: 'Teammitglieder' },
   ].forEach((s, i) => {
     const d = document.createElement('div');
     d.className = 'stat-tile' + (s.accent ? ' accent' : '');
@@ -368,25 +351,13 @@ function applyProject(P) {
     bento.appendChild(d);
   });
 
-  // Zertifizierungen
-  const certsEl = $('certs');
-  certsEl.innerHTML = '';
-  (df.certifications||[]).forEach(c => {
-    const badge = document.createElement('div');
-    badge.className = 'cert-badge';
-    badge.innerHTML =
-      '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' +
-      '<span>' + c + '</span>';
-    certsEl.appendChild(badge);
-  });
-
   // Referenzkarten
   const refs = $('refCards');
   refs.innerHTML = '';
-  const references = (df.references||[]).slice(0,3);
+  const references = (df.references || []).slice(0, 3);
 
   for (let i = 0; i < 3; i++) {
-    const ref = references[i];
+    const ref  = references[i];
     const card = document.createElement('div');
     card.className = 'ref-card';
 
@@ -400,7 +371,7 @@ function applyProject(P) {
     if (ref?.image) {
       const img = document.createElement('img');
       img.className = 'ref-img';
-      img.src = ref.image; img.alt = ref.name||''; img.loading = 'lazy';
+      img.src = ref.image; img.alt = ref.name || ''; img.loading = 'lazy';
       card.appendChild(img);
     }
 
@@ -411,20 +382,21 @@ function applyProject(P) {
     if (ref?.year) {
       const yr = document.createElement('div');
       yr.className = 'ref-year';
-      yr.textContent = 'Fertiggestellt ' + ref.year;
+      yr.textContent = ref.year;
       card.appendChild(yr);
     }
 
     const cnt = document.createElement('div');
     cnt.className = 'ref-content';
     cnt.innerHTML =
-      '<div class="ref-name">'     + (ref?.name     || 'Referenzprojekt')           + '</div>' +
+      '<div class="ref-name">' + (ref?.name || 'Referenzprojekt') + '</div>' +
       (ref?.location
-        ? '<div class="ref-location"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' + ref.location + '</div>'
+        ? '<div class="ref-location">' +
+            '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>' +
+            '<circle cx="12" cy="10" r="3"/></svg>' + ref.location + '</div>'
         : '') +
       (ref?.units
-        ? '<div class="ref-units">' + ref.units + '\u00a0Einheiten</div>'
-        : '');
+        ? '<div class="ref-units">' + ref.units + '\u00a0WE</div>' : '');
     card.appendChild(cnt);
     refs.appendChild(card);
   }
