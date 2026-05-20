@@ -6,16 +6,30 @@
 <title>Nächste Schritte</title>
 <style>
 :root {
-  --bg:      oklch(0.98 0.005 85);
-  --surface: oklch(0.995 0.003 85);
-  --ink:     oklch(0.18 0.02 250);
-  --muted:   oklch(0.50 0.02 250);
-  --subtle:  oklch(0.70 0.01 250);
-  --border:  oklch(0.88 0.01 85);
-  --accent:  oklch(0.55 0.13 160);
-  --pos:     oklch(0.48 0.15 155);
-  --font:    "Roboto", system-ui, -apple-system, sans-serif;
-  --mono:    ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --bg:       oklch(0.98 0.005 85);
+  --surface:  oklch(0.995 0.003 85);
+  --ink:      oklch(0.18 0.02 250);
+  --muted:    oklch(0.45 0.02 250);
+  --subtle:   oklch(0.65 0.01 250);
+  --border:   oklch(0.88 0.01 85);
+  --accent:   oklch(0.55 0.13 160);
+  --pos:      oklch(0.46 0.14 155);
+  --font:     "Roboto", system-ui, -apple-system, sans-serif;
+  --mono:     ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --logo-header:  clamp(22px, 2.6vh, 38px);
+  --pad-v:        clamp(24px, 3.5vh, 48px);
+  --pad-h:        clamp(28px, 3.5vw, 56px);
+  --header-gap:   clamp(20px, 3.5vh, 44px);
+  --content-gap:  clamp(8px, 1.2vh, 16px);
+  --fs-eyebrow:   clamp(9px, 0.75vw, 11px);
+  --fs-headline:  clamp(1.5rem, 2.5vw, 3rem);
+  --fs-subline:   clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:      clamp(0.85rem, 1vw, 1.12rem);
+  --fs-label:     clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:     clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:     clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:      clamp(11px, 0.95vw, 14px);
+  --fs-monoLg:    clamp(1.3rem, 2.1vw, 2.6rem);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html, body {
@@ -23,108 +37,96 @@ html, body {
   background:var(--bg); font-family:var(--font);
   -webkit-font-smoothing:antialiased; color:var(--ink);
 }
-.slide {
-  display:grid; grid-template-columns:46fr 54fr;
-  width:100vw; height:100vh;
-}
+.slide { display:grid; grid-template-columns:46fr 54fr; width:100vw; height:100vh; }
 
-/* ── LINKS — PROZESS ────────────────────────────────────────── */
+/* ── LINKE SPALTE ─────────────────────────────────────────── */
 .col-left {
   display:flex; flex-direction:column;
-  padding:clamp(24px,3.5vh,48px) clamp(24px,3vw,48px);
+  padding:var(--pad-v) var(--pad-h);
   position:relative; overflow:hidden;
   border-right:1px solid var(--border);
 }
 .col-left::before {
   content:''; position:absolute; inset:0; pointer-events:none;
-  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px);
+  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px, transparent 1.2px);
   background-size:28px 28px;
-  mask-image:linear-gradient(160deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 55%);
-  -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 55%);
+  mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
+  -webkit-mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
 }
 .col-left::after {
   content:''; position:absolute; left:0; top:20%; bottom:20%;
-  width:3px; border-radius:0 3px 3px 0;
-  background:var(--accent); opacity:.5;
+  width:3px; border-radius:0 3px 3px 0; background:var(--accent); opacity:.5;
 }
 
+/* HEADER */
 .header {
   position:relative; z-index:1; flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:clamp(16px,2.8vh,36px);
+  margin-bottom:var(--header-gap);
 }
-.dev-logo  { height:clamp(22px,2.6vh,38px); width:auto; object-fit:contain; }
-.slide-num { font-size:clamp(9px,.72vw,11px); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
+.dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
+.slide-label { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
 
-/* Intro */
-.intro { position:relative; z-index:1; flex-shrink:0; margin-bottom:clamp(16px,2.8vh,36px); }
+/* CONTENT */
+.content {
+  position:relative; z-index:1;
+  flex:1; display:flex; flex-direction:column;
+  gap:var(--content-gap); min-height:0;
+}
 .eyebrow {
-  display:flex; align-items:center; gap:8px; margin-bottom:8px;
-  font-size:clamp(9px,.75vw,12px); font-weight:700;
+  display:flex; align-items:center; gap:8px; flex-shrink:0;
+  font-size:var(--fs-eyebrow); font-weight:700;
   letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
 }
 .eyebrow::before {
   content:''; width:clamp(14px,1.6vw,22px); height:2px;
   background:var(--accent); border-radius:2px; flex-shrink:0;
 }
-.headline {
-  font-size:clamp(1.4rem,2.4vw,2.9rem); font-weight:900;
-  letter-spacing:-.025em; line-height:1.05; color:var(--ink);
-}
+.headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0; }
 
 /* Prozess-Timeline */
-.process { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; justify-content:center; gap:0; }
-.proc-item { display:flex; gap:clamp(12px,1.5vw,20px); position:relative; }
+.process {
+  flex:1; display:flex; flex-direction:column;
+  justify-content:center; gap:0; min-height:0;
+}
+.proc-item { display:flex; gap:clamp(12px,1.5vw,20px); }
 .proc-left { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
-
-/* Kreis */
 .proc-circle {
   width:clamp(32px,3.2vw,44px); height:clamp(32px,3.2vw,44px);
   border-radius:50%; border:2px solid var(--border);
   display:flex; align-items:center; justify-content:center;
-  background:var(--surface); flex-shrink:0;
-  transition:background .3s, border-color .3s;
-  position:relative; z-index:1;
+  background:var(--surface); flex-shrink:0; position:relative; z-index:1;
 }
-.proc-circle.final {
-  background:var(--accent); border-color:var(--accent);
-}
+.proc-circle.final { background:var(--accent); border-color:var(--accent); }
 .proc-num {
-  font-family:var(--mono); font-size:clamp(10px,.85vw,13px);
+  font-family:var(--mono); font-size:var(--fs-label);
   font-weight:900; color:var(--subtle); font-variant-numeric:tabular-nums;
 }
 .proc-circle.final .proc-num { color:#fff; }
-
-/* Verbindungslinie */
 .proc-line {
   width:2px; flex:1; min-height:clamp(16px,2.5vh,32px);
   background:var(--border); margin:3px 0;
 }
-.proc-line.final { background:var(--accent); opacity:.3; }
-
-/* Text */
-.proc-content { padding-bottom:clamp(14px,2.2vh,28px); display:flex; flex-direction:column; gap:3px; padding-top:clamp(5px,.8vh,9px); }
+.proc-content { padding-bottom:clamp(14px,2.2vh,28px); display:flex; flex-direction:column; gap:4px; padding-top:clamp(5px,.8vh,9px); }
 .proc-item:last-child .proc-content { padding-bottom:0; }
-.proc-label { font-size:clamp(12px,1.1vw,16px); font-weight:900; color:var(--ink); line-height:1.1; }
+.proc-label { font-size:var(--fs-body); font-weight:900; color:var(--ink); line-height:1.1; }
 .proc-item:last-child .proc-label { color:var(--accent); }
-.proc-desc { font-size:clamp(10px,.82vw,12.5px); color:var(--muted); line-height:1.45; }
+.proc-desc  { font-size:var(--fs-label); color:var(--muted); line-height:1.45; }
 
-/* Footer */
+/* FOOTER */
 .footer-left {
   position:relative; z-index:1; flex-shrink:0;
-  padding-top:clamp(10px,1.5vh,16px); border-top:1px solid var(--border);
-  margin-top:clamp(10px,1.5vh,16px);
+  margin-top:clamp(12px,2vh,24px); padding-top:clamp(10px,1.5vh,18px);
+  border-top:1px solid var(--border);
 }
-.address { font-size:clamp(9px,.72vw,12px); color:var(--subtle); }
+.address { font-size:var(--fs-label); color:var(--subtle); }
 
-/* ── RECHTS — KONTAKT ───────────────────────────────────────── */
+/* ── RECHTE SPALTE: KONTAKT + CTA ────────────────────────── */
 .col-right {
   display:flex; flex-direction:column;
-  padding:clamp(24px,3.5vh,48px) clamp(28px,3.5vw,56px);
-  gap:0; position:relative; overflow:hidden;
+  padding:var(--pad-v) var(--pad-h);
+  position:relative; overflow:hidden;
 }
-
-/* Subtiler Accent-Hintergrund rechts */
 .col-right::before {
   content:''; position:absolute; inset:0; pointer-events:none;
   background:radial-gradient(ellipse 100% 80% at 80% 50%,
@@ -132,168 +134,149 @@ html, body {
 }
 
 .contact-block {
-  position:relative; z-index:1; flex:1; display:flex;
-  flex-direction:column; justify-content:center;
-  gap:clamp(16px,2.8vh,36px);
+  position:relative; z-index:1; flex:1;
+  display:flex; flex-direction:column;
+  justify-content:center; gap:clamp(16px,2.8vh,36px);
 }
 
-/* Foto + Name */
+/* Kontaktperson */
 .contact-person { display:flex; align-items:center; gap:clamp(14px,1.8vw,24px); }
 .contact-photo {
-  width:clamp(56px,6.5vw,88px); height:clamp(56px,6.5vw,88px);
+  width:clamp(52px,6vw,80px); height:clamp(52px,6vw,80px);
   border-radius:50%; overflow:hidden; flex-shrink:0;
-  border:2px solid var(--border);
-  background:oklch(0.92 0.01 250);
+  border:2px solid var(--border); background:oklch(0.92 0.01 250);
   display:flex; align-items:center; justify-content:center;
 }
 .contact-photo img { width:100%; height:100%; object-fit:cover; }
-.contact-initials {
-  font-size:clamp(1rem,1.8vw,2rem); font-weight:900; color:var(--accent);
-}
+.contact-initials { font-size:clamp(.9rem,1.6vw,1.8rem); font-weight:900; color:var(--accent); }
 .contact-info { display:flex; flex-direction:column; gap:2px; }
-.contact-name  { font-size:clamp(1rem,1.5vw,1.8rem); font-weight:900; color:var(--ink); letter-spacing:-.01em; line-height:1.1; }
-.contact-title { font-size:clamp(.78rem,.9vw,1.05rem); font-weight:400; color:var(--muted); }
+.contact-name  { font-size:var(--fs-subline); font-weight:900; color:var(--ink); letter-spacing:-.01em; line-height:1.1; }
+.contact-title { font-size:var(--fs-body);    font-weight:400; color:var(--muted); }
 
 /* Kontakt-Zeilen */
 .contact-details { display:flex; flex-direction:column; gap:clamp(8px,1.2vh,14px); }
 .contact-row {
-  display:flex; align-items:center; gap:clamp(10px,1.2vw,16px);
-  text-decoration:none;
+  display:flex; align-items:center; gap:clamp(10px,1.2vw,16px); text-decoration:none;
 }
 .contact-icon {
-  width:clamp(32px,3vw,42px); height:clamp(32px,3vw,42px); flex-shrink:0;
+  width:clamp(30px,2.8vw,40px); height:clamp(30px,2.8vw,40px); flex-shrink:0;
   display:flex; align-items:center; justify-content:center;
   background:var(--surface); border:1px solid var(--border); border-radius:10px;
   transition:background .2s, border-color .2s;
 }
-.contact-icon svg { width:16px; height:16px; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.contact-icon svg { width:15px; height:15px; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
 .contact-row:hover .contact-icon { background:oklch(from var(--accent) l c h / .1); border-color:oklch(from var(--accent) l c h / .3); }
-.contact-text { font-size:clamp(11px,1vw,14px); font-weight:500; color:var(--ink); }
+.contact-text { font-size:var(--fs-body); font-weight:500; color:var(--ink); }
 
 /* CTA Buttons */
 .cta-block { display:flex; flex-direction:column; gap:clamp(8px,1.2vh,14px); }
 .btn-primary {
   display:flex; align-items:center; justify-content:center; gap:10px;
-  padding:clamp(14px,2vh,20px) clamp(20px,2.5vw,36px);
+  padding:clamp(13px,1.8vh,19px) clamp(20px,2.5vw,36px);
   background:var(--accent); border:none; border-radius:14px;
-  color:#fff; font-family:var(--font);
-  font-size:clamp(13px,1.1vw,17px); font-weight:700; letter-spacing:.03em;
-  cursor:pointer; text-decoration:none;
+  color:#fff; font-family:var(--font); font-size:var(--fs-body);
+  font-weight:700; letter-spacing:.02em; cursor:pointer; text-decoration:none;
   box-shadow:0 4px 24px oklch(from var(--accent) l c h / .30),
              0 1px 0 oklch(1 0 0 / .15) inset;
   transition:transform .2s cubic-bezier(.4,0,.2,1), box-shadow .2s;
 }
-.btn-primary:hover {
-  transform:translateY(-2px);
-  box-shadow:0 8px 36px oklch(from var(--accent) l c h / .42),
-             0 1px 0 oklch(1 0 0 / .15) inset;
-}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 36px oklch(from var(--accent) l c h / .42), 0 1px 0 oklch(1 0 0 / .15) inset; }
 .btn-primary:active { transform:scale(.98); }
-.btn-primary svg { width:18px; height:18px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
-
+.btn-primary svg { width:17px; height:17px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
 .btn-secondary {
   display:flex; align-items:center; justify-content:center; gap:8px;
   padding:clamp(10px,1.4vh,16px) clamp(20px,2.5vw,36px);
   background:var(--surface); border:1.5px solid var(--border);
   border-radius:12px; color:var(--muted); font-family:var(--font);
-  font-size:clamp(12px,.98vw,15px); font-weight:600; letter-spacing:.02em;
-  cursor:pointer; text-decoration:none;
+  font-size:var(--fs-body); font-weight:600; cursor:pointer; text-decoration:none;
   transition:border-color .2s, color .2s, background .2s;
 }
-.btn-secondary:hover {
-  border-color:var(--accent); color:var(--accent);
-  background:oklch(from var(--accent) l c h / .05);
-}
-.btn-secondary svg { width:15px; height:15px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+.btn-secondary:hover { border-color:var(--accent); color:var(--accent); background:oklch(from var(--accent) l c h / .05); }
+.btn-secondary svg { width:14px; height:14px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
 
-/* QR + Info */
+/* QR-Code */
 .qr-row {
   display:flex; align-items:center; gap:clamp(12px,1.5vw,20px);
   padding:clamp(10px,1.4vh,16px) clamp(14px,1.6vw,22px);
   background:var(--surface); border:1px solid var(--border); border-radius:12px;
 }
-.qr-img { width:clamp(52px,5.5vw,72px); height:clamp(52px,5.5vw,72px); flex-shrink:0; border-radius:6px; }
+.qr-img { width:clamp(48px,5.5vw,68px); height:clamp(48px,5.5vw,68px); flex-shrink:0; border-radius:6px; }
 .qr-text { display:flex; flex-direction:column; gap:3px; }
-.qr-label { font-size:clamp(8px,.65vw,10px); font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--subtle); }
-.qr-hint  { font-size:clamp(10px,.82vw,13px); font-weight:500; color:var(--muted); }
+.qr-label { font-size:var(--fs-label); font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--subtle); }
+.qr-hint  { font-size:var(--fs-body); font-weight:500; color:var(--muted); }
 
-/* ── ANIMATIONEN ────────────────────────────────────────────── */
-@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+/* ── ANIMATIONEN ─────────────────────────────────────────── */
+@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 @keyframes fade { from{opacity:0} to{opacity:1} }
 
-.header        { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
-.intro         { animation:up   .6s  cubic-bezier(.22,1,.36,1) .12s both }
-.proc-item:nth-child(1) { animation:up .5s cubic-bezier(.22,1,.36,1) .22s both }
-.proc-item:nth-child(2) { animation:up .5s cubic-bezier(.22,1,.36,1) .30s both }
-.proc-item:nth-child(3) { animation:up .5s cubic-bezier(.22,1,.36,1) .38s both }
-.proc-item:nth-child(4) { animation:up .5s cubic-bezier(.22,1,.36,1) .46s both }
-.footer-left   { animation:fade .4s  ease                       .55s both }
+.header          { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
+.eyebrow         { animation:up   .55s cubic-bezier(.22,1,.36,1) .12s both }
+.headline        { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
+.footer-left     { animation:fade .4s  ease                       .55s both }
+.contact-person  { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
+.contact-details { animation:up   .6s  cubic-bezier(.22,1,.36,1) .30s both }
+.cta-block       { animation:up   .6s  cubic-bezier(.22,1,.36,1) .40s both }
+.qr-row          { animation:up   .55s cubic-bezier(.22,1,.36,1) .50s both }
 
-.contact-person  { animation:up   .65s cubic-bezier(.22,1,.36,1) .2s  both }
-.contact-details { animation:up   .6s  cubic-bezier(.22,1,.36,1) .3s  both }
-.cta-block       { animation:up   .6s  cubic-bezier(.22,1,.36,1) .4s  both }
-.qr-row          { animation:up   .55s cubic-bezier(.22,1,.36,1) .5s  both }
+.proc-item:nth-child(1) { animation:up .5s cubic-bezier(.22,1,.36,1) .26s both }
+.proc-item:nth-child(2) { animation:up .5s cubic-bezier(.22,1,.36,1) .33s both }
+.proc-item:nth-child(3) { animation:up .5s cubic-bezier(.22,1,.36,1) .40s both }
+.proc-item:nth-child(4) { animation:up .5s cubic-bezier(.22,1,.36,1) .47s both }
 
 @media (prefers-reduced-motion:reduce) {
-  *{animation:none!important;opacity:1!important;transform:none!important}
+  * { animation:none !important; opacity:1 !important; transform:none !important }
 }
 </style>
 </head>
 <body>
 <div class="slide">
 
-  <!-- LINKS — PROZESS -->
+  <!-- LINKS: PROZESS -->
   <div class="col-left">
     <div class="header">
       <img class="dev-logo" id="devLogo" src="" alt="">
-      <span class="slide-num">N&#228;chste Schritte</span>
+      <span class="slide-label">N&#228;chste Schritte</span>
     </div>
-
-    <div class="intro">
+    <div class="content">
       <div class="eyebrow">Ihr Weg zur Wohnung</div>
       <h2 class="headline" id="headline">So geht es weiter.</h2>
+      <div class="process" id="processSteps"></div>
     </div>
-
-    <div class="process" id="processSteps"></div>
-
     <div class="footer-left">
-      <span class="address" id="address">—</span>
+      <span class="address" id="address">&#8212;</span>
     </div>
   </div>
 
-  <!-- RECHTS — KONTAKT + CTA -->
+  <!-- RECHTS: KONTAKT + CTA -->
   <div class="col-right">
     <div class="contact-block">
 
-      <!-- Kontaktperson -->
       <div class="contact-person">
         <div class="contact-photo">
           <img id="contactPhotoImg" src="" alt="" style="display:none">
-          <div class="contact-initials" id="contactInitials">—</div>
+          <div class="contact-initials" id="contactInitials">&#8212;</div>
         </div>
         <div class="contact-info">
-          <div class="contact-name"  id="contactName">—</div>
-          <div class="contact-title" id="contactTitle">—</div>
+          <div class="contact-name"  id="contactName">&#8212;</div>
+          <div class="contact-title" id="contactTitle">&#8212;</div>
         </div>
       </div>
 
-      <!-- Kontakt-Details -->
       <div class="contact-details">
         <a class="contact-row" id="phoneRow" href="#">
           <div class="contact-icon">
             <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.82a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
           </div>
-          <span class="contact-text" id="contactPhone">—</span>
+          <span class="contact-text" id="contactPhone">&#8212;</span>
         </a>
         <a class="contact-row" id="emailRow" href="#">
           <div class="contact-icon">
             <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           </div>
-          <span class="contact-text" id="contactEmail">—</span>
+          <span class="contact-text" id="contactEmail">&#8212;</span>
         </a>
       </div>
 
-      <!-- CTAs -->
       <div class="cta-block">
         <a class="btn-primary" id="btnBooking" href="#" target="_blank">
           <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -305,12 +288,11 @@ html, body {
         </a>
       </div>
 
-      <!-- QR Code -->
       <div class="qr-row" id="qrRow" style="display:none">
         <img class="qr-img" id="qrImg" src="" alt="QR Code">
         <div class="qr-text">
           <span class="qr-label">Terminbuchung</span>
-          <span class="qr-hint">QR-Code scannen f&#252;r direkte Terminbuchung</span>
+          <span class="qr-hint">QR-Code scannen f&#252;r direkte Buchung</span>
         </div>
       </div>
 
@@ -318,8 +300,18 @@ html, body {
   </div>
 
 </div>
-
 <script>
+function applyUITokens(ui) {
+  if (!ui) return;
+  const r = document.documentElement;
+  if (ui.fontSans)   r.style.setProperty('--font',        ui.fontSans);
+  if (ui.fontMono)   r.style.setProperty('--font-mono',   ui.fontMono);
+  if (ui.logoHeader) r.style.setProperty('--logo-header', ui.logoHeader);
+  if (ui.type) Object.entries(ui.type).forEach(([k, v]) =>
+    r.style.setProperty('--fs-' + k, v)
+  );
+}
+
 function getInitials(name) {
   if (!name) return '?';
   return name.trim().split(/\s+/).map(w => w[0].toUpperCase()).slice(0,2).join('');
@@ -336,18 +328,16 @@ function applyProject(P) {
   $('address').textContent = P.address || '';
 
   const ns = P.nextSteps || {};
-
-  // Headline
   $('headline').textContent = ns.headline || 'So geht es weiter.';
 
   // Prozess-Schritte
   const stepsEl = $('processSteps');
   stepsEl.innerHTML = '';
   const steps = ns.processSteps || [
-    { step:'01', label:'Reservierung',  desc:'Verbindliche Reservierung mit \u20ac\u00a0' + (ns.reservationFee || '2.500') + ' Reservierungsgeb\u00fchr' },
-    { step:'02', label:'Finanzierung',  desc:'Finanzierungsbest\u00e4tigung innerhalb von ' + (ns.reservationDuration || '14 Tagen') },
+    { step:'01', label:'Reservierung',  desc:'Verbindliche Reservierung mit \u20ac\u00a0' + (ns.reservationFee||'2.500') + ' Reservierungsgeb\u00fchr' },
+    { step:'02', label:'Finanzierung',  desc:'Finanzierungsbest\u00e4tigung innerhalb von ' + (ns.reservationDuration||'14 Tagen') },
     { step:'03', label:'Notar',         desc:'Kaufvertrag und Beurkundung beim Notar' },
-    { step:'04', label:'\u00dcbergabe', desc:'Schl\u00fcsseltermin nach Fertigstellung ' + (P.completionDate || '') },
+    { step:'04', label:'\u00dcbergabe', desc:'Schl\u00fcsseltermin nach Fertigstellung ' + (P.completionDate||'') },
   ];
 
   steps.forEach((s, i) => {
@@ -362,60 +352,60 @@ function applyProject(P) {
         (!isFinal ? '<div class="proc-line"></div>' : '') +
       '</div>' +
       '<div class="proc-content">' +
-        '<div class="proc-label">' + (s.label || '') + '</div>' +
-        '<div class="proc-desc">'  + (s.desc  || '') + '</div>' +
+        '<div class="proc-label">' + (s.label||'') + '</div>' +
+        '<div class="proc-desc">'  + (s.desc ||'') + '</div>' +
       '</div>';
     stepsEl.appendChild(item);
   });
 
   // Kontaktperson
-  const name  = ns.contactName  || '';
-  const title = ns.contactTitle || '';
-  const phone = ns.contactPhone || '';
-  const email = ns.contactEmail || '';
-  const photo = ns.contactPhoto || '';
-  const booking = ns.bookingUrl || '';
+  const name    = ns.contactName  || '';
+  const title   = ns.contactTitle || '';
+  const phone   = ns.contactPhone || '';
+  const email   = ns.contactEmail || '';
+  const photo   = ns.contactPhoto || '';
+  const booking = ns.bookingUrl   || '';
 
   $('contactName').textContent  = name;
   $('contactTitle').textContent = title;
   $('contactPhone').textContent = phone;
   $('contactEmail').textContent = email;
-
-  // Initials
   $('contactInitials').textContent = getInitials(name);
 
-  // Foto
   if (photo) {
     const img = $('contactPhotoImg');
-    img.src = photo;
-    img.alt = name;
-    img.style.display = 'block';
+    img.src = photo; img.alt = name; img.style.display = 'block';
     $('contactInitials').style.display = 'none';
   }
 
-  // Links
   if (phone) $('phoneRow').href = 'tel:' + phone.replace(/\s/g,'');
   if (email) $('emailRow').href = 'mailto:' + email;
+
   if (booking && !booking.includes('PLACEHOLDER')) {
     $('btnBooking').href = booking;
-    // QR Code via api.qrserver.com
-    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=140x140&margin=6&data='
-                  + encodeURIComponent(booking);
-    $('qrImg').src = qrUrl;
+    $('qrImg').src = 'https://api.qrserver.com/v1/create-qr-code/?size=140x140&margin=6&data='
+                     + encodeURIComponent(booking);
     $('qrRow').style.display = 'flex';
   }
 
-  // Reservation CTA
   if (email) {
     $('btnReservation').href = 'mailto:' + email
-      + '?subject=' + encodeURIComponent('Reservierungsanfrage ' + (P.name || ''))
-      + '&body=' + encodeURIComponent('Guten Tag,\n\nich m\u00f6chte eine Wohneinheit im Projekt ' + (P.name || '') + ' reservieren.\n\nMit freundlichen Gr\u00fc\u00dfen');
+      + '?subject=' + encodeURIComponent('Reservierungsanfrage ' + (P.name||''))
+      + '&body=' + encodeURIComponent('Guten Tag,\n\nich m\u00f6chte eine Wohneinheit im Projekt '
+        + (P.name||'') + ' reservieren.\n\nMit freundlichen Gr\u00fc\u00dfen');
   }
 }
 
-try { if (window.parent?.PROJECT) applyProject(window.parent.PROJECT); } catch(e){}
+try { if (window.parent?.PROJECT) {
+  applyProject(window.parent.PROJECT);
+  applyUITokens(window.parent.PROJECT?.ui);
+}} catch(e) {}
+
 window.addEventListener('message', e => {
-  if (e.data?.type === 'PROJECT_DATA') applyProject(e.data.data);
+  if (e.data?.type === 'PROJECT_DATA') {
+    applyProject(e.data.data);
+    applyUITokens(e.data.ui);
+  }
 });
 </script>
 </body>
