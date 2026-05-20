@@ -5,17 +5,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cover</title>
 <style>
+/* ════════════════════════════════════════════════════════════
+   MASTER-TEMPLATE · slide_01.html
+   Alle Slides folgen dieser Struktur:
+   – :root mit Farb- + Typo-Token-Fallbacks
+   – .header  → Logo links · Slide-Label rechts
+   – .content → Eyebrow · Headline · Subline · Inhalte
+   – .footer-left → Adresse
+   ════════════════════════════════════════════════════════════ */
+
 :root {
+  /* Farben */
   --bg:      oklch(0.98 0.005 85);
   --surface: oklch(0.995 0.003 85);
   --ink:     oklch(0.18 0.02 250);
-  --muted:   oklch(0.50 0.02 250);
-  --subtle:  oklch(0.70 0.01 250);
+  --muted:   oklch(0.45 0.02 250);   /* etwas dunkler als vorher = besser lesbar */
+  --subtle:  oklch(0.65 0.01 250);
   --border:  oklch(0.88 0.01 85);
   --accent:  oklch(0.55 0.13 160);
-  --font:    "Roboto", system-ui, -apple-system, sans-serif;
   --img-bg:  oklch(0.82 0.04 65);
+  --font:    "Roboto", system-ui, -apple-system, sans-serif;
+
+  /* Logo-Größe (via postMessage überschreibbar) */
+  --logo-header: clamp(22px, 2.6vh, 38px);
+
+  /* ── Typografie-Tokens ────────────────────────────────────
+     Fallback-Werte; werden per postMessage mit PROJECT.ui.type
+     überschrieben → alle --fs-* Variablen zentral steuerbar  */
+  --fs-eyebrow:  clamp(9px, 0.75vw, 11px);
+  --fs-headline: clamp(1.5rem, 2.5vw, 3rem);
+  --fs-subline:  clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:     clamp(0.85rem, 1vw, 1.12rem);
+  --fs-label:    clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:    clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:    clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:     clamp(11px, 0.95vw, 14px);
+  --fs-monoLg:   clamp(1.3rem, 2.1vw, 2.6rem);
 }
+
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html, body {
   width:100vw; height:100vh; overflow:hidden;
@@ -30,147 +57,165 @@ html, body {
   width:100vw; height:100vh;
 }
 
-/* ── LINKS ────────────────────────────────────────────────── */
+/* ── LINKE SPALTE ─────────────────────────────────────────── */
 .col-left {
   display:flex; flex-direction:column;
-  padding:clamp(24px,3.5vh,48px) clamp(28px,3.5vw,60px);
+  /* Standard-Padding: alle Slides gleich */
+  padding:clamp(24px,3.5vh,48px) clamp(28px,3.5vw,56px);
   position:relative; overflow:hidden;
-  background:var(--bg);
 }
-/* Dot-Pattern */
+/* Dot-Pattern Hintergrund */
 .col-left::before {
   content:''; position:absolute; inset:0; pointer-events:none;
   background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px, transparent 1.2px);
   background-size:28px 28px;
-  mask-image:linear-gradient(135deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 58%);
-  -webkit-mask-image:linear-gradient(135deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 58%);
+  mask-image:linear-gradient(135deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 58%);
+  -webkit-mask-image:linear-gradient(135deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 58%);
 }
-/* Accent-Line */
+/* Accent-Line links */
 .col-left::after {
   content:''; position:absolute; left:0; top:18%; bottom:18%;
   width:3px; border-radius:0 3px 3px 0;
   background:var(--accent); opacity:.55;
 }
 
-/* Header */
+/* ── HEADER ─────────────────────────────────────────────────
+   Standard: Logo links · Slide-Label rechts
+   Abstand zum Content: immer gleich                          */
 .header {
-  position:relative; z-index:1;
+  position:relative; z-index:1; flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between;
-  flex-shrink:0; margin-bottom:clamp(20px,3.5vh,44px);
+  /* Fester Abstand nach unten – auf allen Slides gleich */
+  margin-bottom:clamp(20px, 3.5vh, 44px);
 }
-.dev-logo { height:clamp(22px,2.6vh,40px); width:auto; object-fit:contain; }
-.deck-label {
-  font-size:clamp(9px,.72vw,11px); font-weight:700;
+.dev-logo {
+  /* Größe zentral via --logo-header steuerbar */
+  height:var(--logo-header); width:auto; object-fit:contain;
+}
+.slide-label {
+  /* Slide-Typ-Bezeichnung rechts oben */
+  font-size:var(--fs-label); font-weight:700;
   letter-spacing:.18em; text-transform:uppercase; color:var(--subtle);
 }
 
-/* Content */
+/* ── CONTENT ────────────────────────────────────────────────
+   Flex-Column, vertikal zentriert.
+   Reihenfolge: Eyebrow → Headline → Subline → [Inhalt]      */
 .content {
   position:relative; z-index:1;
-  display:flex; flex-direction:column;
-  flex:1; justify-content:center;
-  gap:clamp(8px,1.2vh,14px);
+  flex:1; display:flex; flex-direction:column;
+  justify-content:center;
+  gap:clamp(8px, 1.2vh, 16px);
   min-height:0;
 }
+
+/* Eyebrow: kleines Accent-Label mit Strich davor */
 .eyebrow {
   display:flex; align-items:center; gap:8px;
-  font-size:clamp(9px,.75vw,12px); font-weight:700;
+  font-size:var(--fs-eyebrow); font-weight:700;
   letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
+  flex-shrink:0;
 }
 .eyebrow::before {
-  content:''; width:clamp(14px,1.6vw,24px); height:2px;
+  content:''; width:clamp(14px, 1.6vw, 24px); height:2px;
   background:var(--accent); border-radius:2px; flex-shrink:0;
 }
+
+/* Headline: Haupt-Titel der Slide */
+.headline {
+  font-size:var(--fs-headline); font-weight:900;
+  letter-spacing:-.025em; line-height:1.05; color:var(--ink);
+  flex-shrink:0;
+}
+
+/* Subline / Tagline: sichtbar, nicht zu dünn */
+.subline {
+  font-size:var(--fs-subline); font-weight:400; /* 400 statt 300 = besser lesbar */
+  color:var(--muted); line-height:1.5;
+  flex-shrink:0;
+}
+
+/* Trenn-Akzent zwischen Subline und Inhaltsblock */
+.divider {
+  width:clamp(28px, 4.5vw, 56px); height:3px; border-radius:3px;
+  background:var(--accent); flex-shrink:0;
+}
+
+/* ── FOOTER ─────────────────────────────────────────────────
+   Adresse unten, immer gleich auf allen Slides               */
+.footer-left {
+  position:relative; z-index:1; flex-shrink:0;
+  margin-top:clamp(12px, 2vh, 24px);
+  padding-top:clamp(10px, 1.5vh, 18px);
+  border-top:1px solid var(--border);
+}
+.address {
+  font-size:var(--fs-label); color:var(--subtle); font-weight:400;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SLIDE-01-SPEZIFISCH — alles ab hier ist nur für den Cover
+   ══════════════════════════════════════════════════════════ */
+
+/* Cover: große Projekt-Headline */
 .project-name {
-  font-size:clamp(2.8rem,7vw,8rem); font-weight:900;
+  font-size:clamp(2.8rem, 7vw, 8rem); font-weight:900;
   letter-spacing:-.035em; line-height:.92; color:var(--ink);
   word-break:break-word;
 }
-.tagline {
-  font-size:clamp(.95rem,1.35vw,1.45rem); font-weight:300;
-  color:var(--muted); letter-spacing:.01em; line-height:1.4;
-}
-.divider {
-  width:clamp(28px,4.5vw,56px); height:3px; border-radius:3px;
-  background:var(--accent); flex-shrink:0;
-  margin:clamp(2px,.5vh,6px) 0;
-}
 
-/* Fact-Chips */
-.facts {
-  display:flex; flex-wrap:wrap; gap:7px;
-}
+/* Fact-Chips (WE-Anzahl, Preis, etc.) */
+.facts { display:flex; flex-wrap:wrap; gap:7px; }
 .fact {
   display:flex; flex-direction:column; gap:1px;
   padding:clamp(5px,.8vh,9px) clamp(9px,1vw,14px);
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:10px;
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
 }
 .fact-v {
-  font-size:clamp(11px,1vw,14px); font-weight:700; color:var(--ink);
+  font-size:var(--fs-mono); font-weight:700; color:var(--ink);
   font-variant-numeric:tabular-nums;
 }
 .fact-l {
-  font-size:clamp(8px,.62vw,10px); font-weight:500;
+  font-size:var(--fs-label); font-weight:500;
   letter-spacing:.09em; text-transform:uppercase; color:var(--subtle);
 }
 
-/* Highlights: Energy + USPs */
+/* USP-Highlights-Box */
 .highlights {
   display:flex; flex-direction:column; gap:clamp(7px,1vh,11px);
-  padding:clamp(10px,1.4vh,16px) clamp(12px,1.3vw,18px);
+  padding:clamp(10px,1.4vh,18px) clamp(12px,1.3vw,18px);
   background:var(--surface); border:1px solid var(--border);
-  border-radius:14px;
-  flex-shrink:0;
-  position:relative; overflow:hidden;
+  border-radius:14px; flex-shrink:0; position:relative; overflow:hidden;
 }
 .highlights::before {
   content:''; position:absolute; top:0; left:0; bottom:0;
-  width:3px; background:var(--accent); border-radius:3px 0 0 3px;
-  opacity:.7;
+  width:3px; background:var(--accent); border-radius:3px 0 0 3px; opacity:.7;
 }
-.energy-row {
-  display:flex; align-items:center; gap:8px;
-}
+.energy-row { display:flex; align-items:center; gap:8px; }
 .energy-lbl {
-  font-size:clamp(8px,.65vw,10px); font-weight:700;
+  font-size:var(--fs-label); font-weight:700;
   letter-spacing:.12em; text-transform:uppercase; color:var(--subtle);
 }
 .energy-tag {
-  font-size:clamp(10px,.82vw,12px); font-weight:700; color:var(--accent);
+  font-size:var(--fs-label); font-weight:700; color:var(--accent);
   padding:2px 8px; border-radius:6px;
   background:oklch(from var(--accent) l c h / .09);
   border:1px solid oklch(from var(--accent) l c h / .22);
 }
-.usps {
-  list-style:none; display:flex; flex-direction:column;
-  gap:clamp(4px,.6vh,7px);
-}
+.usps { list-style:none; display:flex; flex-direction:column; gap:clamp(4px,.6vh,7px); }
 .usps li {
-  font-size:clamp(10px,.82vw,12.5px); color:var(--muted);
-  display:flex; align-items:flex-start; gap:6px; line-height:1.35;
+  font-size:var(--fs-body); color:var(--muted);
+  display:flex; align-items:flex-start; gap:6px; line-height:1.4;
 }
 .usps li::before {
   content:'✓'; color:var(--accent); font-weight:700;
   flex-shrink:0; font-size:.9em; margin-top:1px;
 }
 
-/* Footer */
-.footer-left {
-  position:relative; z-index:1; flex-shrink:0;
-  margin-top:clamp(12px,2vh,24px);
-  padding-top:clamp(10px,1.5vh,18px);
-  border-top:1px solid var(--border);
-}
-.address {
-  font-size:clamp(10px,.8vw,13px); color:var(--subtle); font-weight:400;
-}
-
-/* ── RECHTS ────────────────────────────────────────────────── */
+/* ── RECHTE SPALTE: BILD ────────────────────────────────── */
 .col-right {
-  position:relative; overflow:hidden;
-  background:var(--img-bg);
-  border-radius:var(--radius,20px) 0 0 var(--radius,20px);
+  position:relative; overflow:hidden; background:var(--img-bg);
+  border-radius:20px 0 0 20px;
 }
 .cover-img {
   position:absolute; inset:0; width:100%; height:100%;
@@ -196,8 +241,7 @@ html, body {
   background:oklch(0.995 0 0 / .88);
   backdrop-filter:blur(16px) saturate(180%);
   -webkit-backdrop-filter:blur(16px) saturate(180%);
-  border:1px solid oklch(1 0 0 / .5);
-  border-radius:50px;
+  border:1px solid oklch(1 0 0 / .5); border-radius:50px;
   box-shadow:0 2px 16px oklch(0.2 0 0 / .10);
 }
 .avail-dot {
@@ -206,138 +250,167 @@ html, body {
   box-shadow:0 0 0 3px oklch(from var(--accent) l c h / .18);
 }
 .avail-text {
-  font-size:clamp(9px,.8vw,12px); font-weight:600; color:var(--ink);
-  white-space:nowrap;
+  font-size:var(--fs-label); font-weight:600; color:var(--ink); white-space:nowrap;
 }
 
-/* ── ANIMATIONEN ────────────────────────────────────────────── */
-@keyframes up   { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
-@keyframes fade { from{opacity:0}to{opacity:1} }
+/* ── ANIMATIONEN ────────────────────────────────────────── */
+@keyframes up   { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+@keyframes fade { from{opacity:0} to{opacity:1} }
 
-.header        { animation:up   .6s cubic-bezier(.22,1,.36,1) .05s  both }
-.eyebrow       { animation:up   .6s cubic-bezier(.22,1,.36,1) .12s  both }
-.project-name  { animation:up   .7s cubic-bezier(.22,1,.36,1) .2s   both }
-.tagline       { animation:up   .6s cubic-bezier(.22,1,.36,1) .32s  both }
-.divider       { animation:fade .5s ease                       .4s   both }
-.facts         { animation:up   .6s cubic-bezier(.22,1,.36,1) .46s  both }
-.highlights    { animation:up   .6s cubic-bezier(.22,1,.36,1) .54s  both }
-.footer-left   { animation:fade .5s ease                       .62s  both }
-.col-right     { animation:fade .8s ease                       0s    both }
-.avail-pill    { animation:up   .6s cubic-bezier(.22,1,.36,1) .65s  both }
+.header       { animation:up   .6s cubic-bezier(.22,1,.36,1) .05s both }
+.eyebrow      { animation:up   .6s cubic-bezier(.22,1,.36,1) .12s both }
+.project-name { animation:up   .7s cubic-bezier(.22,1,.36,1) .20s both }
+.subline      { animation:up   .6s cubic-bezier(.22,1,.36,1) .30s both }
+.divider      { animation:fade .5s ease                       .38s both }
+.facts        { animation:up   .6s cubic-bezier(.22,1,.36,1) .44s both }
+.highlights   { animation:up   .6s cubic-bezier(.22,1,.36,1) .52s both }
+.footer-left  { animation:fade .5s ease                       .60s both }
+.col-right    { animation:fade .8s ease                       0s   both }
+.avail-pill   { animation:up   .6s cubic-bezier(.22,1,.36,1) .65s both }
 
 @media (prefers-reduced-motion:reduce) {
-  *{animation:none!important;opacity:1!important;transform:none!important}
+  * { animation:none !important; opacity:1 !important; transform:none !important }
 }
 </style>
 </head>
 <body>
 <div class="slide">
 
-  <!-- LINKS -->
+  <!-- LINKE SPALTE ─────────────────────────────────────── -->
   <div class="col-left">
+
+    <!-- HEADER: Logo + Slide-Label -->
     <div class="header">
       <img class="dev-logo" id="devLogo" src="" alt="">
-      <span class="deck-label">Immobilienprojekt</span>
+      <span class="slide-label">Immobilienprojekt</span>
     </div>
 
+    <!-- CONTENT: Eyebrow · Headline · Subline · Inhalte -->
     <div class="content">
       <div class="eyebrow" id="eyebrow">Neubau</div>
-      <h1 class="project-name" id="projectName">—</h1>
-      <p  class="tagline"      id="tagline">—</p>
+      <h1  class="project-name" id="projectName">&#8212;</h1>
+      <p   class="subline"      id="subline">&#8212;</p>
       <div class="divider"></div>
-      <div class="facts" id="facts"></div>
-
-      <div class="highlights" id="highlights">
+      <div class="facts"        id="facts"></div>
+      <div class="highlights"   id="highlights">
         <div class="energy-row">
           <span class="energy-lbl">Standard</span>
-          <span class="energy-tag" id="energyTag">—</span>
+          <span class="energy-tag" id="energyTag">&#8212;</span>
         </div>
         <ul class="usps" id="usps"></ul>
       </div>
     </div>
 
+    <!-- FOOTER: Adresse -->
     <div class="footer-left">
-      <span class="address" id="address">—</span>
+      <span class="address" id="address">&#8212;</span>
     </div>
+
   </div>
 
-  <!-- RECHTS -->
+  <!-- RECHTE SPALTE: Bild ──────────────────────────────── -->
   <div class="col-right">
     <div class="img-placeholder"></div>
     <img class="cover-img" id="coverImg" src="" alt="" loading="eager">
     <div class="img-overlay"></div>
     <div class="avail-pill">
       <div class="avail-dot"></div>
-      <span class="avail-text" id="availText">— verfügbar</span>
+      <span class="avail-text" id="availText">&#8212; verf&#252;gbar</span>
     </div>
   </div>
 
 </div>
 <script>
-function fmt(n) {
-  if (!n) return '\u2014';
-  return n>=1000000
-    ? (n/1000000).toLocaleString('de',{maximumFractionDigits:1})+'\u00a0Mio.\u00a0\u20ac'
-    : Math.round(n/1000).toLocaleString('de')+'\u00a0T\u20ac';
+/* ── UI-TOKENS anwenden ─────────────────────────────────────
+   Setzt --fs-* + --logo-header + --font aus PROJECT.ui      */
+function applyUITokens(ui) {
+  if (!ui) return;
+  const r = document.documentElement;
+  if (ui.fontSans)   r.style.setProperty('--font',        ui.fontSans);
+  if (ui.fontMono)   r.style.setProperty('--font-mono',   ui.fontMono);
+  if (ui.logoHeader) r.style.setProperty('--logo-header', ui.logoHeader);
+  if (ui.type) Object.entries(ui.type).forEach(([k, v]) =>
+    r.style.setProperty('--fs-' + k, v)
+  );
 }
 
+function fmt(n) {
+  if (!n) return '\u2014';
+  return n >= 1000000
+    ? (n / 1000000).toLocaleString('de', { maximumFractionDigits:1 }) + '\u00a0Mio.\u00a0\u20ac'
+    : Math.round(n / 1000).toLocaleString('de') + '\u00a0T\u20ac';
+}
+
+/* ── PROJECT anwenden ───────────────────────────────────────
+   Wird via postMessage von index.html aufgerufen             */
 function applyProject(P) {
   const r = document.documentElement;
   if (P.accent)    r.style.setProperty('--accent',     P.accent);
   if (P.accentHex) r.style.setProperty('--accent-hex', P.accentHex);
 
-  const $  = id => document.getElementById(id);
-  $('devLogo').src        = P.developerLogo || '';
-  $('devLogo').alt        = P.developer     || '';
-  $('eyebrow').textContent   = 'Neubau \u00b7 ' + (P.location || '');
-  $('projectName').textContent = P.name      || '';
-  $('tagline').textContent     = P.tagline   || '';
-  $('address').textContent     = P.address   || '';
-  $('energyTag').textContent   = P.energyStandard || '';
+  const $ = id => document.getElementById(id);
+
+  $('devLogo').src    = P.developerLogo || '';
+  $('devLogo').alt    = P.developer     || '';
+  $('address').textContent = P.address  || '';
+  $('energyTag').textContent = P.energyStandard || '';
+
+  $('eyebrow').textContent =
+    'Neubau \u00b7 ' + (P.location || '');
+  $('projectName').textContent = P.name    || '';
+  $('subline').textContent     = P.tagline || '';
   $('availText').textContent   =
-    (P.availableUnits||'\u2014')+' von '+(P.units||'\u2014')+' Einheiten verf\u00fcgbar';
+    (P.availableUnits || '\u2014') + ' von ' + (P.units || '\u2014') +
+    ' Einheiten verf\u00fcgbar';
 
   if (P.images?.cover) {
     $('coverImg').src = P.images.cover;
-    $('coverImg').alt = P.name;
+    $('coverImg').alt = P.name || '';
   }
 
   // Fact-Chips
   const factsEl = $('facts');
   factsEl.innerHTML = '';
   [
-    { v:(P.units||'\u2014')+'\u00a0WE', l:'Einheiten' },
-    { v:P.rooms||'\u2014',              l:'Zimmer' },
-    { v:'ab\u00a0'+fmt(P.priceFrom),    l:'Kaufpreis' },
-    { v:P.completionDate||'\u2014',     l:'Erstbezug' },
-  ].forEach(f=>{
-    const c=document.createElement('div');
-    c.className='fact';
-    c.innerHTML=`<span class="fact-v">${f.v}</span><span class="fact-l">${f.l}</span>`;
-    factsEl.appendChild(c);
+    { v:(P.units || '\u2014') + '\u00a0WE', l:'Einheiten' },
+    { v: P.rooms     || '\u2014',           l:'Zimmer' },
+    { v:'ab\u00a0' + fmt(P.priceFrom),      l:'Kaufpreis' },
+    { v: P.completionDate || '\u2014',       l:'Erstbezug' },
+  ].forEach(f => {
+    const d = document.createElement('div');
+    d.className = 'fact';
+    d.innerHTML = '<span class="fact-v">' + f.v + '</span>' +
+                  '<span class="fact-l">' + f.l + '</span>';
+    factsEl.appendChild(d);
   });
 
-  // USPs — KA oder EN je nach Zielgruppe
-  const uspsEl = $('usps');
+  // USPs je nach Zielgruppe
+  const uspsEl  = $('usps');
   uspsEl.innerHTML = '';
-  const uspList = (P.audience==='EN' ? P.en?.usps : P.ka?.usps) || [];
-  uspList.forEach(u=>{
-    const li=document.createElement('li');
-    li.textContent=u;
+  const uspList = (P.audience === 'EN' ? P.en?.usps : P.ka?.usps) || [];
+  uspList.forEach(u => {
+    const li = document.createElement('li');
+    li.textContent = u;
     uspsEl.appendChild(li);
   });
 
-  // Highlights ausblenden wenn keine USPs
   if (!uspList.length && !P.energyStandard) {
-    $('highlights').style.display='none';
+    $('highlights').style.display = 'none';
   }
 }
 
-// 1. Same-origin (lokales Testen)
-try { if (window.parent?.PROJECT) applyProject(window.parent.PROJECT); } catch(e){}
-// 2. postMessage (production cross-origin)
-window.addEventListener('message', e=>{
-  if (e.data?.type==='PROJECT_DATA') applyProject(e.data.data);
+// Lokales Testen (same-origin)
+try { if (window.parent?.PROJECT) {
+  applyProject(window.parent.PROJECT);
+  applyUITokens(window.parent.PROJECT?.ui);
+}} catch(e) {}
+
+// Production (cross-origin postMessage)
+window.addEventListener('message', e => {
+  if (e.data?.type === 'PROJECT_DATA') {
+    applyProject(e.data.data);
+    applyUITokens(e.data.ui);
+  }
 });
 </script>
 </body>
