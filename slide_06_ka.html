@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renditerechner</title>
+<style>
+:root {
+  --bg:      oklch(0.98 0.005 85);
+  --surface: oklch(0.995 0.003 85);
+  --ink:     oklch(0.18 0.02 250);
+  --muted:   oklch(0.50 0.02 250);
+  --subtle:  oklch(0.70 0.01 250);
+  --border:  oklch(0.88 0.01 85);
+  --accent:  oklch(0.55 0.13 160);
+  --pos:     oklch(0.48 0.15 155);
+  --neg:     oklch(0.55 0.18 38);
+  --font:    "Roboto", system-ui, -apple-system, sans-serif;
+  --mono:    ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100vw; height:100vh; overflow:hidden;
+  background:var(--bg); font-family:var(--font);
+  -webkit-font-smoothing:antialiased; color:var(--ink);
+}
+.slide {
+  display:grid; grid-template-columns:38fr 62fr;
+  width:100vw; height:100vh;
+}
+
+/* ── LINKS ───────────────────────────────────────────────────── */
+.col-left {
+  display:flex; flex-direction:column;
+  padding:clamp(16px,2.5vh,36px) clamp(16px,2vw,36px);
+  position:relative; overflow:hidden;
+  border-right:1px solid var(--border);
+}
+.col-left::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px);
+  background-size:28px 28px;
+  mask-image:linear-gradient(160deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,0) 55%);
+  -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,0) 55%);
+}
+.col-left::after {
+  content:''; position:absolute; left:0; top:20%; bottom:20%;
+  width:3px; border-radius:0 3px 3px 0;
+  background:var(--accent); opacity:.5;
+}
+
+/* Header */
+.header {
+  position:relative; z-index:1; flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:clamp(10px,1.8vh,22px);
+}
+.dev-logo  { height:clamp(20px,2.4vh,34px); width:auto; object-fit:contain; }
+.slide-num { font-size:clamp(9px,.7vw,11px); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
+
+/* Intro */
+.intro { position:relative; z-index:1; flex-shrink:0; margin-bottom:clamp(10px,1.6vh,20px); }
+.eyebrow {
+  display:flex; align-items:center; gap:8px; margin-bottom:5px;
+  font-size:clamp(9px,.72vw,11px); font-weight:700;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--accent);
+}
+.eyebrow::before {
+  content:''; width:clamp(12px,1.4vw,20px); height:2px;
+  background:var(--accent); border-radius:2px; flex-shrink:0;
+}
+.headline { font-size:clamp(1.1rem,1.8vw,2.1rem); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); }
+
+/* Inputs */
+.inputs { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; gap:clamp(6px,1vh,11px); min-height:0; }
+.input-lbl { font-size:clamp(8px,.6vw,10px); font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--subtle); display:block; margin-bottom:4px; }
+
+/* Unit Selector */
+.unit-select {
+  width:100%; padding:clamp(7px,1vh,11px) 32px clamp(7px,1vh,11px) clamp(10px,1vw,14px);
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  font-family:var(--font); font-size:clamp(11px,.88vw,13px); font-weight:500; color:var(--ink);
+  cursor:pointer; appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 10px center;
+  transition:border-color .2s;
+}
+.unit-select:focus { outline:none; border-color:var(--accent); }
+
+/* Kaufpreis */
+.price-wrap { position:relative; }
+.price-input {
+  width:100%; padding:clamp(8px,1.2vh,14px) 36px clamp(8px,1.2vh,14px) clamp(10px,1vw,14px);
+  background:var(--surface); border:1.5px solid var(--border); border-radius:10px;
+  font-family:var(--mono); font-size:clamp(13px,1.3vw,18px); font-weight:700; color:var(--ink);
+  font-variant-numeric:tabular-nums; transition:border-color .2s;
+}
+.price-input:focus { outline:none; border-color:var(--accent); }
+.price-suffix { position:absolute; right:11px; top:50%; transform:translateY(-50%); font-size:clamp(11px,.9vw,14px); font-weight:700; color:var(--subtle); pointer-events:none; }
+
+/* Wohnfläche input */
+.sqm-input-wrap { position:relative; }
+.sqm-input {
+  width:100%; padding:clamp(7px,1vh,11px) 36px clamp(7px,1vh,11px) clamp(10px,1vw,14px);
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  font-family:var(--mono); font-size:clamp(12px,1.1vw,15px); font-weight:600; color:var(--ink);
+  font-variant-numeric:tabular-nums; transition:border-color .2s;
+}
+.sqm-input:focus { outline:none; border-color:var(--accent); }
+.sqm-suffix { position:absolute; right:11px; top:50%; transform:translateY(-50%); font-size:clamp(10px,.82vw,13px); font-weight:600; color:var(--subtle); pointer-events:none; }
+
+/* EK Kombination: Input + Stepper */
+.ek-combo { display:flex; gap:8px; align-items:stretch; }
+.ek-eur-wrap { position:relative; flex:1; }
+.ek-eur-input {
+  width:100%; height:100%;
+  padding:clamp(7px,1vh,11px) 28px clamp(7px,1vh,11px) clamp(10px,1vw,14px);
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  font-family:var(--mono); font-size:clamp(11px,.9vw,14px); font-weight:600; color:var(--ink);
+  font-variant-numeric:tabular-nums; transition:border-color .2s;
+}
+.ek-eur-input:focus { outline:none; border-color:var(--accent); }
+.ek-eur-sfx { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:clamp(9px,.72vw,11px); font-weight:700; color:var(--subtle); pointer-events:none; }
+.stepper {
+  display:flex; align-items:center; gap:0;
+  border:1px solid var(--border); border-radius:10px;
+  background:var(--surface); overflow:hidden; flex-shrink:0;
+}
+.step-btn {
+  width:clamp(26px,2.4vw,34px); height:100%; min-height:clamp(28px,2.8vh,38px);
+  display:flex; align-items:center; justify-content:center;
+  background:none; border:none; cursor:pointer; color:var(--muted);
+  font-size:15px; font-weight:400; transition:background .15s, color .15s; flex-shrink:0;
+}
+.step-btn:hover { background:oklch(from var(--accent) l c h / .1); color:var(--accent); }
+.step-val {
+  min-width:clamp(36px,3.2vw,48px); text-align:center;
+  font-family:var(--mono); font-size:clamp(10px,.82vw,13px);
+  font-weight:700; color:var(--ink);
+  border-left:1px solid var(--border); border-right:1px solid var(--border);
+  padding:0 4px; white-space:nowrap;
+}
+
+/* Steuersatz Stepper Row */
+.stepper-row { display:flex; align-items:center; gap:8px; }
+.stepper-row .input-lbl { flex:1; margin-bottom:0; }
+
+/* Finanzierungsdetails Trigger */
+.fin-trigger {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:clamp(7px,1vh,11px) clamp(10px,1vw,14px);
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; cursor:pointer; flex-shrink:0;
+  transition:border-color .2s, background .15s;
+}
+.fin-trigger:hover { border-color:var(--accent); background:oklch(from var(--accent) 0.99 0.005 h); }
+.fin-trigger-lbl {
+  font-size:clamp(9px,.75vw,11px); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+  display:flex; align-items:center; gap:6px;
+}
+.fin-trigger-lbl svg { width:12px; height:12px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.fin-mischzins { font-family:var(--mono); font-size:clamp(10px,.82vw,13px); font-weight:700; color:var(--accent); }
+.fin-arrow { font-size:10px; color:var(--subtle); transition:transform .25s; }
+.fin-arrow.open { transform:rotate(180deg); }
+
+/* Finanzierungsdetails Panel */
+.fin-panel {
+  max-height:0; overflow:hidden;
+  transition:max-height .35s cubic-bezier(0.4,0,0.2,1);
+}
+.fin-panel-inner {
+  padding:clamp(8px,1.2vh,14px) clamp(10px,1vw,14px);
+  background:oklch(from var(--accent) 0.99 0.005 h);
+  border:1px solid oklch(from var(--accent) l c h / .2);
+  border-radius:10px; border-top:none; border-top-left-radius:0; border-top-right-radius:0;
+  display:grid; grid-template-columns:1fr 1fr; gap:8px clamp(10px,1.5vw,18px);
+}
+.fin-field { display:flex; flex-direction:column; gap:3px; }
+.fin-field-lbl { font-size:clamp(8px,.6vw,10px); font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--subtle); }
+.fin-input {
+  padding:clamp(5px,.7vh,8px) clamp(8px,.9vw,12px);
+  background:var(--surface); border:1px solid var(--border); border-radius:8px;
+  font-family:var(--mono); font-size:clamp(10px,.82vw,13px); font-weight:600; color:var(--ink);
+  font-variant-numeric:tabular-nums; transition:border-color .2s;
+}
+.fin-input:focus { outline:none; border-color:var(--accent); }
+.fin-full { grid-column:1/-1; }
+.fin-reset { 
+  grid-column:1/-1; padding:5px; background:none; border:none; cursor:pointer;
+  font-size:clamp(8px,.62vw,10px); color:var(--subtle); font-family:var(--font);
+  font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+  transition:color .2s; text-align:right;
+}
+.fin-reset:hover { color:var(--accent); }
+
+/* Footer */
+.footer-left { position:relative; z-index:1; flex-shrink:0; padding-top:clamp(8px,1.2vh,14px); border-top:1px solid var(--border); margin-top:clamp(8px,1.2vh,14px); }
+.address { font-size:clamp(9px,.72vw,12px); color:var(--subtle); }
+
+/* ── RECHTS ───────────────────────────────────────────────────── */
+.col-right { display:flex; flex-direction:column; padding:clamp(16px,2.5vh,36px) clamp(16px,2vw,38px); gap:clamp(8px,1.2vh,14px); }
+
+/* Calc Header */
+.calc-hdr { flex-shrink:0; display:flex; align-items:center; justify-content:space-between; }
+.calc-title { font-size:clamp(9px,.7vw,11px); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
+.hdr-right { display:flex; align-items:center; gap:8px; }
+.unit-badge { font-size:clamp(9px,.7vw,11px); font-weight:700; padding:3px 10px; border-radius:50px; background:oklch(from var(--accent) l c h / .1); color:var(--accent); border:1px solid oklch(from var(--accent) l c h / .25); }
+.print-btn {
+  display:flex; align-items:center; gap:5px;
+  padding:4px 10px; background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; cursor:pointer; font-family:var(--font);
+  font-size:clamp(9px,.7vw,11px); font-weight:600; color:var(--muted);
+  transition:border-color .2s, color .2s;
+}
+.print-btn:hover { border-color:var(--accent); color:var(--accent); }
+.print-btn svg { width:12px; height:12px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+
+/* Hero */
+.hero-block {
+  flex-shrink:0; background:var(--surface); border:1px solid var(--border);
+  border-radius:16px; overflow:hidden; position:relative;
+}
+.hero-block::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--accent); }
+.hero-inner { padding:clamp(10px,1.6vh,20px) clamp(14px,1.5vw,22px); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.hero-left { display:flex; flex-direction:column; gap:4px; }
+.hero-lbl { font-size:clamp(8px,.65vw,11px); font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--subtle); }
+.hero-val { font-family:var(--mono); font-size:clamp(2rem,4vw,4.5rem); font-weight:900; letter-spacing:-.03em; font-variant-numeric:tabular-nums; transition:color .3s; }
+.hero-sub { font-size:clamp(8px,.65vw,10px); color:var(--subtle); }
+.ws-toggle { display:flex; border:1px solid var(--border); border-radius:8px; overflow:hidden; flex-shrink:0; }
+.ws-btn { padding:clamp(5px,.8vh,8px) clamp(8px,1vw,14px); background:var(--surface); border:none; cursor:pointer; font-family:var(--font); font-size:clamp(9px,.7vw,11px); font-weight:600; color:var(--subtle); transition:all .2s; white-space:nowrap; }
+.ws-btn.active { background:var(--accent); color:#fff; }
+.ws-btn:not(.active):hover { background:oklch(from var(--accent) l c h / .1); color:var(--accent); }
+
+/* Waterfall */
+.waterfall { flex:1; min-height:0; background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; display:flex; flex-direction:column; }
+.w-row { display:flex; align-items:center; justify-content:space-between; padding:clamp(6px,.9vh,10px) clamp(12px,1.3vw,18px); border-bottom:1px solid var(--border); gap:8px; flex-shrink:0; }
+.w-row:last-child { border-bottom:none; }
+.w-row.sub { background:oklch(0.975 0.003 85); padding-top:clamp(4px,.6vh,7px); padding-bottom:clamp(4px,.6vh,7px); }
+.w-row.total { background:oklch(0.965 0.004 85); }
+.w-row.result { background:var(--bg); border-top:2px solid var(--border); border-bottom:2px solid var(--border); }
+.w-row.afa { background:oklch(from var(--accent) 0.985 0.008 h); }
+.w-lbl { font-size:clamp(10px,.82vw,13px); color:var(--muted); flex:1; }
+.w-lbl.b { font-weight:700; color:var(--ink); }
+.w-lbl.s { font-size:clamp(9px,.7vw,11px); color:var(--subtle); padding-left:14px; }
+.w-lbl.a { font-weight:600; color:var(--accent); }
+.w-val { font-family:var(--mono); font-size:clamp(11px,.95vw,14px); font-weight:700; text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.w-val.inc { color:var(--pos); }
+.w-val.exp { color:var(--neg); }
+.w-val.sv { font-size:clamp(9px,.72vw,11px); font-weight:400; color:var(--subtle); }
+.w-val.aval { color:var(--accent); }
+.w-sep { height:1px; background:var(--border); flex-shrink:0; }
+.w-sep.t { height:2px; background:oklch(0.84 0.005 85); }
+
+/* KPI Row */
+.kpi-row { flex-shrink:0; display:flex; gap:clamp(6px,.8vw,10px); }
+.kpi { flex:1; display:flex; flex-direction:column; gap:2px; padding:clamp(7px,1vh,11px) clamp(8px,.9vw,12px); background:var(--surface); border:1px solid var(--border); border-radius:10px; min-width:0; }
+.kpi-v { font-family:var(--mono); font-size:clamp(11px,1vw,14px); font-weight:900; color:var(--ink); font-variant-numeric:tabular-nums; }
+.kpi-l { font-size:clamp(8px,.6vw,10px); font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--subtle); }
+
+/* Disclaimer */
+.disclaimer { flex-shrink:0; padding:clamp(6px,.9vh,10px) clamp(12px,1.3vw,18px); background:oklch(0.96 0.005 85); border:1px solid var(--border); border-radius:10px; }
+.disclaimer-text { font-size:clamp(8px,.6vw,10px); color:var(--subtle); line-height:1.5; }
+.disclaimer-text strong { color:var(--muted); }
+
+/* ── ANIMATIONEN ──────────────────────────────────────────────── */
+@keyframes up   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fade { from{opacity:0} to{opacity:1} }
+.header      { animation:up   .5s cubic-bezier(.22,1,.36,1) .05s both }
+.intro       { animation:up   .5s cubic-bezier(.22,1,.36,1) .1s  both }
+.inputs      { animation:up   .5s cubic-bezier(.22,1,.36,1) .18s both }
+.footer-left { animation:fade .4s ease                       .4s  both }
+.calc-hdr    { animation:fade .4s ease                       .1s  both }
+.hero-block  { animation:up   .6s cubic-bezier(.22,1,.36,1) .18s both }
+.waterfall   { animation:up   .6s cubic-bezier(.22,1,.36,1) .26s both }
+.kpi-row     { animation:up   .6s cubic-bezier(.22,1,.36,1) .34s both }
+.disclaimer  { animation:fade .4s ease                       .4s  both }
+
+@media (prefers-reduced-motion:reduce) {
+  *{animation:none!important;opacity:1!important;transform:none!important}
+}
+
+/* ── PRINT ────────────────────────────────────────────────────── */
+@media print {
+  html, body { overflow:visible; height:auto; width:auto; }
+  .slide { display:block; height:auto; width:auto; }
+  .col-left { display:none; }
+  .col-right {
+    display:block; padding:20px; height:auto;
+    page-break-inside:avoid;
+  }
+  .waterfall, .hero-block, .kpi-row, .disclaimer { break-inside:avoid; }
+  .fin-panel, .ws-toggle, .print-btn { display:none; }
+  .hero-val { font-size:3rem; }
+  .w-val { font-size:12px; }
+  .w-lbl { font-size:12px; }
+  .disclaimer { border:1px solid #ccc; }
+  @page { margin:1.5cm; }
+}
+</style>
+</head>
+<body>
+<div class="slide">
+
+  <!-- LINKS -->
+  <div class="col-left">
+    <div class="header">
+      <img class="dev-logo" id="devLogo" src="" alt="">
+      <span class="slide-num">Rendite</span>
+    </div>
+    <div class="intro">
+      <div class="eyebrow">Renditerechner</div>
+      <h2 class="headline">Ihre pers&#246;nliche Kalkulation.</h2>
+    </div>
+
+    <div class="inputs">
+      <!-- Unit -->
+      <div>
+        <span class="input-lbl">Wohnungstyp</span>
+        <select class="unit-select" id="unitSel"></select>
+      </div>
+
+      <!-- Kaufpreis -->
+      <div>
+        <span class="input-lbl">Kaufpreis</span>
+        <div class="price-wrap">
+          <input class="price-input" id="kaufpreisIn" type="text" inputmode="numeric" autocomplete="off" value="0">
+          <span class="price-suffix">€</span>
+        </div>
+      </div>
+
+      <!-- Wohnfläche -->
+      <div>
+        <span class="input-lbl">Wohnfl&#228;che</span>
+        <div class="sqm-input-wrap">
+          <input class="sqm-input" id="sqmIn" type="number" min="10" max="300" step="0.5" value="60">
+          <span class="sqm-suffix">m&#178;</span>
+        </div>
+      </div>
+
+      <!-- Eigenkapital: Feld + Stepper -->
+      <div>
+        <span class="input-lbl">Eigenkapital</span>
+        <div class="ek-combo">
+          <div class="ek-eur-wrap">
+            <input class="ek-eur-input" id="ekEurIn" type="text" inputmode="numeric" value="0">
+            <span class="ek-eur-sfx">€</span>
+          </div>
+          <div class="stepper">
+            <button class="step-btn" id="ekMinus">&#8722;</button>
+            <span class="step-val" id="ekPctDisp">20%</span>
+            <button class="step-btn" id="ekPlus">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Steuersatz -->
+      <div class="stepper-row">
+        <span class="input-lbl">Grenzsteuersatz</span>
+        <div class="stepper">
+          <button class="step-btn" id="steuMinus">&#8722;</button>
+          <span class="step-val" id="steuDisp">42%</span>
+          <button class="step-btn" id="steuPlus">+</button>
+        </div>
+      </div>
+
+      <!-- Finanzierungs-Details -->
+      <div style="flex-shrink:0">
+        <div class="fin-trigger" id="finTrigger">
+          <span class="fin-trigger-lbl">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Finanzierungsdetails
+          </span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="fin-mischzins" id="mischzinsDisp">—</span>
+            <span class="fin-arrow" id="finArrow">&#9660;</span>
+          </div>
+        </div>
+        <div class="fin-panel" id="finPanel">
+          <div class="fin-panel-inner">
+            <div class="fin-field">
+              <span class="fin-field-lbl">Haupt-Zins %</span>
+              <input class="fin-input" id="mainZinsIn" type="number" step="0.05" value="3.80">
+            </div>
+            <div class="fin-field">
+              <span class="fin-field-lbl">Haupt-Tilgung %</span>
+              <input class="fin-input" id="mainTilgIn" type="number" step="0.25" value="2.00">
+            </div>
+            <div class="fin-field">
+              <span class="fin-field-lbl">KfW-Zins %</span>
+              <input class="fin-input" id="kfwZinsIn" type="number" step="0.05" value="2.85">
+            </div>
+            <div class="fin-field">
+              <span class="fin-field-lbl">KfW-Tilgung %</span>
+              <input class="fin-input" id="kfwTilgIn" type="number" step="0.25" value="2.00">
+            </div>
+            <div class="fin-field">
+              <span class="fin-field-lbl">Nebenkosten %</span>
+              <input class="fin-input" id="nkIn" type="number" step="0.5" value="7.5">
+            </div>
+            <div class="fin-field">
+              <span class="fin-field-lbl">Wertsteigerung %</span>
+              <input class="fin-input" id="wsIn" type="number" step="0.5" value="2.0">
+            </div>
+            <button class="fin-reset fin-full" id="finReset">&#8635; Standardwerte wiederherstellen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-left">
+      <span class="address" id="address">—</span>
+    </div>
+  </div>
+
+  <!-- RECHTS -->
+  <div class="col-right">
+
+    <div class="calc-hdr">
+      <span class="calc-title">Jahresbetrachtung</span>
+      <div class="hdr-right">
+        <span class="unit-badge" id="calcBadge">—</span>
+        <button class="print-btn" onclick="window.print()">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Drucken
+        </button>
+      </div>
+    </div>
+
+    <!-- Hero: EK-Rendite -->
+    <div class="hero-block">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <span class="hero-lbl">Eigenkapitalrendite p.a.</span>
+          <div class="hero-val" id="heroVal">—</div>
+          <span class="hero-sub" id="heroSub">Jahre 1–4 · inkl. AfA-Steuereffekt + Tilgung</span>
+        </div>
+        <div class="ws-toggle">
+          <button class="ws-btn active" id="btnMitWS" onclick="setWS(true)">Mit WS</button>
+          <button class="ws-btn" id="btnOhneWS" onclick="setWS(false)">Ohne WS</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Waterfall: Jahreswerte -->
+    <div class="waterfall">
+      <div class="w-row">
+        <span class="w-lbl">Kaltmiete / Jahr</span>
+        <span class="w-val inc" id="r-kaltmieteY">—</span>
+      </div>
+      <div class="w-row sub">
+        <span class="w-lbl s">Bewirtschaftungskosten (12 %)</span>
+        <span class="w-val sv exp" id="r-bwkY">—</span>
+      </div>
+      <div class="w-sep"></div>
+      <div class="w-row total">
+        <span class="w-lbl b">Nettomiete / Jahr</span>
+        <span class="w-val inc" id="r-nettomieteY">—</span>
+      </div>
+      <div class="w-row">
+        <span class="w-lbl b">Annuit&#228;t gesamt / Jahr</span>
+        <span class="w-val exp" id="r-rateY">—</span>
+      </div>
+      <div class="w-row sub">
+        <span class="w-lbl s" id="r-kfwLbl">KfW-Anteil</span>
+        <span class="w-val sv" id="r-kfwRateY">—</span>
+      </div>
+      <div class="w-row sub">
+        <span class="w-lbl s">Marktdarlehen + Tilgung</span>
+        <span class="w-val sv" id="r-mainRateY">—</span>
+      </div>
+      <div class="w-sep t"></div>
+      <div class="w-row result">
+        <span class="w-lbl b">Operativer Cashflow / Jahr</span>
+        <span class="w-val" id="r-cfPreY">—</span>
+      </div>
+      <div class="w-row afa">
+        <span class="w-lbl a">+ AfA-Steuerersparnis / Jahr</span>
+        <span class="w-val aval" id="r-afaY">—</span>
+      </div>
+      <div class="w-row afa" style="background:oklch(from var(--pos) 0.97 0.02 h)">
+        <span class="w-lbl" style="font-weight:600;color:var(--pos)">+ Tilgung (Verm&#246;gensaufbau) / Jahr</span>
+        <span class="w-val" style="color:var(--pos)" id="r-tilgY">—</span>
+      </div>
+    </div>
+
+    <!-- KPI Row -->
+    <div class="kpi-row">
+      <div class="kpi">
+        <span class="kpi-v" id="r-cfNachAfAM">—</span>
+        <span class="kpi-l">Cashflow/Monat nach AfA</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-v" id="r-steuervorteil">—</span>
+        <span class="kpi-l">Steuervorteil p.a.</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-v" id="r-brutto">—</span>
+        <span class="kpi-l">Bruttomietrendite</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-v" id="r-darlehen">—</span>
+        <span class="kpi-l">Darlehensbetrag</span>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      <p class="disclaimer-text"><strong>Hinweis:</strong> Diese Kalkulation dient ausschlie&szlig;lich der Vorabinformation und stellt keine Steuer- oder Anlageberatung dar. Alle Angaben basieren auf Annahmen und vereinfachten Berechnungsmodellen. Die tats&auml;chliche steuerliche Auswirkung ist individuell verschieden &mdash; bitte konsultieren Sie Ihren Steuerberater f&uuml;r eine pers&ouml;nliche Berechnung.</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────
+let P = null;
+let mitWS = true;
+let steuersatz = 42;
+let ekPct = 20;
+let R = {}; // calc results
+
+const DEF = { mainZins:3.80, mainTilg:2.00, kfwZins:2.85, kfwTilg:2.00, nkPct:7.5, wsPct:2.0 };
+const S = Object.assign({}, DEF);
+
+// ── HELPERS ────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+function parseDE(s) {
+  if (s === '' || s === null || s === undefined) return 0;
+  return parseFloat(String(s).replace(/\./g,'').replace(',','.')) || 0;
+}
+function fmtY(n, plus) {
+  const a = Math.abs(Math.round(n));
+  const sgn = n < 0 ? '\u2212\u00a0' : (plus ? '+\u00a0' : '');
+  return sgn + a.toLocaleString('de') + '\u00a0€';
+}
+function fmtPct(n, dec=1) {
+  return n.toLocaleString('de',{minimumFractionDigits:dec,maximumFractionDigits:dec}) + '\u00a0%';
+}
+function fmtK(n) {
+  n = Math.round(n);
+  if (Math.abs(n) >= 1000000) return (n/1000000).toLocaleString('de',{maximumFractionDigits:1})+'\u00a0Mio.\u00a0€';
+  if (Math.abs(n) >= 1000)    return Math.round(n/1000).toLocaleString('de')+'\u00a0T€';
+  return n.toLocaleString('de')+'\u00a0€';
+}
+
+// ── KALKULATION ─────────────────────────────────────────────────
+function calc() {
+  if (!P) return;
+
+  const kaufpreis = parseDE($('kaufpreisIn').value);
+  const sqm       = parseFloat($('sqmIn').value)  || 60;
+  const ekEur     = parseDE($('ekEurIn').value);
+
+  // Darlehen
+  const gesamtk   = kaufpreis * (1 + S.nkPct/100);
+  const darlehen  = Math.max(0, gesamtk - ekEur);
+
+  // KfW-Split
+  const kfwMax    = P.ka?.kfw?.programs?.find(p=>p.highlight)?.maxLoan
+                    || P.ka?.kfw?.programs?.[0]?.maxLoan
+                    || P.ka?.kfwLoan || 100000;
+  const kfwA      = Math.min(kfwMax, darlehen);
+  const mainA     = Math.max(0, darlehen - kfwA);
+
+  // Jährliche Annuitäten
+  const kfwAnnoY  = kfwA  * (S.kfwZins/100  + S.kfwTilg/100);
+  const mainAnnoY = mainA * (S.mainZins/100 + S.mainTilg/100);
+  const rateY     = kfwAnnoY + mainAnnoY;
+
+  // Zinsen & Tilgung (Jahr 1)
+  const kfwZinsY  = kfwA  * S.kfwZins/100;
+  const mainZinsY = mainA * S.mainZins/100;
+  const zinsenY   = kfwZinsY + mainZinsY;
+  const kfwTilgY  = kfwA  * S.kfwTilg/100;
+  const mainTilgY = mainA * S.mainTilg/100;
+  const tilgungY  = kfwTilgY + mainTilgY;
+
+  // Miete / Jahr
+  const rentSqm   = P.ka?.rentPerSqm || 14;
+  const kaltmY    = sqm * rentSqm * 12;
+  const bwkY      = kaltmY * 0.12;
+  const nettomY   = kaltmY - bwkY;
+
+  // Cashflow operativ
+  const cfOpY     = nettomY - rateY;
+
+  // AfA
+  const afa       = P.ka?.afa || {};
+  const bShare    = (afa.buildingShare || 85) / 100;
+  const afaDegr   = (afa.degressiv?.rate || P.ka?.afaDegressiv || 5) / 100;
+  const afaSpez   = afa.spezial?.eligible !== false
+                    ? (afa.spezial?.rate || P.ka?.afaSpezial || 5) / 100 : 0;
+  const afaBaseY  = kaufpreis * bShare;
+  const afaTotalY = afaBaseY * (afaDegr + afaSpez);
+  const steuerY   = afaTotalY * steuersatz / 100;
+
+  const cfNachAfAY = cfOpY + steuerY;
+  const cfNachAfAM = cfNachAfAY / 12;
+
+  // Mischzins
+  const mischzins = darlehen > 0
+    ? (kfwA * S.kfwZins + mainA * S.mainZins) / darlehen : 0;
+
+  // Wertsteigerung
+  const wsY = kaufpreis * S.wsPct / 100;
+
+  // EK-Rendite
+  const gesamtY_ohneWS = cfNachAfAY + tilgungY;
+  const gesamtY_mitWS  = gesamtY_ohneWS + wsY;
+  const ekRendOhne = ekEur > 0 ? gesamtY_ohneWS / ekEur * 100 : 0;
+  const ekRendMit  = ekEur > 0 ? gesamtY_mitWS  / ekEur * 100 : 0;
+
+  // Bruttorendite
+  const bruttoR = kaufpreis > 0 ? kaltmY / kaufpreis * 100 : 0;
+
+  R = { kaufpreis, sqm, ekEur, darlehen, kfwA, mainA,
+        kfwAnnoY, mainAnnoY, rateY, zinsenY, tilgungY,
+        kaltmY, bwkY, nettomY, cfOpY, steuerY,
+        cfNachAfAY, cfNachAfAM,
+        mischzins, wsY, ekRendOhne, ekRendMit,
+        bruttoR };
+
+  updateDisplay();
+}
+
+function updateDisplay() {
+  if (!R.kaufpreis) return;
+
+  // Hero
+  const ekR = mitWS ? R.ekRendMit : R.ekRendOhne;
+  $('heroVal').textContent = fmtPct(ekR, 1);
+  $('heroVal').style.color = ekR >= 0 ? 'var(--pos)' : 'var(--neg)';
+  $('heroSub').textContent = 'Jahre 1\u20134 \u00b7 inkl. AfA + Tilgung'
+    + (mitWS ? ' + ' + S.wsPct.toLocaleString('de') + '\u00a0% WS p.a.' : '');
+
+  // Mischzins
+  $('mischzinsDisp').textContent = '\u00d8 ' + fmtPct(R.mischzins, 2) + ' Mischzins';
+
+  // Waterfall
+  $('r-kaltmieteY').textContent = '+\u00a0' + Math.round(R.kaltmY).toLocaleString('de') + '\u00a0€';
+  $('r-bwkY').textContent       = '\u2212\u00a0' + Math.round(R.bwkY).toLocaleString('de') + '\u00a0€';
+  $('r-nettomieteY').textContent = '+\u00a0' + Math.round(R.nettomY).toLocaleString('de') + '\u00a0€';
+  $('r-rateY').textContent       = '\u2212\u00a0' + Math.round(R.rateY).toLocaleString('de') + '\u00a0€';
+  $('r-kfwRateY').textContent    = Math.round(R.kfwAnnoY).toLocaleString('de') + '\u00a0€';
+  $('r-mainRateY').textContent   = Math.round(R.mainAnnoY).toLocaleString('de') + '\u00a0€';
+
+  const cfEl = $('r-cfPreY');
+  cfEl.textContent = fmtY(R.cfOpY, true);
+  cfEl.className = 'w-val ' + (R.cfOpY >= 0 ? 'inc' : 'exp');
+
+  $('r-afaY').textContent  = '+\u00a0' + Math.round(R.steuerY).toLocaleString('de') + '\u00a0€';
+  $('r-tilgY').textContent = '+\u00a0' + Math.round(R.tilgungY).toLocaleString('de') + '\u00a0€';
+
+  // KfW Label
+  const prog = P.ka?.kfw?.programs?.find(p=>p.highlight) || P.ka?.kfw?.programs?.[0];
+  $('r-kfwLbl').textContent = (prog?.name || 'KfW') + ' (' + fmtPct(S.kfwZins,2) + ')';
+
+  // KPIs
+  const cfM = R.cfNachAfAM;
+  $('r-cfNachAfAM').textContent = (cfM >= 0 ? '+\u00a0' : '\u2212\u00a0')
+    + Math.abs(Math.round(cfM)).toLocaleString('de') + '\u00a0€';
+  $('r-steuervorteil').textContent = '+\u00a0' + Math.round(R.steuerY).toLocaleString('de') + '\u00a0€';
+  $('r-brutto').textContent = fmtPct(R.bruttoR, 1);
+  $('r-darlehen').textContent = fmtK(R.darlehen);
+}
+
+// ── EK SYNC ────────────────────────────────────────────────────
+function syncEKfromEur() {
+  const eur = parseDE($('ekEurIn').value);
+  const kp  = parseDE($('kaufpreisIn').value);
+  ekPct = kp > 0 ? Math.round(eur / kp * 100) : 0;
+  $('ekPctDisp').textContent = ekPct + '%';
+  calc();
+}
+function syncEKfromPct() {
+  const kp  = parseDE($('kaufpreisIn').value);
+  const eur = Math.round(kp * ekPct / 100);
+  $('ekEurIn').value = eur.toLocaleString('de');
+  $('ekPctDisp').textContent = ekPct + '%';
+  calc();
+}
+
+// ── WS TOGGLE ──────────────────────────────────────────────────
+function setWS(on) {
+  mitWS = on;
+  $('btnMitWS').classList.toggle('active', on);
+  $('btnOhneWS').classList.toggle('active', !on);
+  updateDisplay();
+}
+window.setWS = setWS;
+
+// ── FIN PANEL ──────────────────────────────────────────────────
+let finOpen = false;
+function toggleFin() {
+  finOpen = !finOpen;
+  const panel = $('finPanel');
+  panel.style.maxHeight = finOpen ? panel.scrollHeight + 'px' : '0';
+  $('finArrow').classList.toggle('open', finOpen);
+  if (finOpen) setTimeout(() => { panel.style.maxHeight = '600px'; }, 10);
+}
+$('finTrigger').addEventListener('click', toggleFin);
+
+$('finReset').addEventListener('click', () => {
+  Object.assign(S, DEF);
+  $('mainZinsIn').value = DEF.mainZins;
+  $('mainTilgIn').value = DEF.mainTilg;
+  $('kfwZinsIn').value  = DEF.kfwZins;
+  $('kfwTilgIn').value  = DEF.kfwTilg;
+  $('nkIn').value       = DEF.nkPct;
+  $('wsIn').value       = DEF.wsPct;
+  calc();
+});
+
+['mainZinsIn','mainTilgIn','kfwZinsIn','kfwTilgIn','nkIn','wsIn'].forEach(id => {
+  $(id).addEventListener('input', () => {
+    S.mainZins = parseFloat($('mainZinsIn').value) || DEF.mainZins;
+    S.mainTilg = parseFloat($('mainTilgIn').value) || DEF.mainTilg;
+    S.kfwZins  = parseFloat($('kfwZinsIn').value)  || DEF.kfwZins;
+    S.kfwTilg  = parseFloat($('kfwTilgIn').value)  || DEF.kfwTilg;
+    S.nkPct    = parseFloat($('nkIn').value)        || DEF.nkPct;
+    S.wsPct    = parseFloat($('wsIn').value)        || 0;
+    calc();
+  });
+});
+
+// ── KAUFPREIS ──────────────────────────────────────────────────
+$('kaufpreisIn').addEventListener('blur', e => {
+  const v = parseDE(e.target.value);
+  e.target.value = v.toLocaleString('de');
+  syncEKfromPct();
+});
+$('kaufpreisIn').addEventListener('focus', e => {
+  e.target.value = String(parseDE(e.target.value));
+});
+$('kaufpreisIn').addEventListener('input', () => { syncEKfromPct(); });
+
+// ── WOHNFLÄCHE ─────────────────────────────────────────────────
+$('sqmIn').addEventListener('input', calc);
+
+// ── EK ─────────────────────────────────────────────────────────
+$('ekEurIn').addEventListener('blur', e => {
+  const v = parseDE(e.target.value);
+  e.target.value = v.toLocaleString('de');
+  syncEKfromEur();
+});
+$('ekEurIn').addEventListener('focus', e => {
+  e.target.value = String(parseDE(e.target.value));
+});
+$('ekEurIn').addEventListener('input', syncEKfromEur);
+
+$('ekMinus').addEventListener('click', () => { ekPct = Math.max(5, ekPct-5); syncEKfromPct(); });
+$('ekPlus').addEventListener('click',  () => { ekPct = Math.min(50,ekPct+5); syncEKfromPct(); });
+
+$('steuMinus').addEventListener('click', () => { steuersatz = Math.max(25,steuersatz-5); $('steuDisp').textContent=steuersatz+'%'; calc(); });
+$('steuPlus').addEventListener('click',  () => { steuersatz = Math.min(48,steuersatz+5); $('steuDisp').textContent=steuersatz+'%'; calc(); });
+
+// ── UNIT SELECTOR ──────────────────────────────────────────────
+$('unitSel').addEventListener('change', e => loadUnit(parseInt(e.target.value)));
+
+function loadUnit(idx) {
+  const u = P?.unitTypes?.[idx];
+  if (!u) return;
+  const sqmMid = (() => { const m = u.sqm?.match(/(\d+)[^\d]+(\d+)/); return m ? (parseInt(m[1])+parseInt(m[2]))/2 : 60; })();
+  const priceMid = (() => { const f=parseDE(u.priceFrom), t=parseDE(u.priceTo); return f&&t?(f+t)/2:f||t||400000; })();
+  $('sqmIn').value = sqmMid.toFixed(1);
+  $('kaufpreisIn').value = Math.round(priceMid).toLocaleString('de');
+  $('calcBadge').textContent = u.type || '';
+  syncEKfromPct();
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+function applyProject(proj) {
+  P = proj;
+  const r = document.documentElement;
+  if (P.accent)    r.style.setProperty('--accent',     P.accent);
+  if (P.accentHex) r.style.setProperty('--accent-hex', P.accentHex);
+
+  $('devLogo').src = P.developerLogo || '';
+  $('devLogo').alt = P.developer     || '';
+  $('address').textContent = P.address || '';
+
+  // Defaults aus PROJECT übernehmen
+  const ka = P.ka || {};
+  const kfwProg = ka.kfw?.programs?.find(p=>p.highlight) || ka.kfw?.programs?.[0];
+  if (kfwProg?.rate)     { S.kfwZins  = kfwProg.rate;     $('kfwZinsIn').value  = S.kfwZins; }
+  if (ka.marketRate)     { S.mainZins = ka.marketRate;     $('mainZinsIn').value = S.mainZins; }
+  DEF.kfwZins  = S.kfwZins;
+  DEF.mainZins = S.mainZins;
+
+  // Unit Selector
+  const sel = $('unitSel');
+  sel.innerHTML = '';
+  (P.unitTypes || []).forEach((u,i) => {
+    const o = document.createElement('option');
+    o.value = i; o.textContent = u.type + ' \u00b7 ' + u.sqm;
+    sel.appendChild(o);
+  });
+
+  const defIdx = Math.floor((P.unitTypes||[]).length / 2);
+  sel.value = defIdx;
+  loadUnit(defIdx);
+}
+
+try { if (window.parent?.PROJECT) applyProject(window.parent.PROJECT); } catch(e){}
+window.addEventListener('message', e => {
+  if (e.data?.type === 'PROJECT_DATA') applyProject(e.data.data);
+});
+</script>
+</body>
+</html>
