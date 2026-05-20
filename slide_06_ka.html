@@ -21,7 +21,7 @@
   /* Layout-Tokens (Master-Standard) */
   --pad-v:        clamp(24px, 3.5vh, 48px);
   --pad-h:        clamp(28px, 3.5vw, 56px);
-  --header-gap:   clamp(14px, 2vh, 24px);   /* kleiner als Master: Tool-Slide, mehr Inhalt */
+  --header-gap:   clamp(20px, 3.5vh, 44px);   /* Master-Standard = gleiche Position wie alle anderen Slides */
   --content-gap:  clamp(8px, 1.2vh, 16px);
   /* Typo-Tokens (Fallbacks – per postMessage überschreibbar) */
   --fs-eyebrow:  clamp(9px, 0.75vw, 11px);
@@ -58,7 +58,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
 .slide-num{font-size:var(--fs-eyebrow);font-weight:700;letter-spacing:.18em;
   text-transform:uppercase;color:var(--subtle)}
 
-.intro{position:relative;z-index:1;flex-shrink:0;margin-bottom:clamp(8px,1.4vh,18px)}
+.intro{position:relative;z-index:1;flex-shrink:0;margin-bottom:clamp(6px,1vh,12px)}
 .eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:5px;
   font-size:var(--fs-eyebrow);font-weight:700;letter-spacing:.2em;
   text-transform:uppercase;color:var(--accent)}
