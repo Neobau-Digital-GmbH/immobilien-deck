@@ -13,7 +13,6 @@
   --subtle:   oklch(0.65 0.01 250);
   --border:   oklch(0.88 0.01 85);
   --accent:   oklch(0.55 0.13 160);
-  --pos:      oklch(0.46 0.14 155);
   --font:     "Roboto", system-ui, -apple-system, sans-serif;
   --mono:     ui-monospace, "SFMono-Regular", Menlo, monospace;
   --logo-header:  clamp(22px, 2.6vh, 38px);
@@ -37,7 +36,7 @@ html, body {
   background:var(--bg); font-family:var(--font);
   -webkit-font-smoothing:antialiased; color:var(--ink);
 }
-.slide { display:grid; grid-template-columns:46fr 54fr; width:100vw; height:100vh; }
+.slide { display:grid; grid-template-columns:50fr 50fr; width:100vw; height:100vh; }
 
 /* ── LINKE SPALTE ─────────────────────────────────────────── */
 .col-left {
@@ -58,7 +57,6 @@ html, body {
   width:3px; border-radius:0 3px 3px 0; background:var(--accent); opacity:.5;
 }
 
-/* HEADER */
 .header {
   position:relative; z-index:1; flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between;
@@ -67,7 +65,6 @@ html, body {
 .dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
 .slide-label { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
 
-/* CONTENT */
 .content {
   position:relative; z-index:1;
   flex:1; display:flex; flex-direction:column;
@@ -84,58 +81,64 @@ html, body {
 }
 .headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0; }
 
-/* Prozess-Timeline — visuell stark */
-.process {
-  flex:1; display:flex; flex-direction:column;
-  justify-content:center; gap:0; min-height:0;
+/* 2×2 Step-Cards */
+.steps-grid {
+  flex:1; min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:clamp(8px,1.1vh,14px);
 }
-.proc-item { display:flex; gap:clamp(14px,1.8vw,24px); }
-.proc-left { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+.step-card {
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; gap:clamp(8px,1.1vh,14px);
+  padding:clamp(14px,2vh,24px) clamp(12px,1.3vw,18px);
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:16px; position:relative; overflow:hidden;
+}
+/* Schritt-Nummer als kleines Label oben-links */
+.step-num {
+  position:absolute; top:clamp(8px,1.1vh,13px); left:clamp(10px,1.2vw,14px);
+  font-family:var(--mono); font-size:clamp(8px,.62vw,10px);
+  font-weight:700; color:var(--subtle); letter-spacing:.1em;
+}
+/* Top-Linie als dekorativer Akzent */
+.step-card::before {
+  content:''; position:absolute; top:0; left:12%; right:12%; height:2px;
+  background:linear-gradient(90deg, transparent, oklch(0.84 0.005 85), transparent);
+}
+/* Finale Karte (Übergabe) */
+.step-card.final {
+  background:oklch(from var(--accent) 0.97 0.02 h);
+  border-color:oklch(from var(--accent) l c h / .3);
+}
+.step-card.final::before {
+  background:linear-gradient(90deg, transparent, oklch(from var(--accent) l c h / .45), transparent);
+}
+.step-card.final .step-num { color:oklch(from var(--accent) 0.55 0.08 h); }
 
-/* Großer Kreis mit Icon */
-.proc-circle {
-  width:clamp(44px,5vw,62px); height:clamp(44px,5vw,62px);
-  border-radius:50%; border:2px solid var(--border);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:1px;
-  background:var(--surface); flex-shrink:0; position:relative; z-index:1;
-  transition:background .3s, border-color .3s;
+/* Großes Icon */
+.step-icon {
+  width:clamp(40px,4.5vw,60px); height:clamp(40px,4.5vw,60px);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  background:oklch(from var(--accent) l c h / .1);
+  border:1.5px solid oklch(from var(--accent) l c h / .22);
+  border-radius:clamp(12px,1.4vw,18px);
 }
-.proc-circle.final {
-  background:var(--accent); border-color:var(--accent);
-  box-shadow:0 4px 16px oklch(from var(--accent) l c h / .3);
-}
-.proc-icon { display:flex; align-items:center; justify-content:center; }
-.proc-icon svg {
-  width:clamp(16px,1.8vw,22px); height:clamp(16px,1.8vw,22px);
-  stroke:var(--accent); stroke-width:1.8; fill:none;
+.step-icon svg {
+  width:52%; height:52%;
+  stroke:var(--accent); stroke-width:1.7; fill:none;
   stroke-linecap:round; stroke-linejoin:round;
 }
-.proc-circle.final .proc-icon svg { stroke:#fff; }
-.proc-num {
-  font-family:var(--mono); font-size:clamp(8px,.62vw,10px);
-  font-weight:700; color:var(--subtle); font-variant-numeric:tabular-nums;
-  line-height:1;
+.step-card.final .step-icon {
+  background:oklch(from var(--accent) l c h / .15);
+  border-color:oklch(from var(--accent) l c h / .3);
 }
-.proc-circle.final .proc-num { color:oklch(1 0 0 / .7); }
 
-/* Verbindungslinie dicker und akzentuierter */
-.proc-line {
-  width:2px; flex:1; min-height:clamp(18px,3vh,38px);
-  background:var(--border); margin:4px 0;
-  border-radius:2px;
-}
-.proc-line.pre-final { background:linear-gradient(to bottom, var(--border), oklch(from var(--accent) l c h / .4)); }
-
-.proc-content {
-  padding-bottom:clamp(14px,2.5vh,32px);
-  display:flex; flex-direction:column; gap:4px;
-  padding-top:clamp(8px,1.2vh,14px);
-}
-.proc-item:last-child .proc-content { padding-bottom:0; }
-.proc-label { font-size:var(--fs-subline); font-weight:900; color:var(--ink); line-height:1.1; }
-.proc-item:last-child .proc-label { color:var(--accent); }
-.proc-desc  { font-size:var(--fs-body); color:var(--muted); line-height:1.45; }
+.step-label { font-size:var(--fs-subline); font-weight:900; color:var(--ink); line-height:1.1; }
+.step-card.final .step-label { color:var(--accent); }
+.step-desc  { font-size:var(--fs-label); color:var(--muted); line-height:1.45; }
 
 /* FOOTER */
 .footer-left {
@@ -175,7 +178,7 @@ html, body {
 .contact-initials { font-size:clamp(.9rem,1.6vw,1.8rem); font-weight:900; color:var(--accent); }
 .contact-info { display:flex; flex-direction:column; gap:2px; }
 .contact-name  { font-size:var(--fs-subline); font-weight:900; color:var(--ink); letter-spacing:-.01em; line-height:1.1; }
-.contact-title { font-size:var(--fs-body);    font-weight:400; color:var(--muted); }
+.contact-title { font-size:var(--fs-body); font-weight:400; color:var(--muted); }
 
 /* Kontakt-Zeilen */
 .contact-details { display:flex; flex-direction:column; gap:clamp(8px,1.2vh,14px); }
@@ -242,10 +245,10 @@ html, body {
 .cta-block       { animation:up   .6s  cubic-bezier(.22,1,.36,1) .40s both }
 .qr-row          { animation:up   .55s cubic-bezier(.22,1,.36,1) .50s both }
 
-.proc-item:nth-child(1) { animation:up .5s cubic-bezier(.22,1,.36,1) .26s both }
-.proc-item:nth-child(2) { animation:up .5s cubic-bezier(.22,1,.36,1) .33s both }
-.proc-item:nth-child(3) { animation:up .5s cubic-bezier(.22,1,.36,1) .40s both }
-.proc-item:nth-child(4) { animation:up .5s cubic-bezier(.22,1,.36,1) .47s both }
+.step-card:nth-child(1) { animation:up .55s cubic-bezier(.22,1,.36,1) .26s both }
+.step-card:nth-child(2) { animation:up .55s cubic-bezier(.22,1,.36,1) .32s both }
+.step-card:nth-child(3) { animation:up .55s cubic-bezier(.22,1,.36,1) .38s both }
+.step-card:nth-child(4) { animation:up .55s cubic-bezier(.22,1,.36,1) .44s both }
 
 @media (prefers-reduced-motion:reduce) {
   * { animation:none !important; opacity:1 !important; transform:none !important }
@@ -264,7 +267,7 @@ html, body {
     <div class="content">
       <div class="eyebrow">Ihr Weg zur Wohnung</div>
       <h2 class="headline" id="headline">So geht es weiter.</h2>
-      <div class="process" id="processSteps"></div>
+      <div class="steps-grid" id="stepsGrid"></div>
     </div>
     <div class="footer-left">
       <span class="address" id="address">&#8212;</span>
@@ -274,7 +277,6 @@ html, body {
   <!-- RECHTS: KONTAKT + CTA -->
   <div class="col-right">
     <div class="contact-block">
-
       <div class="contact-person">
         <div class="contact-photo">
           <img id="contactPhotoImg" src="" alt="" style="display:none">
@@ -301,16 +303,7 @@ html, body {
         </a>
       </div>
 
-      <div class="cta-block">
-        <a class="btn-primary" id="btnBooking" href="#" target="_blank">
-          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Termin vereinbaren
-        </a>
-        <a class="btn-secondary" id="btnReservation" href="#">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
-          Reservierung anfragen
-        </a>
-      </div>
+      <div class="cta-block" id="ctaBlock"></div>
 
       <div class="qr-row" id="qrRow" style="display:none">
         <img class="qr-img" id="qrImg" src="" alt="QR Code">
@@ -319,7 +312,6 @@ html, body {
           <span class="qr-hint">QR-Code scannen f&#252;r direkte Buchung</span>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -341,6 +333,13 @@ function getInitials(name) {
   return name.trim().split(/\s+/).map(w => w[0].toUpperCase()).slice(0,2).join('');
 }
 
+const STEP_ICONS = [
+  '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="13" x2="12" y2="17"/><line x1="10" y1="15" x2="14" y2="15"/>',
+  '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>',
+  '<path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/>',
+  '<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>',
+];
+
 function applyProject(P) {
   const r = document.documentElement;
   if (P.accent)    r.style.setProperty('--accent',     P.accent);
@@ -354,49 +353,38 @@ function applyProject(P) {
   const ns = P.nextSteps || {};
   $('headline').textContent = ns.headline || 'So geht es weiter.';
 
-  // Prozess-Schritte
-  const stepsEl = $('processSteps');
-  stepsEl.innerHTML = '';
+  // Step-Cards 2×2
+  const grid = $('stepsGrid');
+  grid.innerHTML = '';
   const steps = ns.processSteps || [
-    { step:'01', label:'Reservierung',  desc:'Verbindliche Reservierung mit \u20ac\u00a0' + (ns.reservationFee||'2.500') + ' Reservierungsgeb\u00fchr' },
+    { step:'01', label:'Reservierung',  desc:'Verbindliche Reservierung mit \u20ac\u00a0' + (ns.reservationFee||'2.500') },
     { step:'02', label:'Finanzierung',  desc:'Finanzierungsbest\u00e4tigung innerhalb von ' + (ns.reservationDuration||'14 Tagen') },
     { step:'03', label:'Notar',         desc:'Kaufvertrag und Beurkundung beim Notar' },
     { step:'04', label:'\u00dcbergabe', desc:'Schl\u00fcsseltermin nach Fertigstellung ' + (P.completionDate||'') },
   ];
 
-  steps.forEach((s, i) => {
-    const isFinal = i === steps.length - 1;
-    const STEP_ICONS = [
-      '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="13" x2="12" y2="17"/><line x1="10" y1="15" x2="14" y2="15"/>',
-      '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>',
-      '<path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/>',
-      '<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>',
-    ];
-    const preFinal = i === steps.length - 2;
-    const item = document.createElement('div');
-    item.className = 'proc-item';
-    item.innerHTML =
-      '<div class="proc-left">' +
-        '<div class="proc-circle' + (isFinal ? ' final' : '') + '">' +
-          '<div class="proc-icon"><svg viewBox="0 0 24 24">' + (STEP_ICONS[i]||STEP_ICONS[0]) + '</svg></div>' +
-          '<span class="proc-num">' + (s.step || String(i+1).padStart(2,'0')) + '</span>' +
-        '</div>' +
-        (!isFinal ? '<div class="proc-line' + (preFinal ? ' pre-final' : '') + '"></div>' : '') +
+  steps.slice(0,4).forEach((s, i) => {
+    const isFinal = i === steps.length - 1 || i === 3;
+    const card = document.createElement('div');
+    card.className = 'step-card' + (isFinal ? ' final' : '');
+    card.innerHTML =
+      '<span class="step-num">' + (s.step || String(i+1).padStart(2,'0')) + '</span>' +
+      '<div class="step-icon">' +
+        '<svg viewBox="0 0 24 24">' + (STEP_ICONS[i] || STEP_ICONS[0]) + '</svg>' +
       '</div>' +
-      '<div class="proc-content">' +
-        '<div class="proc-label">' + (s.label||'') + '</div>' +
-        '<div class="proc-desc">'  + (s.desc ||'') + '</div>' +
-      '</div>';
-    stepsEl.appendChild(item);
+      '<div class="step-label">' + (s.label || '') + '</div>' +
+      '<div class="step-desc">'  + (s.desc  || '') + '</div>';
+    grid.appendChild(card);
   });
 
-  // Kontaktperson
+  // Kontakt
   const name    = ns.contactName  || '';
   const title   = ns.contactTitle || '';
   const phone   = ns.contactPhone || '';
   const email   = ns.contactEmail || '';
   const photo   = ns.contactPhoto || '';
   const booking = ns.bookingUrl   || '';
+  const showBtn = ns.showBookingButton !== false; // default true
 
   $('contactName').textContent  = name;
   $('contactTitle').textContent = title;
@@ -409,22 +397,42 @@ function applyProject(P) {
     img.src = photo; img.alt = name; img.style.display = 'block';
     $('contactInitials').style.display = 'none';
   }
-
   if (phone) $('phoneRow').href = 'tel:' + phone.replace(/\s/g,'');
   if (email) $('emailRow').href = 'mailto:' + email;
 
-  if (booking && !booking.includes('PLACEHOLDER')) {
-    $('btnBooking').href = booking;
+  // CTA-Buttons dynamisch
+  const cta = $('ctaBlock');
+  cta.innerHTML = '';
+
+  // Termin-Button nur wenn showBookingButton: true UND URL vorhanden
+  if (showBtn && booking && !booking.includes('PLACEHOLDER')) {
+    const btnP = document.createElement('a');
+    btnP.className = 'btn-primary';
+    btnP.href = booking;
+    btnP.target = '_blank';
+    btnP.innerHTML =
+      '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/>' +
+      '<line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>' +
+      '<line x1="3" y1="10" x2="21" y2="10"/></svg>Termin vereinbaren';
+    cta.appendChild(btnP);
+
+    // QR nur wenn Termin-Button auch angezeigt wird
     $('qrImg').src = 'https://api.qrserver.com/v1/create-qr-code/?size=140x140&margin=6&data='
                      + encodeURIComponent(booking);
     $('qrRow').style.display = 'flex';
   }
 
+  // Reservierungs-Button immer
   if (email) {
-    $('btnReservation').href = 'mailto:' + email
+    const btnS = document.createElement('a');
+    btnS.className = 'btn-secondary';
+    btnS.href = 'mailto:' + email
       + '?subject=' + encodeURIComponent('Reservierungsanfrage ' + (P.name||''))
-      + '&body=' + encodeURIComponent('Guten Tag,\n\nich m\u00f6chte eine Wohneinheit im Projekt '
-        + (P.name||'') + ' reservieren.\n\nMit freundlichen Gr\u00fc\u00dfen');
+      + '&body='    + encodeURIComponent('Guten Tag,\n\nich m\u00f6chte eine Wohneinheit reservieren.\n\nMit freundlichen Gr\u00fc\u00dfen');
+    btnS.innerHTML =
+      '<svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>' +
+      '<polyline points="22,6 12,13 2,6"/></svg>Reservierung per E-Mail';
+    cta.appendChild(btnS);
   }
 }
 
