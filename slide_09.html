@@ -6,15 +6,29 @@
 <title>Bauträger &amp; Vertrauen</title>
 <style>
 :root {
-  --bg:      oklch(0.98 0.005 85);
-  --surface: oklch(0.995 0.003 85);
-  --ink:     oklch(0.18 0.02 250);
-  --muted:   oklch(0.50 0.02 250);
-  --subtle:  oklch(0.70 0.01 250);
-  --border:  oklch(0.88 0.01 85);
-  --accent:  oklch(0.55 0.13 160);
-  --font:    "Roboto", system-ui, -apple-system, sans-serif;
-  --mono:    ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --bg:       oklch(0.98 0.005 85);
+  --surface:  oklch(0.995 0.003 85);
+  --ink:      oklch(0.18 0.02 250);
+  --muted:    oklch(0.45 0.02 250);
+  --subtle:   oklch(0.65 0.01 250);
+  --border:   oklch(0.88 0.01 85);
+  --accent:   oklch(0.55 0.13 160);
+  --font:     "Roboto", system-ui, -apple-system, sans-serif;
+  --mono:     ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --logo-header:  clamp(22px, 2.6vh, 38px);
+  --pad-v:        clamp(24px, 3.5vh, 48px);
+  --pad-h:        clamp(28px, 3.5vw, 56px);
+  --header-gap:   clamp(20px, 3.5vh, 44px);
+  --content-gap:  clamp(8px, 1.2vh, 16px);
+  --fs-eyebrow:   clamp(9px, 0.75vw, 11px);
+  --fs-headline:  clamp(1.5rem, 2.5vw, 3rem);
+  --fs-subline:   clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:      clamp(0.85rem, 1vw, 1.12rem);
+  --fs-label:     clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:     clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:     clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:      clamp(11px, 0.95vw, 14px);
+  --fs-monoLg:    clamp(1.3rem, 2.1vw, 2.6rem);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html, body {
@@ -22,248 +36,204 @@ html, body {
   background:var(--bg); font-family:var(--font);
   -webkit-font-smoothing:antialiased; color:var(--ink);
 }
-.slide {
-  display:grid; grid-template-columns:40fr 60fr;
-  width:100vw; height:100vh;
-}
+.slide { display:grid; grid-template-columns:40fr 60fr; width:100vw; height:100vh; }
 
-/* ── LINKS ─────────────────────────────────────────────────── */
+/* ── LINKE SPALTE ─────────────────────────────────────────── */
 .col-left {
   display:flex; flex-direction:column;
-  padding:clamp(24px,3.5vh,48px) clamp(24px,3vw,48px);
+  padding:var(--pad-v) var(--pad-h);
   position:relative; overflow:hidden;
   border-right:1px solid var(--border);
 }
 .col-left::before {
   content:''; position:absolute; inset:0; pointer-events:none;
-  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px);
+  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px, transparent 1.2px);
   background-size:28px 28px;
-  mask-image:linear-gradient(160deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 55%);
-  -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 55%);
+  mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
+  -webkit-mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
 }
 .col-left::after {
   content:''; position:absolute; left:0; top:20%; bottom:20%;
-  width:3px; border-radius:0 3px 3px 0;
-  background:var(--accent); opacity:.5;
+  width:3px; border-radius:0 3px 3px 0; background:var(--accent); opacity:.5;
 }
 
-/* Header */
+/* HEADER — nur einmal Logo */
 .header {
   position:relative; z-index:1; flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:clamp(14px,2.5vh,32px);
+  margin-bottom:var(--header-gap);
 }
-.dev-logo-small { height:clamp(20px,2.4vh,34px); width:auto; object-fit:contain; }
-.slide-num { font-size:clamp(9px,.72vw,11px); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
+.dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
+.slide-label { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
 
-/* Developer Logo Block */
-.dev-hero { position:relative; z-index:1; flex-shrink:0; margin-bottom:clamp(12px,2vh,24px); }
-.dev-logo-large {
-  height:clamp(36px,4.5vh,62px); width:auto; object-fit:contain; display:block;
-}
-.dev-name {
-  font-size:clamp(1rem,1.5vw,1.7rem); font-weight:900;
-  letter-spacing:-.02em; color:var(--ink); margin-top:clamp(6px,1vh,12px);
-  line-height:1.1;
-}
-.dev-tagline {
-  font-size:clamp(.82rem,.95vw,1.05rem); font-weight:300;
-  color:var(--muted); margin-top:4px; line-height:1.4;
-}
-
-/* Content */
+/* CONTENT */
 .content {
-  position:relative; z-index:1; flex:1; display:flex;
-  flex-direction:column; justify-content:center; gap:clamp(10px,1.6vh,20px);
+  position:relative; z-index:1;
+  flex:1; display:flex; flex-direction:column;
+  gap:var(--content-gap); min-height:0;
 }
 .eyebrow {
-  display:flex; align-items:center; gap:8px;
-  font-size:clamp(9px,.75vw,12px); font-weight:700;
+  display:flex; align-items:center; gap:8px; flex-shrink:0;
+  font-size:var(--fs-eyebrow); font-weight:700;
   letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
 }
 .eyebrow::before {
   content:''; width:clamp(14px,1.6vw,22px); height:2px;
   background:var(--accent); border-radius:2px; flex-shrink:0;
 }
-.headline {
-  font-size:clamp(1.3rem,2.2vw,2.6rem); font-weight:900;
-  letter-spacing:-.025em; line-height:1.05; color:var(--ink);
-}
-.description {
-  font-size:clamp(.82rem,1vw,1.08rem); font-weight:300;
-  color:var(--muted); line-height:1.65;
-}
+.headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0; }
+.subline  { font-size:var(--fs-subline);  font-weight:400; color:var(--muted); line-height:1.6; flex-shrink:0; }
 
-/* KPI Stats — 2×2 Bento */
-.stats-grid {
+/* Bento-Grid: 4 KPI-Kacheln */
+.stats-bento {
   display:grid; grid-template-columns:1fr 1fr;
-  gap:clamp(7px,.9vh,11px);
+  gap:clamp(6px,.9vh,10px); flex-shrink:0;
 }
-.stat-card {
-  display:flex; flex-direction:column; gap:2px;
-  padding:clamp(9px,1.2vh,15px) clamp(10px,1.1vw,16px);
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:12px; position:relative; overflow:hidden;
+.stat-tile {
+  display:flex; flex-direction:column; gap:3px;
+  padding:clamp(10px,1.4vh,16px) clamp(11px,1.2vw,15px);
+  background:var(--surface); border:1px solid var(--border); border-radius:13px;
+  position:relative; overflow:hidden;
 }
-.stat-card.accent-card {
+.stat-tile.accent {
   background:oklch(from var(--accent) 0.98 0.01 h);
   border-color:oklch(from var(--accent) l c h / .25);
 }
-.stat-card::before {
-  content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
-  background:linear-gradient(90deg,transparent,oklch(0.82 0.005 85),transparent);
+.stat-tile::before {
+  content:''; position:absolute; top:0; left:8%; right:8%; height:1px;
+  background:linear-gradient(90deg, transparent, oklch(0.84 0.005 85), transparent);
 }
-.stat-card.accent-card::before {
-  background:linear-gradient(90deg,transparent,oklch(from var(--accent) l c h / .4),transparent);
+.stat-tile.accent::before {
+  background:linear-gradient(90deg, transparent, oklch(from var(--accent) l c h / .3), transparent);
 }
-.stat-val {
-  font-family:var(--mono); font-size:clamp(1.2rem,2vw,2.4rem); font-weight:900;
+.stat-v {
+  font-family:var(--mono); font-size:var(--fs-kpiSm); font-weight:900;
   letter-spacing:-.02em; color:var(--ink); line-height:1;
   font-variant-numeric:tabular-nums;
 }
-.stat-card.accent-card .stat-val { color:var(--accent); }
-.stat-lbl {
-  font-size:clamp(8px,.65vw,10px); font-weight:600;
-  letter-spacing:.1em; text-transform:uppercase; color:var(--subtle);
+.stat-tile.accent .stat-v { color:var(--accent); }
+.stat-l {
+  font-size:var(--fs-label); font-weight:600;
+  letter-spacing:.09em; text-transform:uppercase; color:var(--subtle);
 }
 
-/* Certifications */
-.certs { display:flex; flex-wrap:wrap; gap:7px; }
+/* Zertifizierungen */
+.certs { display:flex; flex-wrap:wrap; gap:7px; flex-shrink:0; }
 .cert-badge {
   display:inline-flex; align-items:center; gap:5px;
   padding:clamp(4px,.6vh,7px) clamp(8px,.9vw,12px);
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:50px;
+  background:var(--surface); border:1px solid var(--border); border-radius:50px;
 }
 .cert-badge svg { width:12px; height:12px; stroke:var(--accent); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
-.cert-badge span { font-size:clamp(9px,.72vw,11px); font-weight:600; color:var(--muted); }
+.cert-badge span { font-size:var(--fs-label); font-weight:600; color:var(--muted); }
 
-/* Footer */
+/* FOOTER */
 .footer-left {
   position:relative; z-index:1; flex-shrink:0;
-  padding-top:clamp(10px,1.5vh,16px); border-top:1px solid var(--border);
-  margin-top:clamp(10px,1.5vh,16px);
+  margin-top:clamp(12px,2vh,24px); padding-top:clamp(10px,1.5vh,18px);
+  border-top:1px solid var(--border);
 }
-.address { font-size:clamp(9px,.72vw,12px); color:var(--subtle); }
+.address { font-size:var(--fs-label); color:var(--subtle); }
 
-/* ── RECHTS — REFERENZPROJEKTE ──────────────────────────────── */
+/* ── RECHTE SPALTE: REFERENZPROJEKTE ─────────────────────── */
 .col-right {
   display:flex; flex-direction:column;
-  padding:clamp(24px,3.5vh,48px) clamp(24px,3vw,48px);
-  gap:clamp(10px,1.6vh,18px);
+  padding:var(--pad-v) var(--pad-h);
+  gap:clamp(10px,1.6vh,20px);
 }
 .right-header {
   flex-shrink:0; display:flex; align-items:center; justify-content:space-between;
 }
-.right-title {
-  font-size:clamp(9px,.72vw,11px); font-weight:700;
-  letter-spacing:.18em; text-transform:uppercase; color:var(--subtle);
-}
+.right-title { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
 .warranty-badge {
   display:flex; align-items:center; gap:6px;
   padding:clamp(5px,.7vh,8px) clamp(10px,1.1vw,16px);
   background:oklch(from var(--accent) 0.97 0.02 h);
-  border:1px solid oklch(from var(--accent) l c h / .25);
-  border-radius:50px;
+  border:1px solid oklch(from var(--accent) l c h / .25); border-radius:50px;
 }
-.warranty-badge svg { width:14px; height:14px; stroke:var(--accent); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
-.warranty-text { font-size:clamp(9px,.75vw,12px); font-weight:700; color:var(--ink); }
-.warranty-val  { font-size:clamp(9px,.75vw,12px); font-weight:900; color:var(--accent); }
+.warranty-badge svg { width:13px; height:13px; stroke:var(--accent); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.warranty-txt { font-size:var(--fs-label); font-weight:700; color:var(--ink); }
+.warranty-val { font-size:var(--fs-label); font-weight:900; color:var(--accent); }
 
-/* Referenz-Karten */
-.ref-cards { flex:1; min-height:0; display:flex; gap:clamp(8px,1vw,14px); }
+/* Referenzkarten */
+.ref-cards {
+  flex:1; min-height:0;
+  display:flex; gap:clamp(8px,1vw,14px);
+  max-height:clamp(280px, 55vh, 520px);  /* Höhe kontrolliert */
+}
 .ref-card {
-  flex:1; min-width:0; min-height:0;
-  position:relative; border-radius:18px; overflow:hidden;
+  flex:1; min-width:0;
+  position:relative; border-radius:16px; overflow:hidden;
   display:flex; flex-direction:column; justify-content:flex-end;
 }
+/* Gradient-Platzhalter je Karte */
+.ref-card:nth-child(1) .ref-ph { background:linear-gradient(160deg, oklch(0.78 0.06 70)  0%, oklch(0.64 0.08 50)  100%); }
+.ref-card:nth-child(2) .ref-ph { background:linear-gradient(160deg, oklch(0.74 0.05 215) 0%, oklch(0.62 0.08 225) 100%); }
+.ref-card:nth-child(3) .ref-ph { background:linear-gradient(160deg, oklch(0.76 0.06 155) 0%, oklch(0.62 0.08 165) 100%); }
 
-/* Placeholder-Gradienten für Karten ohne Bild */
-.ref-card:nth-child(1) .ref-placeholder {
-  background:linear-gradient(160deg, oklch(0.78 0.06 70) 0%, oklch(0.64 0.08 50) 100%);
-}
-.ref-card:nth-child(2) .ref-placeholder {
-  background:linear-gradient(160deg, oklch(0.74 0.05 215) 0%, oklch(0.62 0.08 225) 100%);
-}
-.ref-card:nth-child(3) .ref-placeholder {
-  background:linear-gradient(160deg, oklch(0.76 0.06 155) 0%, oklch(0.62 0.08 165) 100%);
-}
-
-.ref-placeholder {
+.ref-ph {
   position:absolute; inset:0;
   display:flex; align-items:center; justify-content:center;
 }
-.ref-placeholder svg {
-  width:clamp(32px,4vw,56px); height:clamp(32px,4vw,56px);
-  stroke:oklch(1 0 0 / .25); stroke-width:1; fill:none;
+.ref-ph svg {
+  width:clamp(28px,3.5vw,48px); height:clamp(28px,3.5vw,48px);
+  stroke:oklch(1 0 0 / .22); stroke-width:1; fill:none;
   stroke-linecap:round; stroke-linejoin:round;
 }
-
 .ref-img {
   position:absolute; inset:0; width:100%; height:100%;
   object-fit:cover; object-position:center; display:block;
 }
-
-/* Overlay für Lesbarkeit */
 .ref-overlay {
   position:absolute; inset:0;
   background:linear-gradient(to top,
-    oklch(0.12 0.02 250 / .85) 0%,
-    oklch(0.12 0.02 250 / .35) 45%,
-    transparent 75%);
+    oklch(0.12 0.02 250 / .82) 0%,
+    oklch(0.12 0.02 250 / .28) 45%,
+    transparent 72%);
 }
-
-/* Jahr-Badge oben rechts */
-.ref-year-badge {
+.ref-year {
   position:absolute; top:clamp(10px,1.5vh,16px); right:clamp(10px,1.2vw,16px);
-  padding:3px 10px; border-radius:50px;
+  padding:2px 9px; border-radius:50px;
   background:oklch(0.995 0 0 / .88);
   backdrop-filter:blur(12px) saturate(180%);
   -webkit-backdrop-filter:blur(12px) saturate(180%);
-  font-size:clamp(9px,.72vw,11px); font-weight:700; color:var(--ink);
+  font-size:var(--fs-label); font-weight:700; color:var(--ink);
   border:1px solid oklch(1 0 0 / .4);
 }
-
-/* Karten-Content unten */
 .ref-content {
   position:relative; z-index:1;
-  padding:clamp(12px,1.8vh,20px) clamp(12px,1.4vw,18px);
+  padding:clamp(10px,1.5vh,16px) clamp(12px,1.3vw,16px);
   display:flex; flex-direction:column; gap:3px;
 }
-.ref-proj-name {
-  font-size:clamp(11px,1.1vw,16px); font-weight:900; color:#fff;
-  letter-spacing:-.01em; line-height:1.2;
-}
+.ref-name     { font-size:var(--fs-body); font-weight:900; color:#fff; line-height:1.2; }
 .ref-location {
-  font-size:clamp(9px,.75vw,12px); font-weight:400;
-  color:oklch(1 0 0 / .7); display:flex; align-items:center; gap:5px;
+  font-size:var(--fs-label); font-weight:400;
+  color:oklch(1 0 0 / .7); display:flex; align-items:center; gap:4px;
 }
 .ref-location svg { width:10px; height:10px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
 .ref-units {
-  display:inline-flex; align-items:center; gap:4px;
-  margin-top:4px; padding:2px 8px; border-radius:50px;
+  display:inline-flex; align-items:center; gap:4px; margin-top:4px;
+  padding:2px 8px; border-radius:50px; align-self:flex-start;
   background:oklch(1 0 0 / .15); border:1px solid oklch(1 0 0 / .2);
-  font-size:clamp(8px,.65vw,10px); font-weight:700; color:#fff;
-  align-self:flex-start;
+  font-size:var(--fs-label); font-weight:700; color:#fff;
 }
 
-/* ── ANIMATIONEN ────────────────────────────────────────────── */
-@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+/* ── ANIMATIONEN ─────────────────────────────────────────── */
+@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 @keyframes fade { from{opacity:0} to{opacity:1} }
 
 .header       { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
-.dev-hero     { animation:up   .6s  cubic-bezier(.22,1,.36,1) .1s  both }
-.eyebrow      { animation:up   .55s cubic-bezier(.22,1,.36,1) .18s both }
-.headline     { animation:up   .65s cubic-bezier(.22,1,.36,1) .24s both }
-.description  { animation:up   .55s cubic-bezier(.22,1,.36,1) .3s  both }
-.stats-grid   { animation:up   .55s cubic-bezier(.22,1,.36,1) .36s both }
-.certs        { animation:up   .55s cubic-bezier(.22,1,.36,1) .42s both }
-.footer-left  { animation:fade .4s  ease                       .5s  both }
+.eyebrow      { animation:up   .55s cubic-bezier(.22,1,.36,1) .12s both }
+.headline     { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
+.subline      { animation:up   .55s cubic-bezier(.22,1,.36,1) .28s both }
+.stats-bento  { animation:up   .55s cubic-bezier(.22,1,.36,1) .34s both }
+.certs        { animation:up   .55s cubic-bezier(.22,1,.36,1) .40s both }
+.footer-left  { animation:fade .4s  ease                       .50s both }
 .right-header { animation:fade .4s  ease                       .15s both }
 .ref-cards    { animation:up   .7s  cubic-bezier(.22,1,.36,1) .22s both }
 
 @media (prefers-reduced-motion:reduce) {
-  *{animation:none!important;opacity:1!important;transform:none!important}
+  * { animation:none !important; opacity:1 !important; transform:none !important }
 }
 </style>
 </head>
@@ -273,27 +243,18 @@ html, body {
   <!-- LINKS -->
   <div class="col-left">
     <div class="header">
-      <img class="dev-logo-small" id="devLogoSmall" src="" alt="">
-      <span class="slide-num">Bautr&#228;ger</span>
+      <img class="dev-logo" id="devLogo" src="" alt="">
+      <span class="slide-label">Bautr&#228;ger</span>
     </div>
-
-    <div class="dev-hero">
-      <img class="dev-logo-large" id="devLogoLarge" src="" alt="">
-      <div class="dev-name" id="devName">—</div>
-      <div class="dev-tagline" id="devTagline">—</div>
-    </div>
-
     <div class="content">
       <div class="eyebrow">Track Record</div>
-      <h2 class="headline" id="headline">Erfahrung.<br>Vertrauen. Qualit&#228;t.</h2>
-      <p class="description" id="description">—</p>
-
-      <div class="stats-grid" id="statsGrid"></div>
-      <div class="certs" id="certs"></div>
+      <h2 class="headline" id="headline">&#8212;</h2>
+      <p  class="subline"  id="subline">&#8212;</p>
+      <div class="stats-bento" id="statsBento"></div>
+      <div class="certs"       id="certs"></div>
     </div>
-
     <div class="footer-left">
-      <span class="address" id="address">—</span>
+      <span class="address" id="address">&#8212;</span>
     </div>
   </div>
 
@@ -303,62 +264,67 @@ html, body {
       <span class="right-title">Referenzprojekte</span>
       <div class="warranty-badge">
         <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span class="warranty-text">Gew&#228;hrleistung</span>
-        <span class="warranty-val" id="warrantyVal">—</span>
+        <span class="warranty-txt">Gew&#228;hrleistung</span>
+        <span class="warranty-val" id="warrantyVal">&#8212;</span>
       </div>
     </div>
-
     <div class="ref-cards" id="refCards"></div>
   </div>
 
 </div>
-
 <script>
+function applyUITokens(ui) {
+  if (!ui) return;
+  const r = document.documentElement;
+  if (ui.fontSans)   r.style.setProperty('--font',        ui.fontSans);
+  if (ui.fontMono)   r.style.setProperty('--font-mono',   ui.fontMono);
+  if (ui.logoHeader) r.style.setProperty('--logo-header', ui.logoHeader);
+  if (ui.type) Object.entries(ui.type).forEach(([k, v]) =>
+    r.style.setProperty('--fs-' + k, v)
+  );
+}
+
 function applyProject(P) {
   const r = document.documentElement;
   if (P.accent)    r.style.setProperty('--accent',     P.accent);
   if (P.accentHex) r.style.setProperty('--accent-hex', P.accentHex);
 
   const $ = id => document.getElementById(id);
+  $('devLogo').src = P.developerLogo || '';
+  $('devLogo').alt = P.developer     || '';
   $('address').textContent = P.address || '';
 
   const df = P.developerFacts || {};
-  const logo = P.developerLogo || '';
 
-  // Logos
-  $('devLogoSmall').src = logo;  $('devLogoSmall').alt = P.developer || '';
-  $('devLogoLarge').src = logo;  $('devLogoLarge').alt = P.developer || '';
+  // Headline = Developer-Name, Subline = Beschreibung
+  $('headline').textContent = P.developer || '';
+  $('subline').textContent  = df.description || '';
+  $('warrantyVal').textContent = df.warranty || '\u2014';
 
-  // Dev-Name & Tagline
-  $('devName').textContent    = P.developer || '';
-  $('devTagline').textContent = df.description || '';
-
-  // Warranty
-  $('warrantyVal').textContent = df.warranty || '—';
-
-  // KPI Stats
-  const founded = df.founded ? (new Date().getFullYear() - parseInt(df.founded)) : null;
-  const stats = [
-    { v: founded ? founded + '\u00a0J.' : df.founded, l: 'Erfahrung', accent: true },
-    { v: (df.projects || '—') + '',                   l: 'Projekte' },
-    { v: (df.units    || '—') + '',                   l: 'Wohneinheiten' },
-    { v: df.warranty  || '—',                         l: 'Gew\u00e4hrleistung' },
-  ];
-  const grid = $('statsGrid');
-  grid.innerHTML = '';
-  stats.forEach(s => {
+  // Stats-Bento 2×2
+  const founded = df.founded
+    ? (new Date().getFullYear() - parseInt(df.founded)) + '\u00a0J.'
+    : (df.founded || '\u2014');
+  const bento = $('statsBento');
+  bento.innerHTML = '';
+  [
+    { v:founded,                    l:'Erfahrung', accent:true },
+    { v:(df.projects||'\u2014')+'', l:'Projekte' },
+    { v:(df.units||'\u2014')+'',    l:'Wohneinheiten' },
+    { v: df.warranty || '\u2014',   l:'Gew\u00e4hrleistung' },
+  ].forEach(s => {
     const d = document.createElement('div');
-    d.className = 'stat-card' + (s.accent ? ' accent-card' : '');
+    d.className = 'stat-tile' + (s.accent ? ' accent' : '');
     d.innerHTML =
-      '<div class="stat-val">' + s.v + '</div>' +
-      '<div class="stat-lbl">' + s.l + '</div>';
-    grid.appendChild(d);
+      '<div class="stat-v">' + s.v + '</div>' +
+      '<div class="stat-l">' + s.l + '</div>';
+    bento.appendChild(d);
   });
 
   // Zertifizierungen
   const certsEl = $('certs');
   certsEl.innerHTML = '';
-  (df.certifications || []).forEach(c => {
+  (df.certifications||[]).forEach(c => {
     const badge = document.createElement('div');
     badge.className = 'cert-badge';
     badge.innerHTML =
@@ -367,86 +333,66 @@ function applyProject(P) {
     certsEl.appendChild(badge);
   });
 
-  // Referenz-Karten
+  // Referenzkarten
   const refs = $('refCards');
   refs.innerHTML = '';
-  const references = (df.references || []).slice(0, 3);
+  const references = (df.references||[]).slice(0,3);
 
-  references.forEach((ref, i) => {
+  for (let i = 0; i < 3; i++) {
+    const ref = references[i];
     const card = document.createElement('div');
     card.className = 'ref-card';
 
-    // Placeholder
     const ph = document.createElement('div');
-    ph.className = 'ref-placeholder';
+    ph.className = 'ref-ph';
     ph.innerHTML =
-      '<svg viewBox="0 0 24 24">' +
-        '<rect x="3" y="3" width="7" height="18"/>' +
-        '<rect x="14" y="8" width="7" height="13"/>' +
-        '<path d="M3 21h18"/>' +
-      '</svg>';
+      '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18"/>' +
+      '<rect x="14" y="8" width="7" height="13"/><path d="M3 21h18"/></svg>';
     card.appendChild(ph);
 
-    // Bild falls vorhanden
-    if (ref.image) {
+    if (ref?.image) {
       const img = document.createElement('img');
       img.className = 'ref-img';
-      img.src = ref.image;
-      img.alt = ref.name;
-      img.loading = 'lazy';
+      img.src = ref.image; img.alt = ref.name||''; img.loading = 'lazy';
       card.appendChild(img);
     }
 
-    // Overlay
     const ov = document.createElement('div');
     ov.className = 'ref-overlay';
     card.appendChild(ov);
 
-    // Jahr-Badge
-    if (ref.year) {
+    if (ref?.year) {
       const yr = document.createElement('div');
-      yr.className = 'ref-year-badge';
+      yr.className = 'ref-year';
       yr.textContent = 'Fertiggestellt ' + ref.year;
       card.appendChild(yr);
     }
 
-    // Content
     const cnt = document.createElement('div');
     cnt.className = 'ref-content';
     cnt.innerHTML =
-      '<div class="ref-proj-name">' + (ref.name || '—') + '</div>' +
-      '<div class="ref-location">' +
-        '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
-        (ref.location || '') +
-      '</div>' +
-      (ref.units ? '<div class="ref-units">' + ref.units + '\u00a0Einheiten</div>' : '');
+      '<div class="ref-name">'     + (ref?.name     || 'Referenzprojekt')           + '</div>' +
+      (ref?.location
+        ? '<div class="ref-location"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' + ref.location + '</div>'
+        : '') +
+      (ref?.units
+        ? '<div class="ref-units">' + ref.units + '\u00a0Einheiten</div>'
+        : '');
     card.appendChild(cnt);
-
     refs.appendChild(card);
-  });
-
-  // Leer-Karten auffüllen wenn weniger als 3 Referenzen
-  for (let i = references.length; i < 3; i++) {
-    const empty = document.createElement('div');
-    empty.className = 'ref-card';
-    const ph = document.createElement('div');
-    ph.className = 'ref-placeholder';
-    ph.innerHTML = '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18"/><rect x="14" y="8" width="7" height="13"/><path d="M3 21h18"/></svg>';
-    empty.appendChild(ph);
-    const ov = document.createElement('div');
-    ov.className = 'ref-overlay';
-    empty.appendChild(ov);
-    const cnt = document.createElement('div');
-    cnt.className = 'ref-content';
-    cnt.innerHTML = '<div class="ref-proj-name" style="opacity:.4">Referenzprojekt</div>';
-    empty.appendChild(cnt);
-    refs.appendChild(empty);
   }
 }
 
-try { if (window.parent?.PROJECT) applyProject(window.parent.PROJECT); } catch(e){}
+try { if (window.parent?.PROJECT) {
+  applyProject(window.parent.PROJECT);
+  applyUITokens(window.parent.PROJECT?.ui);
+}} catch(e) {}
+
 window.addEventListener('message', e => {
-  if (e.data?.type === 'PROJECT_DATA') applyProject(e.data.data);
+  if (e.data?.type === 'PROJECT_DATA') {
+    applyProject(e.data.data);
+    applyUITokens(e.data.ui);
+  }
 });
 </script>
 </body>
