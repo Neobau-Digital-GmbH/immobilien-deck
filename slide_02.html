@@ -115,11 +115,12 @@ html, body {
   display:flex; flex-direction:column;
   padding:var(--pad-v) var(--pad-h);
   gap:clamp(10px, 1.8vh, 22px);
+  justify-content:center;               /* Gruppen vertikal zentriert */
 }
 
 /* Gruppe: Label + 3 Kacheln */
 .stat-group {
-  flex:1; min-height:0;
+  flex-shrink:0;
   display:flex; flex-direction:column;
   gap:clamp(6px, 1vh, 12px);
 }
@@ -139,25 +140,28 @@ html, body {
   background:oklch(from var(--accent) l c h / .3);
 }
 
-/* 3 Kacheln in einer Reihe */
+/* 3 Kacheln in einer Reihe — feste Höhe */
 .stats-row {
-  display:flex; gap:clamp(6px, 0.8vw, 12px);
-  flex:1; min-height:0;
+  display:flex;
+  gap:clamp(6px, 0.8vw, 12px);
+  height:clamp(120px, 15vh, 190px);     /* feste Höhe → keine leeren Riesen-Karten */
 }
 
 /* Einzelne KPI-Kachel */
 .kpi-card {
-  flex:1; min-width:0; min-height:0;
+  flex:1; min-width:0;
   display:flex; flex-direction:column;
-  justify-content:center;               /* Inhalt vertikal zentriert */
+  align-items:center;                   /* horizontal zentriert */
+  justify-content:center;               /* vertikal zentriert */
   gap:clamp(4px, 0.6vh, 8px);
   padding:clamp(10px, 1.4vh, 18px) clamp(10px, 1.1vw, 16px);
   background:var(--surface); border:1px solid var(--border);
   border-radius:14px; position:relative; overflow:hidden;
+  text-align:center;
 }
 .kpi-card::before {
-  content:''; position:absolute; inset:0; top:auto;
-  height:2px; bottom:0;
+  content:''; position:absolute;
+  left:8%; right:8%; top:0; height:1px;
   background:linear-gradient(90deg, transparent,
     oklch(0.82 0.005 85), transparent);
 }
