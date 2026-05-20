@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Energieeffizienz</title>
+<style>
+:root {
+  --bg:       oklch(0.98 0.005 85);
+  --surface:  oklch(0.995 0.003 85);
+  --ink:      oklch(0.18 0.02 250);
+  --muted:    oklch(0.45 0.02 250);
+  --subtle:   oklch(0.65 0.01 250);
+  --border:   oklch(0.88 0.01 85);
+  --accent:   oklch(0.55 0.13 160);
+  --pos:      oklch(0.46 0.14 155);
+  --font:     "Roboto", system-ui, -apple-system, sans-serif;
+  --mono:     ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --logo-header:  clamp(22px, 2.6vh, 38px);
+  --pad-v:        clamp(24px, 3.5vh, 48px);
+  --pad-h:        clamp(28px, 3.5vw, 56px);
+  --header-gap:   clamp(20px, 3.5vh, 44px);
+  --content-gap:  clamp(8px, 1.2vh, 16px);
+  --fs-eyebrow:   clamp(9px, 0.75vw, 11px);
+  --fs-headline:  clamp(1.5rem, 2.5vw, 3rem);
+  --fs-subline:   clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:      clamp(0.85rem, 1vw, 1.12rem);
+  --fs-label:     clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:     clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:     clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:      clamp(11px, 0.95vw, 14px);
+  --fs-monoLg:    clamp(1.3rem, 2.1vw, 2.6rem);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100vw; height:100vh; overflow:hidden; background:var(--bg); font-family:var(--font); -webkit-font-smoothing:antialiased; color:var(--ink); }
+.slide { display:grid; grid-template-columns:36fr 64fr; width:100vw; height:100vh; }
+
+.col-left {
+  display:flex; flex-direction:column; padding:var(--pad-v) var(--pad-h);
+  position:relative; overflow:hidden; border-right:1px solid var(--border);
+}
+.col-left::before { content:''; position:absolute; inset:0; pointer-events:none; background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px); background-size:28px 28px; mask-image:linear-gradient(160deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 55%); -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 55%); }
+.col-left::after { content:''; position:absolute; left:0; top:20%; bottom:20%; width:3px; border-radius:0 3px 3px 0; background:var(--accent); opacity:.5; }
+
+.header { position:relative; z-index:1; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--header-gap); }
+.dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
+.slide-label { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
+
+.content { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; gap:var(--content-gap); min-height:0; }
+.eyebrow { display:flex; align-items:center; gap:8px; flex-shrink:0; font-size:var(--fs-eyebrow); font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); }
+.eyebrow::before { content:''; width:clamp(14px,1.6vw,22px); height:2px; background:var(--accent); border-radius:2px; flex-shrink:0; }
+.headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0; }
+.subline  { font-size:var(--fs-subline);  font-weight:400; color:var(--muted); line-height:1.6; flex-shrink:0; }
+
+/* Vorteils-Chips */
+.benefit-list { display:flex; flex-direction:column; gap:clamp(6px,.9vh,10px); }
+.benefit-item {
+  display:flex; align-items:center; gap:10px; flex-shrink:0;
+  padding:clamp(9px,1.2vh,14px) clamp(11px,1.2vw,15px);
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+}
+.benefit-icon {
+  flex-shrink:0; width:clamp(20px,1.9vw,26px); height:clamp(20px,1.9vw,26px);
+  display:flex; align-items:center; justify-content:center;
+  background:oklch(from var(--accent) l c h / .1);
+  border:1px solid oklch(from var(--accent) l c h / .22); border-radius:7px;
+}
+.benefit-icon svg { width:58%; height:58%; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.benefit-text { font-size:var(--fs-body); font-weight:500; color:var(--ink); line-height:1.3; flex:1; }
+
+/* Energy-Tag */
+.energy-tag {
+  display:inline-flex; align-items:center; gap:6px; flex-shrink:0; align-self:flex-start;
+  padding:clamp(7px,1vh,10px) clamp(10px,1.1vw,15px);
+  background:oklch(from var(--accent) 0.97 0.02 h);
+  border:1px solid oklch(from var(--accent) l c h / .3); border-radius:12px;
+}
+.energy-tag svg { width:14px; height:14px; stroke:var(--accent); stroke-width:2; fill:none; stroke-linecap:round; }
+.energy-tag-txt { font-size:var(--fs-body); font-weight:600; color:var(--ink); }
+.energy-tag-badge { font-size:var(--fs-label); font-weight:700; padding:1px 7px; border-radius:5px; background:var(--accent); color:#fff; }
+
+.footer-left { position:relative; z-index:1; flex-shrink:0; margin-top:clamp(12px,2vh,24px); padding-top:clamp(10px,1.5vh,18px); border-top:1px solid var(--border); }
+.address { font-size:var(--fs-label); color:var(--subtle); }
+
+/* RECHTS */
+.col-right { display:flex; flex-direction:column; padding:var(--pad-v) var(--pad-h); gap:clamp(10px,1.6vh,20px); justify-content:center; }
+
+/* Heizkostenvergleich */
+.heat-compare { flex-shrink:0; background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+.heat-hdr { padding:clamp(10px,1.4vh,16px) clamp(14px,1.5vw,20px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.heat-title { font-size:var(--fs-label); font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--subtle); }
+.heat-hint  { font-size:var(--fs-label); color:var(--muted); }
+.heat-bars  { padding:clamp(12px,1.6vh,20px) clamp(14px,1.5vw,20px); display:flex; flex-direction:column; gap:clamp(10px,1.4vh,18px); }
+.heat-bar-row { display:flex; align-items:center; gap:clamp(8px,1vw,14px); }
+.heat-bar-lbl { min-width:clamp(60px,6vw,90px); flex-shrink:0; font-size:var(--fs-label); color:var(--muted); font-weight:500; }
+.heat-bar-track { flex:1; height:clamp(22px,2.4vh,32px); background:oklch(0.94 0.005 85); border-radius:7px; overflow:hidden; }
+.heat-bar-fill { height:100%; border-radius:7px; display:flex; align-items:center; justify-content:flex-end; padding-right:10px; transition:width .8s cubic-bezier(.4,0,.2,1); }
+.heat-bar-fill.new  { background:var(--accent); }
+.heat-bar-fill.old  { background:oklch(0.82 0.01 250); }
+.heat-val { font-family:var(--mono); font-size:var(--fs-label); font-weight:700; color:#fff; white-space:nowrap; }
+.heat-val.dark { color:var(--ink); }
+.heat-sav-row { padding:clamp(8px,1.1vh,13px) clamp(14px,1.5vw,20px); border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:oklch(from var(--pos) 0.97 0.02 h); }
+.heat-sav-lbl { font-size:var(--fs-body); font-weight:600; color:var(--ink); }
+.heat-sav-val { font-family:var(--mono); font-size:var(--fs-mono); font-weight:900; color:var(--pos); font-variant-numeric:tabular-nums; }
+
+/* KPI Bento 2×2 */
+.kpi-bento { flex-shrink:0; display:grid; grid-template-columns:1fr 1fr; gap:clamp(8px,1.1vh,14px); }
+.kpi-tile {
+  display:flex; flex-direction:column; gap:3px;
+  padding:clamp(12px,1.6vh,20px) clamp(12px,1.3vw,18px);
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+}
+.kpi-tile.accent { background:oklch(from var(--accent) 0.98 0.01 h); border-color:oklch(from var(--accent) l c h / .25); }
+.kpi-v { font-family:var(--mono); font-size:var(--fs-kpiSm); font-weight:900; color:var(--ink); line-height:1; font-variant-numeric:tabular-nums; }
+.kpi-tile.accent .kpi-v { color:var(--accent); }
+.kpi-l { font-size:var(--fs-label); font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--subtle); }
+
+@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+@keyframes fade { from{opacity:0} to{opacity:1} }
+.header        { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
+.eyebrow       { animation:up   .55s cubic-bezier(.22,1,.36,1) .12s both }
+.headline      { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
+.subline       { animation:up   .55s cubic-bezier(.22,1,.36,1) .28s both }
+.benefit-list  { animation:up   .55s cubic-bezier(.22,1,.36,1) .34s both }
+.energy-tag    { animation:up   .5s  cubic-bezier(.22,1,.36,1) .40s both }
+.footer-left   { animation:fade .4s  ease                       .50s both }
+.heat-compare  { animation:up   .6s  cubic-bezier(.22,1,.36,1) .20s both }
+.kpi-bento     { animation:up   .6s  cubic-bezier(.22,1,.36,1) .34s both }
+@media(prefers-reduced-motion:reduce){*{animation:none!important;opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="col-left">
+    <div class="header">
+      <img class="dev-logo" id="devLogo" src="" alt="">
+      <span class="slide-label">Energie &amp; Zukunft</span>
+    </div>
+    <div class="content">
+      <div class="eyebrow">Ihr EH40-Zuhause</div>
+      <h2 class="headline" id="headline">Moderne Effizienz.<br>Dauerhaft sparen.</h2>
+      <p  class="subline"  id="subline">&#8212;</p>
+      <div class="energy-tag">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <span class="energy-tag-txt">Energiestandard</span>
+        <span class="energy-tag-badge" id="energyTag">&#8212;</span>
+      </div>
+      <div class="benefit-list" id="benefitList"></div>
+    </div>
+    <div class="footer-left"><span class="address" id="address">&#8212;</span></div>
+  </div>
+  <div class="col-right">
+    <!-- Heizkostenvergleich -->
+    <div class="heat-compare">
+      <div class="heat-hdr">
+        <span class="heat-title">Heizkostenvergleich</span>
+        <span class="heat-hint" id="heatHint">&#8212;</span>
+      </div>
+      <div class="heat-bars" id="heatBars"></div>
+      <div class="heat-sav-row">
+        <span class="heat-sav-lbl" id="heatSavLbl">Ersparnis / Monat</span>
+        <span class="heat-sav-val" id="heatSavVal">&#8212;</span>
+      </div>
+    </div>
+    <!-- KPI Bento -->
+    <div class="kpi-bento" id="kpiBento"></div>
+  </div>
+</div>
+<script>
+function applyUITokens(ui) {
+  if (!ui) return;
+  const r = document.documentElement;
+  if (ui.fontSans)   r.style.setProperty('--font',        ui.fontSans);
+  if (ui.fontMono)   r.style.setProperty('--font-mono',   ui.fontMono);
+  if (ui.logoHeader) r.style.setProperty('--logo-header', ui.logoHeader);
+  if (ui.type) Object.entries(ui.type).forEach(([k,v]) => r.style.setProperty('--fs-'+k,v));
+}
+
+const BENEFITS = [
+  { icon:'<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',        txt:'Bis zu 70\u00a0% weniger Heizkosten vs. unsanierter Altbau' },
+  { icon:'<path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 6v6l4 2"/>',  txt:'Kein CO\u2082-Aufpreis durch EH40-Standard' },
+  { icon:'<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',   txt:'KfW-Darlehen m\u00f6glich \u2014 QNG-Siegel auf Anfrage' },
+  { icon:'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',  txt:'Langfristige Wertstabilit\u00e4t durch zuk\u00fcnftige Energieauflagen' },
+];
+
+function applyProject(P) {
+  const r = document.documentElement;
+  if (P.accent)    r.style.setProperty('--accent',    P.accent);
+  if (P.accentHex) r.style.setProperty('--accent-hex',P.accentHex);
+  const $ = id => document.getElementById(id);
+  $('devLogo').src = P.developerLogo||''; $('devLogo').alt = P.developer||'';
+  $('address').textContent = P.address||'';
+  $('energyTag').textContent = P.energyStandard||'KfW\u00a040';
+
+  $('subline').textContent = P.en?.intro ||
+    'Der ' + (P.energyStandard||'EH40') + '-Standard bedeutet messbar niedrigere Nebenkosten \u2014 ' +
+    'heute und in Zukunft.';
+
+  // Benefit-Liste
+  const bl = $('benefitList');
+  bl.innerHTML = '';
+  BENEFITS.forEach(b => {
+    const item = document.createElement('div');
+    item.className = 'benefit-item';
+    item.innerHTML =
+      '<div class="benefit-icon"><svg viewBox="0 0 24 24" stroke-width="1.8" fill="none" stroke="currentColor" stroke-linecap="round">' + b.icon + '</svg></div>' +
+      '<span class="benefit-text">' + b.txt + '</span>';
+    bl.appendChild(item);
+  });
+
+  // Heizkostenvergleich
+  const sqm = 60; // Beispiel-Fläche
+  const heatNew = P.en?.heatingCostNew||1.2;
+  const heatOld = P.en?.heatingCostOld||3.8;
+  const costNew = heatNew * sqm;
+  const costOld = heatOld * sqm;
+  const sav     = costOld - costNew;
+  const maxScale= heatOld * 1.1;
+
+  $('heatHint').textContent = 'Beispiel: ' + sqm + '\u00a0m\u00b2 Wohnfl\u00e4che';
+
+  const barsEl = $('heatBars');
+  barsEl.innerHTML = '';
+  [
+    { lbl:'EH40-Neubau', rate:heatNew, cost:costNew, cls:'new', dark:false },
+    { lbl:'Altbau \u00d8',     rate:heatOld, cost:costOld, cls:'old', dark:true  },
+  ].forEach(b => {
+    const pct = Math.round(b.rate / maxScale * 100);
+    const row = document.createElement('div');
+    row.className = 'heat-bar-row';
+    row.innerHTML =
+      '<span class="heat-bar-lbl">' + b.lbl + '</span>' +
+      '<div class="heat-bar-track">' +
+        '<div class="heat-bar-fill ' + b.cls + '" style="width:' + pct + '%">' +
+          '<span class="heat-val' + (b.dark?' dark':'') + '">' +
+            b.rate.toLocaleString('de',{minimumFractionDigits:2}) + '\u00a0\u20ac/m\u00b2' +
+          '</span>' +
+        '</div>' +
+      '</div>';
+    barsEl.appendChild(row);
+  });
+
+  $('heatSavLbl').textContent = 'Heizkostenersparnis / Monat (bei ' + sqm + '\u00a0m\u00b2)';
+  $('heatSavVal').textContent = '+\u00a0' + Math.round(sav).toLocaleString('de') + '\u00a0\u20ac';
+
+  // KPI Bento
+  const bento = $('kpiBento');
+  bento.innerHTML = '';
+  [
+    { v: heatNew.toLocaleString('de',{minimumFractionDigits:2})+'\u00a0\u20ac/m\u00b2', l:'Heizkosten Neubau',    accent:true },
+    { v: heatOld.toLocaleString('de',{minimumFractionDigits:2})+'\u00a0\u20ac/m\u00b2', l:'Heizkosten Altbau \u00d8', accent:false },
+    { v: '\u221270\u00a0%',        l:'Einsparung vs. Altbau',         accent:true },
+    { v: P.energyStandard||'KfW 40', l:'Energieeffizienzstandard',    accent:false },
+  ].forEach(s => {
+    const d = document.createElement('div');
+    d.className = 'kpi-tile' + (s.accent ? ' accent' : '');
+    d.innerHTML = '<div class="kpi-v">' + s.v + '</div><div class="kpi-l">' + s.l + '</div>';
+    bento.appendChild(d);
+  });
+}
+
+try{if(window.parent?.PROJECT){applyProject(window.parent.PROJECT);applyUITokens(window.parent.PROJECT?.ui);}}catch(e){}
+window.addEventListener('message',e=>{if(e.data?.type==='PROJECT_DATA'){applyProject(e.data.data);applyUITokens(e.data.ui);}});
+</script>
+</body>
+</html>
