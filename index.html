@@ -9,6 +9,8 @@
 //
 //  PROJEKT-KONFIGURATION
 //  ► Nur diesen Block anpassen — den Rest nie anfassen.
+//  ► Alle Slide-Inhalte steuern sich aus diesem Block.
+//  ► Leere Strings ("") = Feld nicht anzeigen.
 //
 // ════════════════════════════════════════════════════════════════════════
 
@@ -17,35 +19,40 @@ const BASE = 'https://neobau-digital-gmbh.github.io/immobilien-deck/';
 
 const PROJECT = {
 
-  // ── IDENTITÄT ──────────────────────────────────────────────────────
-  name:       "Kranoldplatz",
-  tagline:    "Substanz trifft Rendite.",
-  subTagline: "Berlin-Lichterfelde \u00b7 12 Eigentumswohnungen",
+  // ── 1. IDENTIT\u00c4T ─────────────────────────────────────────────────────
+  name:          "Kranoldplatz",
+  tagline:       "Substanz trifft Rendite.",
+  subTagline:    "Berlin-Lichterfelde \u00b7 12 Eigentumswohnungen",
   developer:     "BSK Immobilien GmbH",
-  developerLogo: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/logo.png",
+  developerLogo: "https://www.bsk-immobilien.de/images/bsk-immobilien_berliner-sparkasse-immobilien_logo.svg",
 
-  // ── CI (OKLCH-Konverter: https://oklch.com) ────────────────────────
+  // ── 2. CI ────────────────────────────────────────────────────────────
   accent:    "oklch(0.45 0.22 28)",
   accentHex: "#E2001A",
 
-  // ── ZIELGRUPPE ─────────────────────────────────────────────────────
-  audience:   "KA",   // "KA" = Kapitalanleger  |  "EN" = Eigennutzer
+  // ── 3. ZIELGRUPPE & ANSPRACHE ────────────────────────────────────────
+  audience:   "KA",   // "KA" | "EN"
   salutation: "Sie",
 
-  // ── PROJEKTDATEN ───────────────────────────────────────────────────
+  // ── 4. ENERGIESTANDARD & QNG ─────────────────────────────────────────
+  energyStandard: "KfW\u00a040 QNG",
+  qng: true,          // true = QNG-Siegel vorhanden → Sonder-AfA §7b verf\u00fcgbar
+
+  // ── 5. PROJEKTDATEN ──────────────────────────────────────────────────
   location:       "Berlin-Lichterfelde",
   address:        "Kranoldstra\u00dfe, 12309 Berlin",
   units:          12,
-  sizesFrom:      36,  sizesTo: 98,
+  sizesFrom:      36,
+  sizesTo:        98,
   rooms:          "1\u20133 Zimmer",
-  priceFrom:      325000,  priceTo: 650000,
-  energyStandard: "KfW\u00a040",
-  completionDate: "Q3\u00a02026",
+  priceFrom:      325000,
+  priceTo:        650000,
+  completionDate: "Q3\u00a02027",
   availableUnits: 6,
 
-  // ── BILDER ─────────────────────────────────────────────────────────
+  // ── 6. BILDER ────────────────────────────────────────────────────────
   images: {
-    cover:      "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/cover.jpg",
+    cover:      "https://ik.imagekit.io/ViewRStudio/Kundenordner/BSK%20Immobilien%20GmbH/Neubauprojekte/Kranoldplatz/Deck/openart-image.jpg",
     rendering1: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/r1.jpg",
     rendering2: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/r2.jpg",
     rendering3: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/r3.jpg",
@@ -53,9 +60,9 @@ const PROJECT = {
     floorplan2: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/fp2.jpg",
     mapStatic:  "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/map.jpg",
   },
-  mapEmbedUrl: "https://www.google.com/maps/embed?pb=PLACEHOLDER",
+  mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d884.0544210283659!2d13.327304076053455!3d52.42795584132424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a85ae724a1f3f5%3A0x9a9a3c3dc69805a8!2sKranoldpl.%2C%2012209%20Berlin-Bezirk%20Steglitz-Zehlendorf!5e1!3m2!1sde!2sde!4v1779268793286!5m2!1sde!2sde",
 
-  // ── LAGE ───────────────────────────────────────────────────────────
+  // ── 7. LAGE ──────────────────────────────────────────────────────────
   locationFacts: {
     transit:   "S-Bahnhof Lichterfelde Ost \u00b7 3 Min. zu Fu\u00df",
     city:      "Berlin-Mitte \u00b7 25 Min. mit der S-Bahn",
@@ -64,59 +71,221 @@ const PROJECT = {
     employers: "Teltow Tech-Park, Siemens-Campus, Bundesbeh\u00f6rden",
     green:     "Parkanlage Lichterfelde \u00b7 5 Min. zu Fu\u00df",
   },
+  locationIntro: "Berlin-Lichterfelde \u00fcberzeugt mit hervorragender S-Bahn-Anbindung, gewachsener Infrastruktur und einer breiten, kaufkraftstarken Mieterzielgruppe \u2014 von Pendlern \u00fcber Familien bis Senioren.",
 
-  // ── KAPITALANLEGER ─────────────────────────────────────────────────
-  ka: {
-    rentPerSqm: 14.50, grossYield: 4.2, netYield: 3.6,
-    multiplier: 24.8,  vacancyRate: 1.2,
-    populationGrowth: "+1,8\u00a0% p.\u202fa.",
-    afaDegressiv: 5, afaSpezial: 5, buildingShare: 85,
-    kfwProgram: "KfW\u00a0297/298", kfwLoan: 100000,
-    kfwRate: 2.85, marketRate: 3.80,
-    usps: [
-      "Neubau au\u00dferhalb der Mietpreisbremse",
-      "KfW\u00a040 QNG \u2014 maximale AfA-Kombination nutzbar",
-      "Struktureller Wohnraummangel sichert Vermietbarkeit",
+  // ── 8. MARKTDATEN (Slide 02 KA) ──────────────────────────────────────
+  market: {
+    headline: "Warum jetzt der richtige Zeitpunkt ist.",
+    national: [
+      { stat: "1,4\u00a0Mio.",  label: "Wohnungen fehlen aktuell in DE",      source: "BBSR 2026" },
+      { stat: "\u221223\u00a0%", label: "Baugenehmigungen vs. Vorjahr",        source: "Destatis 2025" },
+      { stat: "320.000",        label: "Neubauten p.\u202fa. ben\u00f6tigt bis 2030", source: "IW K\u00f6ln" },
     ],
+    local: [
+      { stat: "+1,8\u00a0%",  label: "Bev\u00f6lkerungswachstum p.\u202fa. Berlin", source: "Destatis" },
+      { stat: "1,2\u00a0%",   label: "Leerstandsquote Lichterfelde",          source: "IBB 2025" },
+      { stat: "+4,2\u00a0%",  label: "Mietanstieg 2025 Berlin gesamt",        source: "empirica" },
+    ],
+    intro: "Der strukturelle Wohnraummangel in Deutschland ist keine Prognose mehr \u2014 er ist Realit\u00e4t. Gleichzeitig sinken die Baugenehmigungen. F\u00fcr Kapitalanleger bedeutet das: stabile Nachfrage bei sinkendem Angebot.",
   },
 
-  // ── EIGENNUTZER ────────────────────────────────────────────────────
+  // ── 9. KAPITALANLEGER ────────────────────────────────────────────────
+  ka: {
+
+    usps: [
+      "Neubau au\u00dferhalb der Mietpreisbremse",
+      "KfW\u00a040 + QNG \u2014 maximale AfA-Kombination",
+      "Struktureller Wohnraummangel sichert Vermietbarkeit",
+    ],
+
+    // ── MIETEINNAHMEN ───────────────────────────────────────────────
+    rentPerSqm:      26.00,  // Kaltmiete \u20ac/m\u00b2/Monat (ortsüblich)
+    hausgeldPerSqm:   4.95,  // Hausgeld-Umlage \u20ac/m\u00b2/Monat (aus Tenant-Warmmiete)
+    // Warmmiete = rentPerSqm + hausgeldPerSqm (= Einnahme im Rechner)
+
+    // ── BEWIRTSCHAFTUNGSKOSTEN ──────────────────────────────────────
+    // Nicht umlagef\u00e4hige Kosten des Eigent\u00fcmers: Verwaltung, Instandhaltung, R\u00fccklagen
+    bewirtschaftungPct:      29,   // % der Kaltmiete (Jahresbetrag)
+    bewirtschaftungSteuPct:  23,   // % der Kaltmiete, steuerlich abzugsf\u00e4hig (ohne eigene R\u00fcckl.)
+
+    // ── FINANZIERUNG-DEFAULTS f\u00fcr Renditerechner ───────────────────
+    nebenkostenPct:  8.0,   // Kaufnebenkosten % (Grunderwerbsteuer + Notar)
+    ekModus:        "nebenkosten",  // "nebenkosten" = EK=NK | "pct" = EK=KP\u00d7ekPct%
+    ekPct:           20,            // aktiv nur wenn ekModus="pct"
+
+    // Hauptdarlehen
+    hauptDarlehen: {
+      rate:    4.00,   // Zinssatz % p.a.
+      tilgung: 1.00,   // anf\u00e4ngliche Tilgung % p.a.
+    },
+
+    // ── RENDITE-DISPLAY ─────────────────────────────────────────────
+    grossYield:  4.2,    // Bruttomietrendite % (nur f\u00fcr Anzeige)
+    multiplier: 24.8,    // Kaufpreisfaktor (nur f\u00fcr Anzeige)
+
+    // ── AfA-BLOCK (Slide 07 + Rechner) ──────────────────────────────
+    // HINWEIS: Sonder-AfA ist nur verf\u00fcgbar wenn PROJECT.qng = true
+    afa: {
+      show:          true,
+      headline:      "Steuervorteile f\u00fcr Neubauten 2026.",
+      intro:         "Durch die Kombination aus degressiver AfA und Sonder-AfA k\u00f6nnen Kapitalanleger in den ersten vier Jahren einen Gro\u00dfteil der Anschaffungskosten steuerlich geltend machen.",
+      buildingShare: 85,            // Geb\u00e4udeanteil an Gesamtinvestitionskosten %
+      // AfA-Basis = Gesamtinvestitionskosten \u00d7 buildingShare (inkl. Nebenkosten!)
+      degressiv: {
+        rate:  5,
+        law:   "\u00a7\u00a07 Abs.\u00a05a EStG",
+        label: "Degressive AfA",
+        info:  "5\u00a0% vom Restwert j\u00e4hrlich \u2014 gilt dauerhaft",
+      },
+      spezial: {
+        rate:      5,
+        years:     4,
+        law:       "\u00a7\u00a07b EStG",
+        label:     "Sonder-AfA",
+        condition: "EH40-Standard + QNG-Siegel erforderlich",
+        info:      "4\u00a0\u00d7\u00a05\u00a0% zus\u00e4tzlich \u2014 bis zu 39\u00a0% der AHK in Jahren 1\u20134 absetzbar",
+        // eligible wird automatisch aus PROJECT.qng abgeleitet
+      },
+      exampleTaxRate: 42,
+      disclaimer:     "Steuerliche Auswirkungen sind individuell verschieden. Bitte mit Steuerberater abstimmen.",
+    },
+
+    // ── KFW-BLOCK (Slide 08 + Rechner) ──────────────────────────────
+    // ! Zinss\u00e4tze \u00e4ndern sich regelm\u00e4\u00dfig \u2014 hier aktuell halten !
+    kfw: {
+      show:      true,
+      headline:  "KfW-F\u00f6rderung f\u00fcr dieses Projekt.",
+      intro:     "Das Projekt erf\u00fcllt die Voraussetzungen f\u00fcr zinsg\u00fcnstige KfW-Darlehen. Durch die Kombination mit dem Hauptdarlehen sinkt der effektive Mischzins deutlich.",
+      programs: [
+        {
+          name:      "KfW\u00a0297",
+          title:     "Klimafreundlicher Neubau",
+          maxLoan:   100000,
+          rate:       1.70,   // ! Regelm\u00e4\u00dfig pr\u00fcfen: kfw.de
+          tilgung:    2.02,   // anf\u00e4ngliche Tilgung %
+          rateDate:  "Mai\u00a02026",
+          condition: "EH\u00a040-Standard",
+          eligible:   true,
+          highlight:  false,
+        },
+        {
+          name:      "KfW\u00a0298",
+          title:     "Klimafreundlicher Neubau \u2014 Kapitalanleger",
+          maxLoan:   150000,  // \u20ac pro Wohneinheit
+          rate:       1.70,   // ! Regelm\u00e4\u00dfig pr\u00fcfen: kfw.de
+          tilgung:    2.02,
+          rateDate:  "Mai\u00a02026",
+          condition: "EH\u00a040-Standard, Vermietung",
+          eligible:   true,
+          highlight:  true,
+        },
+      ],
+      marketRate: 4.00,     // Vergleichs-Marktzinssatz %
+      savings:    "bis zu 2,30\u00a0% Zinsvorteil gegen\u00fcber Marktdarlehen",
+      disclaimer: "KfW-Konditionen \u00e4ndern sich regelm\u00e4\u00dfig. Stets unter kfw.de pr\u00fcfen.",
+      kfwUrl:     "https://www.kfw.de",
+    },
+
+    // ── AB JAHR 5 (Rechner-Szenario) ─────────────────────────────────
+    abJahr5: {
+      mietsteigerungPct: 3.0,   // angenommene Mietsteigerung p.a. f\u00fcr Prognose ab Jahr 5
+    },
+
+    // ── MIETRECHT ────────────────────────────────────────────────────
+    mietrecht: {
+      mietpreisbremse: "Neubau ab 2014 ist von der Mietpreisbremse ausgenommen.",
+      indexmiete:      "Indexmiete w\u00e4chst mit dem VPI \u2014 bei 3\u00a0% p.\u202fa. steigt 1.000\u00a0\u20ac Miete auf \u2248\u00a01.160\u00a0\u20ac in 5 Jahren.",
+      co2:             "EH40-Neubau: keine CO\u2082-Mehrkosten \u2014 Altbauten trifft der CO\u2082-Preis j\u00e4hrlich h\u00e4rter.",
+    },
+  },
+
+  // ── 10. EIGENNUTZER ──────────────────────────────────────────────────
   en: {
-    localRentPerSqm: 16.50, heatingCostNew: 1.20, heatingCostOld: 3.80,
+    headline:        "Hier kommen Sie an.",
+    intro:           "Lichterfelde verbindet das Beste aus zwei Welten: ruhige, gr\u00fcne Wohnlage mit schneller S-Bahn-Verbindung ins Zentrum.",
+    localRentPerSqm: 16.50,
+    heatingCostNew:   1.20,
+    heatingCostOld:   3.80,
     usps: [
       "Barrierearme Grundrisse f\u00fcr alle Lebensphasen",
       "Tiefgarage, Aufzug, Fahrradkeller inklusive",
       "Erstbezug \u2014 Ihre Wohnung, keine fremde Geschichte",
     ],
+    kfw: {
+      show: true,
+      headline:  "KfW-F\u00f6rderung f\u00fcr Ihren Kauf.",
+      intro:     "Als Eigennutzer k\u00f6nnen Sie das zinsg\u00fcnstige KfW-Darlehen nutzen und so Ihre monatliche Rate sp\u00fcrbar senken.",
+      programs: [
+        {
+          name:      "KfW\u00a0297",
+          title:     "Klimafreundlicher Neubau",
+          maxLoan:   150000,
+          rate:       1.70,
+          tilgung:    2.02,
+          rateDate:  "Mai\u00a02026",
+          condition: "EH\u00a040-Standard",
+          eligible:   true,
+          highlight:  true,
+        },
+      ],
+      marketRate:  4.00,
+      disclaimer: "KfW-Konditionen \u00e4ndern sich regelm\u00e4\u00dfig. Stets unter kfw.de pr\u00fcfen.",
+      kfwUrl:     "https://www.kfw.de",
+    },
   },
 
-  // ── WOHNUNGSTYPEN ──────────────────────────────────────────────────
+  // ── 11. WOHNUNGSTYPEN (Slide 05) ─────────────────────────────────────
   unitTypes: [
     { type:"1-Zimmer", sqm:"36\u201342\u00a0m\u00b2", priceFrom:"325.000", priceTo:"360.000", available:2, features:["Balkon","Tageslichtbad","Aufzug"], floorplan:null },
     { type:"2-Zimmer", sqm:"55\u201368\u00a0m\u00b2", priceFrom:"420.000", priceTo:"490.000", available:3, features:["Balkon/Loggia","Offene K\u00fcche","Aufzug"], floorplan:null },
     { type:"3-Zimmer", sqm:"75\u201398\u00a0m\u00b2", priceFrom:"530.000", priceTo:"650.000", available:1, features:["Terrasse","2 B\u00e4der","Aufzug"], floorplan:null },
   ],
 
-  // ── BAUTR\u00c4GER ────────────────────────────────────────────────────────
+  // ── 12. AUSSTATTUNG (Slide 04) ───────────────────────────────────────
+  projectFeatures: [
+    "Barrierefreie Aufz\u00fcge in allen Hauseingängen",
+    "Bodenbelag Parkett / Feinsteinzeug nach Wahl",
+    "Fu\u00dfbodenheizung in allen R\u00e4umen",
+    "Triple-Verglasung, elektrische Rolladen",
+    "Tiefgarage mit E-Lades\u00e4ulen-Vorbereitung",
+    "Photovoltaik auf dem Dach",
+  ],
+
+  // ── 13. BAUTR\u00c4GER (Slide 09) ─────────────────────────────────────────
   developerFacts: {
-    founded:"1998", projects:23, units:487, warranty:"5 Jahre",
+    founded:     "1998",
+    projects:    23,
+    units:       487,
+    warranty:    "5 Jahre Gew\u00e4hrleistung",
+    description: "BSK Immobilien entwickelt seit \u00fcber 25 Jahren Wohnprojekte im Berliner Raum \u2014 mit Fokus auf energieeffiziente Bauweise, durchdachte Grundrisse und langfristige Wertentwicklung.",
+    certifications: ["IVD-Mitglied", "T\u00dcV-gepr\u00fcft"],
     references: [
-      { name:"Referenz A", location:"Berlin-Mitte",  units:24, year:"2023", image:"" },
-      { name:"Referenz B", location:"Potsdam",       units:16, year:"2022", image:"" },
-      { name:"Referenz C", location:"Berlin-Pankow", units:31, year:"2024", image:"" },
+      { name:"Referenzprojekt A", location:"Berlin-Mitte",  units:24, year:"2023", image:"" },
+      { name:"Referenzprojekt B", location:"Potsdam",       units:16, year:"2022", image:"" },
+      { name:"Referenzprojekt C", location:"Berlin-Pankow", units:31, year:"2024", image:"" },
     ],
   },
 
-  // ── N\u00c4CHSTE SCHRITTE ────────────────────────────────────────────────
+  // ── 14. N\u00c4CHSTE SCHRITTE (Slide 10) ───────────────────────────────────
   nextSteps: {
-    reservationFee:"2.500", reservationDuration:"14 Tage",
-    notaryTimeline:"4\u20138 Wochen nach Reservierung",
-    contactName:"Alex Heigl", contactTitle:"Sales Manager",
-    contactPhone:"+49\u00a0151\u00a0290\u00a042\u00a0396",
-    contactEmail:"alex@neubau.marketing",
-    bookingUrl:"https://meetings.zoho.eu/PLACEHOLDER",
-    contactPhoto:"",
+    headline:            "So geht es weiter.",
+    reservationFee:      "2.500",
+    reservationDuration: "14 Tage",
+    notaryTimeline:      "4\u20138 Wochen nach Reservierung",
+    processSteps: [
+      { step:"01", label:"Reservierung", desc:"Verbindliche Reservierung mit \u20ac\u00a02.500 Reservierungsgeb\u00fchr" },
+      { step:"02", label:"Finanzierung", desc:"Finanzierungsbest\u00e4tigung innerhalb von 14 Tagen" },
+      { step:"03", label:"Notar",        desc:"Kaufvertrag und Beurkundung beim Notar" },
+      { step:"04", label:"\u00dcbergabe",      desc:"Schl\u00fcsseltermin nach Fertigstellung Q3\u00a02026" },
+    ],
+    contactName:   "Alex Heigl",
+    contactTitle:  "Sales Manager",
+    contactPhone:  "+49\u00a0151\u00a0290\u00a042\u00a0396",
+    contactEmail:  "alex@neubau.marketing",
+    bookingUrl:    "https://meetings.zoho.eu/PLACEHOLDER",
+    contactPhoto:  "",
   },
+
 };
 
 // Theme sofort anwenden
@@ -263,14 +432,14 @@ html, body {
 #init-screen.fade-out { opacity:0; pointer-events:none; }
 .i-logo {
   position:relative; z-index:1;
-  height:clamp(30px,3.2vh,50px); width:auto; object-fit:contain;
+  height:clamp(40px,4.5vh,66px); width:auto; object-fit:contain;
   opacity:0; animation:iUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;
 }
 .i-name {
   position:relative; z-index:1; text-align:center;
   font-size:clamp(2.4rem,6vw,6rem); font-weight:900;
   letter-spacing:-0.03em; line-height:1.0; color:var(--ink);
-  margin-top:clamp(18px,2.8vh,32px);
+  margin-top:clamp(28px,4.5vh,52px);
   opacity:0; animation:iUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.4s forwards;
 }
 .i-line {
@@ -325,17 +494,10 @@ html, body {
 }
 #btn-start:active { transform:scale(0.98); }
 #btn-start.show { display:flex; animation:iUp 0.55s cubic-bezier(0.22,1,0.36,1) both; }
-.i-brand {
-  position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
-  z-index:201; font-size:clamp(10px,0.74vw,12px); font-weight:700;
-  letter-spacing:0.06em; color:var(--ink-subtle);
-  opacity:0; animation:iFade 0.5s ease 1.5s forwards;
-}
-.i-brand span { color:var(--accent); }
 @keyframes iUp   { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
 @keyframes iFade { from{opacity:0}to{opacity:1} }
 @media (prefers-reduced-motion:reduce) {
-  .i-logo,.i-name,.i-line,.i-tagline,.i-sub,.i-facts,.i-brand{animation:none;opacity:1}
+  .i-logo,.i-name,.i-line,.i-tagline,.i-sub,.i-facts{animation:none;opacity:1}
   #btn-start.show{animation:none} .slide-frame{transition:none}
 }
 </style>
@@ -364,7 +526,6 @@ html, body {
   <div  class="i-bar-wrap" id="iBarW"><div class="i-bar" id="iBar"></div></div>
   <button id="btn-start">&#9654; Pr&#228;sentation starten</button>
 </div>
-<div class="i-brand">neubau<span>.</span>marketing</div>
 
 <script>
 // ── SLIDE-DEFINITIONEN ───────────────────────────────────────────
@@ -400,7 +561,7 @@ document.getElementById('iLogo').alt    = PROJECT.developer;
 document.getElementById('iName').textContent    = PROJECT.name;
 document.getElementById('iTagline').textContent = PROJECT.tagline;
 document.getElementById('iSub').textContent     = PROJECT.subTagline;
-document.title = PROJECT.name + ' \u2014 neubau.marketing';
+document.title = PROJECT.name;
 
 const fEl = document.getElementById('iFacts');
 [
