@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Das Projekt</title>
+<style>
+:root {
+  --bg:      oklch(0.98 0.005 85);
+  --surface: oklch(0.995 0.003 85);
+  --ink:     oklch(0.18 0.02 250);
+  --muted:   oklch(0.50 0.02 250);
+  --subtle:  oklch(0.70 0.01 250);
+  --border:  oklch(0.88 0.01 85);
+  --accent:  oklch(0.55 0.13 160);
+  --font:    "Roboto", system-ui, -apple-system, sans-serif;
+  --mono:    ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --img-bg:  oklch(0.80 0.04 65);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100vw; height:100vh; overflow:hidden;
+  background:var(--bg); font-family:var(--font);
+  -webkit-font-smoothing:antialiased; color:var(--ink);
+}
+
+/* ── LAYOUT ──────────────────────────────────────────────── */
+.slide {
+  display:grid;
+  grid-template-columns:46fr 54fr;
+  width:100vw; height:100vh;
+}
+
+/* ── LINKS ───────────────────────────────────────────────── */
+.col-left {
+  display:flex; flex-direction:column;
+  padding:clamp(24px,3.5vh,48px) clamp(24px,3vw,48px);
+  position:relative; overflow:hidden;
+  border-right:1px solid var(--border);
+}
+.col-left::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px);
+  background-size:28px 28px;
+  mask-image:linear-gradient(160deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 55%);
+  -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 55%);
+}
+.col-left::after {
+  content:''; position:absolute; left:0; top:20%; bottom:20%;
+  width:3px; border-radius:0 3px 3px 0;
+  background:var(--accent); opacity:.5;
+}
+
+/* Header */
+.header {
+  position:relative; z-index:1; flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:clamp(14px,2.5vh,32px);
+}
+.dev-logo  { height:clamp(22px,2.6vh,38px); width:auto; object-fit:contain; }
+.slide-num {
+  font-size:clamp(9px,.72vw,11px); font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--subtle);
+}
+
+/* Intro */
+.intro-block {
+  position:relative; z-index:1; flex-shrink:0;
+  margin-bottom:clamp(12px,2vh,24px);
+  display:flex; flex-direction:column; gap:clamp(6px,1vh,10px);
+}
+.eyebrow {
+  display:flex; align-items:center; gap:8px;
+  font-size:clamp(9px,.75vw,12px); font-weight:700;
+  letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
+}
+.eyebrow::before {
+  content:''; width:clamp(14px,1.6vw,22px); height:2px;
+  background:var(--accent); border-radius:2px; flex-shrink:0;
+}
+.headline {
+  font-size:clamp(1.4rem,2.4vw,2.8rem); font-weight:900;
+  letter-spacing:-.025em; line-height:1.05; color:var(--ink);
+}
+.sub-headline {
+  font-size:clamp(.85rem,1.05vw,1.15rem); font-weight:300;
+  color:var(--muted); line-height:1.5;
+}
+
+/* Key-Stats — 4er Bento-Row */
+.key-stats {
+  position:relative; z-index:1; flex-shrink:0;
+  display:flex; gap:clamp(6px,.8vw,10px);
+  margin-bottom:clamp(12px,2vh,22px);
+}
+.key-stat {
+  flex:1; display:flex; flex-direction:column; gap:2px;
+  padding:clamp(9px,1.2vh,14px) clamp(8px,.9vw,13px);
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; min-width:0;
+}
+.key-stat.accent-stat {
+  background:oklch(from var(--accent) 0.98 0.01 h);
+  border-color:oklch(from var(--accent) l c h / .25);
+}
+.key-stat-v {
+  font-family:var(--mono); font-size:clamp(11px,1.1vw,15px);
+  font-weight:900; color:var(--ink); line-height:1.1;
+  font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+.key-stat.accent-stat .key-stat-v { color:var(--accent); }
+.key-stat-l {
+  font-size:clamp(8px,.6vw,10px); font-weight:600;
+  letter-spacing:.09em; text-transform:uppercase; color:var(--subtle);
+  white-space:nowrap;
+}
+
+/* Divider mit Label */
+.section-divider {
+  position:relative; z-index:1; flex-shrink:0;
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:clamp(10px,1.6vh,18px);
+}
+.section-label {
+  font-size:clamp(9px,.72vw,11px); font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--subtle);
+  white-space:nowrap;
+}
+.section-line {
+  flex:1; height:1px; background:var(--border);
+}
+
+/* Features — 2-Spalten-Liste */
+.features-grid {
+  position:relative; z-index:1;
+  flex:1; display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(6px,.9vh,10px);
+  align-content:start; min-height:0;
+}
+.feature-item {
+  display:flex; align-items:flex-start; gap:8px;
+  padding:clamp(7px,1vh,11px) clamp(8px,.9vw,13px);
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px;
+}
+.feature-check {
+  flex-shrink:0; width:clamp(14px,1.3vw,18px); height:clamp(14px,1.3vw,18px);
+  background:oklch(from var(--accent) l c h / .10);
+  border:1px solid oklch(from var(--accent) l c h / .25);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  margin-top:1px;
+}
+.feature-check svg {
+  width:60%; height:60%;
+  stroke:var(--accent); stroke-width:2.5; fill:none;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+.feature-text {
+  font-size:clamp(9px,.78vw,12px); font-weight:400;
+  color:var(--muted); line-height:1.35;
+}
+
+/* Footer */
+.footer-left {
+  position:relative; z-index:1; flex-shrink:0;
+  padding-top:clamp(10px,1.5vh,16px);
+  border-top:1px solid var(--border);
+  margin-top:clamp(10px,1.5vh,16px);
+}
+.address { font-size:clamp(10px,.8vw,13px); color:var(--subtle); }
+
+/* ── RECHTS — RENDERING ───────────────────────────────────── */
+.col-right {
+  position:relative; overflow:hidden;
+  background:var(--img-bg);
+  border-radius:20px 0 0 20px;
+}
+.rendering-img {
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center; display:block;
+}
+.img-placeholder {
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse 80% 80% at 60% 40%,
+    oklch(0.78 0.06 70) 0%, oklch(0.70 0.08 55) 50%, oklch(0.60 0.06 45) 100%);
+}
+.img-overlay {
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(to right, oklch(0.15 0.02 250 / .12) 0%, transparent 35%),
+    linear-gradient(to top,   oklch(0.15 0.02 250 / .25) 0%, transparent 30%);
+}
+
+/* Preis-Pill unten links im Bild */
+.price-pill {
+  position:absolute; bottom:clamp(14px,2.2vh,26px); left:clamp(14px,2vw,26px);
+  display:flex; flex-direction:column; gap:2px;
+  padding:clamp(8px,1.1vh,13px) clamp(14px,1.6vw,22px);
+  background:oklch(0.995 0 0 / .88);
+  backdrop-filter:blur(16px) saturate(180%);
+  -webkit-backdrop-filter:blur(16px) saturate(180%);
+  border:1px solid oklch(1 0 0 / .5);
+  border-radius:14px;
+  box-shadow:0 2px 16px oklch(0.2 0 0 / .10);
+}
+.price-pill-l {
+  font-size:clamp(8px,.65vw,10px); font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--subtle);
+}
+.price-pill-v {
+  font-family:var(--mono); font-size:clamp(12px,1.1vw,16px);
+  font-weight:900; color:var(--ink); font-variant-numeric:tabular-nums;
+}
+
+/* ── ANIMATIONEN ──────────────────────────────────────────── */
+@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fade { from{opacity:0} to{opacity:1} }
+
+.header          { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
+.eyebrow         { animation:up   .55s cubic-bezier(.22,1,.36,1) .10s both }
+.headline        { animation:up   .65s cubic-bezier(.22,1,.36,1) .18s both }
+.sub-headline    { animation:up   .55s cubic-bezier(.22,1,.36,1) .25s both }
+.key-stats       { animation:up   .55s cubic-bezier(.22,1,.36,1) .32s both }
+.section-divider { animation:fade .4s  ease                       .38s both }
+.footer-left     { animation:fade .4s  ease                       .62s both }
+.col-right       { animation:fade .8s  ease                       0s   both }
+.price-pill      { animation:up   .55s cubic-bezier(.22,1,.36,1) .7s  both }
+
+.feature-item:nth-child(1) { animation:up .5s cubic-bezier(.22,1,.36,1) .40s both }
+.feature-item:nth-child(2) { animation:up .5s cubic-bezier(.22,1,.36,1) .46s both }
+.feature-item:nth-child(3) { animation:up .5s cubic-bezier(.22,1,.36,1) .52s both }
+.feature-item:nth-child(4) { animation:up .5s cubic-bezier(.22,1,.36,1) .58s both }
+.feature-item:nth-child(5) { animation:up .5s cubic-bezier(.22,1,.36,1) .64s both }
+.feature-item:nth-child(6) { animation:up .5s cubic-bezier(.22,1,.36,1) .70s both }
+
+@media (prefers-reduced-motion:reduce) {
+  * { animation:none!important; opacity:1!important; transform:none!important }
+}
+</style>
+</head>
+<body>
+<div class="slide">
+
+  <!-- LINKS -->
+  <div class="col-left">
+
+    <div class="header">
+      <img class="dev-logo" id="devLogo" src="" alt="">
+      <span class="slide-num">Das Projekt</span>
+    </div>
+
+    <div class="intro-block">
+      <div class="eyebrow">Projektübersicht</div>
+      <h2 class="headline" id="headline">—</h2>
+      <p  class="sub-headline" id="subHeadline">—</p>
+    </div>
+
+    <!-- 4 Key-Stats -->
+    <div class="key-stats" id="keyStats"></div>
+
+    <!-- Features -->
+    <div class="section-divider">
+      <span class="section-label">Ausstattung</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="features-grid" id="featuresGrid"></div>
+
+    <div class="footer-left">
+      <span class="address" id="address">—</span>
+    </div>
+  </div>
+
+  <!-- RECHTS -->
+  <div class="col-right">
+    <div class="img-placeholder"></div>
+    <img class="rendering-img" id="renderingImg" src="" alt="" loading="eager">
+    <div class="img-overlay"></div>
+    <div class="price-pill">
+      <span class="price-pill-l">Kaufpreis</span>
+      <span class="price-pill-v" id="priceRange">—</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function fmt(n) {
+  if (!n) return '\u2014';
+  return n >= 1000000
+    ? (n/1000000).toLocaleString('de',{maximumFractionDigits:1})+'\u00a0Mio.\u00a0\u20ac'
+    : Math.round(n/1000).toLocaleString('de')+'\u00a0T\u20ac';
+}
+
+function applyProject(P) {
+  const r = document.documentElement;
+  if (P.accent)    r.style.setProperty('--accent',     P.accent);
+  if (P.accentHex) r.style.setProperty('--accent-hex', P.accentHex);
+
+  const $ = id => document.getElementById(id);
+  $('devLogo').src = P.developerLogo || '';
+  $('devLogo').alt = P.developer     || '';
+  $('address').textContent = P.address || '';
+
+  // Headline
+  $('headline').textContent =
+    (P.units || '\u2014') + ' Eigentumswohnungen.';
+  $('subHeadline').textContent =
+    (P.rooms || '') +
+    (P.sizesFrom && P.sizesTo
+      ? ' \u00b7 ' + P.sizesFrom + '\u2013' + P.sizesTo + '\u00a0m\u00b2'
+      : '') +
+    (P.location ? ' \u00b7 ' + P.location : '');
+
+  // Key-Stats
+  const stats = [
+    { v: P.units + '\u00a0WE',               l:'Einheiten' },
+    { v: P.sizesFrom+'\u2013'+P.sizesTo+'\u00a0m\u00b2', l:'Wohnfl\u00e4che' },
+    { v: P.energyStandard || '\u2014',        l:'Standard',  accent:true },
+    { v: P.completionDate  || '\u2014',        l:'Erstbezug' },
+  ];
+  const statsEl = $('keyStats');
+  statsEl.innerHTML = '';
+  stats.forEach(s => {
+    const d = document.createElement('div');
+    d.className = 'key-stat' + (s.accent ? ' accent-stat' : '');
+    d.innerHTML =
+      `<span class="key-stat-v">${s.v}</span>` +
+      `<span class="key-stat-l">${s.l}</span>`;
+    statsEl.appendChild(d);
+  });
+
+  // Features
+  const grid = $('featuresGrid');
+  grid.innerHTML = '';
+  (P.projectFeatures || []).slice(0, 6).forEach(f => {
+    const item = document.createElement('div');
+    item.className = 'feature-item';
+    item.innerHTML =
+      `<div class="feature-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>` +
+      `<span class="feature-text">${f}</span>`;
+    grid.appendChild(item);
+  });
+
+  // Rendering
+  if (P.images?.rendering1) {
+    const img = $('renderingImg');
+    img.src = P.images.rendering1;
+    img.alt = P.name || '';
+  }
+
+  // Preis-Range
+  if (P.priceFrom && P.priceTo) {
+    $('priceRange').textContent =
+      fmt(P.priceFrom) + ' \u2013 ' + fmt(P.priceTo);
+  }
+}
+
+try { if (window.parent?.PROJECT) applyProject(window.parent.PROJECT); } catch(e){}
+window.addEventListener('message', e => {
+  if (e.data?.type === 'PROJECT_DATA') applyProject(e.data.data);
+});
+</script>
+</body>
+</html>
