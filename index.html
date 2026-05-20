@@ -85,8 +85,6 @@ const PROJECT = {
     rendering1: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/r1.jpg",
     rendering2: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/r2.jpg",
     rendering3: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/r3.jpg",
-    floorplan1: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/fp1.jpg",
-    floorplan2: "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/fp2.jpg",
     mapStatic:  "https://ik.imagekit.io/ViewRStudio/PLACEHOLDER/map.jpg",
   },
   mapEmbedUrl: "https://www.google.com/maps/embed?pb=PLACEHOLDER",
@@ -607,7 +605,7 @@ document.getElementById('iLogo').alt    = PROJECT.developer;
 document.getElementById('iName').textContent    = PROJECT.name;
 document.getElementById('iTagline').textContent = PROJECT.tagline;
 document.getElementById('iSub').textContent     = PROJECT.subTagline;
-document.title = PROJECT.name;
+document.title = PROJECT.name + " » " + PROJECT.developer;
 
 const fEl = document.getElementById('iFacts');
 [
