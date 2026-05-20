@@ -58,11 +58,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
 .slide-num{font-size:var(--fs-eyebrow);font-weight:700;letter-spacing:.18em;
   text-transform:uppercase;color:var(--subtle)}
 
-.intro{position:relative;z-index:1;flex-shrink:0;margin-bottom:clamp(6px,1vh,12px)}
-.eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:5px;
-  font-size:var(--fs-eyebrow);font-weight:700;letter-spacing:.2em;
+.intro{position:relative;z-index:1;flex-shrink:0;display:flex;flex-direction:column;gap:var(--content-gap);margin-bottom:clamp(6px,1vh,12px)}
+.eyebrow{display:flex;align-items:center;gap:8px;flex-shrink:0;
+  font-size:var(--fs-eyebrow);font-weight:700;letter-spacing:.22em;
   text-transform:uppercase;color:var(--accent)}
-.eyebrow::before{content:'';width:clamp(12px,1.4vw,20px);height:2px;
+.eyebrow::before{content:'';width:clamp(14px,1.6vw,22px);height:2px;
   background:var(--accent);border-radius:2px;flex-shrink:0}
 .headline{font-size:var(--fs-headline);font-weight:900;
   letter-spacing:-.025em;line-height:1.05;color:var(--ink)}
