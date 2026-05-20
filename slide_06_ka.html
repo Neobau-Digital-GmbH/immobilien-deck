@@ -761,8 +761,8 @@ function calc() {
   const hgeldY   = sqm * hgeld  * 12;
   const warmY    = kaltmY + hgeldY;
   const bwkPct   = (afa.buildingShare ? 29 : 29); // ca. 29% of Kaltmiete
-  const bwkY     = kaltmY * (P.ka?.bewirtschaftungPct || 29) / 100;
-  const bwkSteuY = kaltmY * (P.ka?.bewirtschaftungSteuPct || 23) / 100;
+  const bwkY     = kaltmY * (P.ka?.bewirtschaftungPct    || 28.7) / 100;
+  const bwkSteuY = kaltmY * (P.ka?.bewirtschaftungSteuPct || 22.8) / 100;
 
   // Cashflow operativ (wie im PDF)
   const cfOpY = warmY - bwkY - zinsenY - tilgungY;
@@ -1061,7 +1061,7 @@ function applyProject(proj) {
   const units = P.unitTypes || [];
   if (units.length > 0) {
     const u = units[Math.floor(units.length/2)];
-    const sqm = (() => { const m=u.sqm?.match(/(\d+)[^\d]+(\d+)/); return m?(+m[1]+m[2])/2:60; })();
+    const sqm = (() => { const m=u.sqm?.match(/(\d+)[^\d]+(\d+)/); return m?(+m[1]+ +m[2])/2:60; })();
     const kp  = (() => { const f=+u.priceFrom?.replace(/\./g,''), t=+u.priceTo?.replace(/\./g,''); return f&&t?(f+t)/2:f||400000; })();
     $('sqmIn').value = sqm.toFixed(1);
     $('kaufpreisIn').value = Math.round(kp).toLocaleString('de');
