@@ -6,16 +6,30 @@
 <title>KfW-Förderung</title>
 <style>
 :root {
-  --bg:      oklch(0.98 0.005 85);
-  --surface: oklch(0.995 0.003 85);
-  --ink:     oklch(0.18 0.02 250);
-  --muted:   oklch(0.50 0.02 250);
-  --subtle:  oklch(0.70 0.01 250);
-  --border:  oklch(0.88 0.01 85);
-  --accent:  oklch(0.55 0.13 160);
-  --pos:     oklch(0.48 0.15 155);
-  --font:    "Roboto", system-ui, -apple-system, sans-serif;
-  --mono:    ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --bg:       oklch(0.98 0.005 85);
+  --surface:  oklch(0.995 0.003 85);
+  --ink:      oklch(0.18 0.02 250);
+  --muted:    oklch(0.45 0.02 250);
+  --subtle:   oklch(0.65 0.01 250);
+  --border:   oklch(0.88 0.01 85);
+  --accent:   oklch(0.55 0.13 160);
+  --pos:      oklch(0.46 0.14 155);
+  --font:     "Roboto", system-ui, -apple-system, sans-serif;
+  --mono:     ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --logo-header:  clamp(22px, 2.6vh, 38px);
+  --pad-v:        clamp(24px, 3.5vh, 48px);
+  --pad-h:        clamp(28px, 3.5vw, 56px);
+  --header-gap:   clamp(20px, 3.5vh, 44px);
+  --content-gap:  clamp(8px, 1.2vh, 16px);
+  --fs-eyebrow:   clamp(9px, 0.75vw, 11px);
+  --fs-headline:  clamp(1.5rem, 2.5vw, 3rem);
+  --fs-subline:   clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:      clamp(0.85rem, 1vw, 1.12rem);
+  --fs-label:     clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:     clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:     clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:      clamp(11px, 0.95vw, 14px);
+  --fs-monoLg:    clamp(1.3rem, 2.1vw, 2.6rem);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html, body {
@@ -23,113 +37,109 @@ html, body {
   background:var(--bg); font-family:var(--font);
   -webkit-font-smoothing:antialiased; color:var(--ink);
 }
-.slide {
-  display:grid; grid-template-columns:36fr 64fr;
-  width:100vw; height:100vh;
-}
+.slide { display:grid; grid-template-columns:36fr 64fr; width:100vw; height:100vh; }
 
-/* ── LINKS ─────────────────────────────────────────────────── */
+/* ── LINKE SPALTE ─────────────────────────────────────────── */
 .col-left {
   display:flex; flex-direction:column;
-  padding:clamp(22px,3.2vh,46px) clamp(22px,2.8vw,44px);
+  padding:var(--pad-v) var(--pad-h);
   position:relative; overflow:hidden;
   border-right:1px solid var(--border);
 }
 .col-left::before {
   content:''; position:absolute; inset:0; pointer-events:none;
-  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px);
+  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px, transparent 1.2px);
   background-size:28px 28px;
-  mask-image:linear-gradient(160deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 55%);
-  -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 55%);
+  mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
+  -webkit-mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
 }
 .col-left::after {
   content:''; position:absolute; left:0; top:20%; bottom:20%;
-  width:3px; border-radius:0 3px 3px 0;
-  background:var(--accent); opacity:.5;
+  width:3px; border-radius:0 3px 3px 0; background:var(--accent); opacity:.5;
 }
 
+/* HEADER */
 .header {
   position:relative; z-index:1; flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:clamp(16px,2.8vh,36px);
+  margin-bottom:var(--header-gap);
 }
-.dev-logo  { height:clamp(22px,2.6vh,38px); width:auto; object-fit:contain; }
-.slide-num { font-size:clamp(9px,.72vw,11px); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
+.dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
+.slide-label { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
 
+/* CONTENT */
 .content {
-  position:relative; z-index:1; flex:1; display:flex;
-  flex-direction:column; justify-content:center; gap:clamp(10px,1.6vh,20px);
+  position:relative; z-index:1;
+  flex:1; display:flex; flex-direction:column;
+  gap:var(--content-gap); min-height:0;
 }
 .eyebrow {
-  display:flex; align-items:center; gap:8px;
-  font-size:clamp(9px,.75vw,12px); font-weight:700;
+  display:flex; align-items:center; gap:8px; flex-shrink:0;
+  font-size:var(--fs-eyebrow); font-weight:700;
   letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
 }
 .eyebrow::before {
   content:''; width:clamp(14px,1.6vw,22px); height:2px;
   background:var(--accent); border-radius:2px; flex-shrink:0;
 }
-.headline {
-  font-size:clamp(1.3rem,2.2vw,2.6rem); font-weight:900;
-  letter-spacing:-.025em; line-height:1.05; color:var(--ink);
+.headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0; }
+.subline  { font-size:var(--fs-subline);  font-weight:400; color:var(--muted); line-height:1.6; flex-shrink:0; }
+
+/* Energy-Standard Pill */
+.energy-pill {
+  display:inline-flex; align-items:center; gap:6px; flex-shrink:0;
+  padding:clamp(7px,1vh,10px) clamp(10px,1.1vw,15px);
+  background:oklch(from var(--accent) 0.97 0.02 h);
+  border:1px solid oklch(from var(--accent) l c h / .3); border-radius:12px;
+  align-self:flex-start;
 }
-.intro-text {
-  font-size:clamp(.82rem,1vw,1.08rem); font-weight:300;
-  color:var(--muted); line-height:1.65;
+.energy-pill svg { width:14px; height:14px; stroke:var(--accent); stroke-width:2; fill:none; stroke-linecap:round; flex-shrink:0; }
+.energy-pill-txt { font-size:var(--fs-body); font-weight:600; color:var(--ink); }
+.energy-pill-tag {
+  font-size:var(--fs-label); font-weight:700; padding:1px 7px;
+  border-radius:5px; background:var(--accent); color:#fff;
 }
 
 /* KfW-Hinweis */
 .kfw-note {
-  display:flex; align-items:center; gap:8px;
-  padding:clamp(8px,1.1vh,13px) clamp(10px,1.1vw,15px);
+  display:flex; align-items:flex-start; gap:8px; flex-shrink:0;
+  padding:clamp(9px,1.2vh,13px) clamp(10px,1.1vw,14px);
   background:var(--surface); border:1px solid var(--border); border-radius:12px;
 }
-.kfw-note svg { width:16px; height:16px; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
-.kfw-note-text { font-size:clamp(9px,.75vw,11px); color:var(--muted); line-height:1.4; flex:1; }
-.kfw-note-text a { color:var(--accent); font-weight:600; text-decoration:none; }
-.kfw-note-text strong { color:var(--ink); }
+.kfw-note svg { width:14px; height:14px; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; flex-shrink:0; margin-top:1px; }
+.kfw-note-txt { font-size:var(--fs-label); color:var(--muted); line-height:1.45; }
+.kfw-note-txt a { color:var(--accent); font-weight:600; text-decoration:none; }
+.kfw-note-txt strong { color:var(--ink); }
 
-/* Energy-Standard Pill */
-.energy-pill {
-  display:inline-flex; align-items:center; gap:6px;
-  padding:clamp(7px,1vh,11px) clamp(10px,1.2vw,16px);
-  background:oklch(from var(--accent) 0.97 0.03 h);
-  border:1px solid oklch(from var(--accent) l c h / .3);
-  border-radius:12px;
-}
-.energy-pill svg { width:14px; height:14px; stroke:var(--accent); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
-.energy-pill-text { font-size:clamp(9px,.78vw,12px); font-weight:600; color:var(--ink); }
-.energy-pill-tag {
-  font-size:clamp(8px,.65vw,10px); font-weight:700; padding:1px 7px;
-  border-radius:5px; background:var(--accent); color:#fff;
-}
-
+/* Disclaimer */
 .disclaimer {
-  position:relative; z-index:1; flex-shrink:0;
-  padding:clamp(8px,1.1vh,12px) clamp(10px,1.1vw,14px);
-  background:oklch(0.96 0.005 85); border:1px solid var(--border); border-radius:10px;
-  font-size:clamp(8px,.62vw,10px); color:var(--subtle); line-height:1.5;
+  flex-shrink:0; padding:clamp(8px,1.1vh,12px) clamp(10px,1.1vw,14px);
+  background:oklch(0.965 0.005 85); border:1px solid var(--border);
+  border-radius:10px; font-size:clamp(8px,.62vw,10px); color:var(--subtle); line-height:1.5;
 }
 .disclaimer strong { color:var(--muted); }
 
+/* FOOTER */
 .footer-left {
   position:relative; z-index:1; flex-shrink:0;
-  padding-top:clamp(8px,1.2vh,14px); border-top:1px solid var(--border);
-  margin-top:clamp(8px,1.2vh,14px);
+  margin-top:clamp(12px,2vh,24px); padding-top:clamp(10px,1.5vh,18px);
+  border-top:1px solid var(--border);
 }
-.address { font-size:clamp(9px,.72vw,12px); color:var(--subtle); }
+.address { font-size:var(--fs-label); color:var(--subtle); }
 
-/* ── RECHTS ─────────────────────────────────────────────────── */
+/* ── RECHTE SPALTE ────────────────────────────────────────── */
 .col-right {
   display:flex; flex-direction:column;
-  padding:clamp(22px,3.2vh,46px) clamp(22px,2.8vw,48px);
-  gap:clamp(10px,1.6vh,18px);
+  padding:var(--pad-v) var(--pad-h);
+  gap:clamp(10px,1.6vh,20px);
+  justify-content:center;
 }
 
 /* Programm-Karten */
 .prog-cards { display:flex; gap:clamp(8px,1vw,14px); flex-shrink:0; }
 .prog-card {
-  flex:1; display:flex; flex-direction:column; gap:clamp(8px,1.1vh,14px);
+  flex:1; display:flex; flex-direction:column;
+  gap:clamp(8px,1.1vh,14px);
   padding:clamp(14px,1.8vh,22px) clamp(14px,1.5vw,20px);
   background:var(--surface); border:1px solid var(--border);
   border-radius:16px; position:relative; overflow:hidden;
@@ -140,45 +150,30 @@ html, body {
 }
 .prog-card::before {
   content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:linear-gradient(90deg,transparent,oklch(from var(--accent) l c h / .3),transparent);
+  background:linear-gradient(90deg, transparent, oklch(from var(--accent) l c h / .3), transparent);
 }
 .prog-card.highlight::before { background:var(--accent); opacity:.8; }
 
 .prog-name-row { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-.prog-name {
-  font-size:clamp(10px,.88vw,14px); font-weight:900; color:var(--accent);
-  letter-spacing:.04em;
-}
+.prog-name { font-size:var(--fs-body); font-weight:900; color:var(--accent); letter-spacing:.04em; }
 .prog-eligible {
   display:inline-flex; align-items:center; gap:4px;
-  font-size:clamp(8px,.65vw,10px); font-weight:700; padding:2px 8px;
-  border-radius:50px;
-}
-.prog-eligible.yes {
+  font-size:var(--fs-label); font-weight:700; padding:2px 8px; border-radius:50px;
   background:oklch(from var(--pos) l c h / .1); color:var(--pos);
   border:1px solid oklch(from var(--pos) l c h / .25);
 }
-.prog-title {
-  font-size:clamp(9px,.78vw,12px); font-weight:400; color:var(--muted); line-height:1.35;
-}
+.prog-title { font-size:var(--fs-label); font-weight:400; color:var(--muted); line-height:1.35; }
 .prog-rate-block { display:flex; align-items:baseline; gap:4px; }
 .prog-rate {
-  font-family:var(--mono); font-size:clamp(1.8rem,3.2vw,3.8rem); font-weight:900;
+  font-family:var(--mono); font-size:var(--fs-kpiLg); font-weight:900;
   color:var(--ink); letter-spacing:-.02em; line-height:1;
 }
-.prog-rate-sfx { font-size:clamp(.8rem,1.3vw,1.5rem); font-weight:700; color:var(--ink); }
-.prog-rate-date {
-  font-size:clamp(8px,.62vw,10px); font-weight:600; color:var(--subtle);
-  letter-spacing:.06em;
-}
-
-.prog-max {
-  font-size:clamp(9px,.78vw,12px); color:var(--muted);
-}
+.prog-rate-sfx { font-size:var(--fs-kpiSm); font-weight:700; color:var(--ink); }
+.prog-rate-date { font-size:var(--fs-label); font-weight:600; color:var(--subtle); letter-spacing:.06em; }
+.prog-max { font-size:var(--fs-label); color:var(--muted); }
 .prog-max strong { color:var(--ink); font-weight:700; }
-
 .prog-condition {
-  font-size:clamp(9px,.75vw,11px); font-weight:500; color:var(--muted);
+  font-size:var(--fs-label); font-weight:500; color:var(--muted);
   padding:clamp(5px,.7vh,8px) clamp(8px,.9vw,12px);
   background:oklch(0.95 0.003 85); border-radius:8px;
   display:flex; align-items:center; gap:6px;
@@ -187,104 +182,76 @@ html, body {
 
 /* Zinsvergleich */
 .rate-compare {
-  flex-shrink:0;
-  background:var(--surface); border:1px solid var(--border);
+  flex-shrink:0; background:var(--surface); border:1px solid var(--border);
   border-radius:16px; overflow:hidden;
-  display:flex; flex-direction:column;
 }
 .rate-compare-hdr {
-  padding:clamp(8px,1.2vh,14px) clamp(14px,1.5vw,20px);
+  padding:clamp(9px,1.2vh,13px) clamp(14px,1.5vw,20px);
   border-bottom:1px solid var(--border);
-  font-size:clamp(9px,.72vw,11px); font-weight:700;
+  font-size:var(--fs-label); font-weight:700;
   letter-spacing:.16em; text-transform:uppercase; color:var(--subtle);
 }
-.rate-bars { padding:clamp(10px,1.5vh,18px) clamp(14px,1.5vw,20px); display:flex; flex-direction:column; gap:clamp(8px,1.2vh,14px); }
-
+.rate-bars { padding:clamp(10px,1.4vh,18px) clamp(14px,1.5vw,20px); display:flex; flex-direction:column; gap:clamp(8px,1.1vh,14px); }
 .rate-bar-row { display:flex; align-items:center; gap:clamp(8px,1vw,14px); }
-.rate-bar-lbl {
-  min-width:clamp(80px,7vw,110px); flex-shrink:0;
-  font-size:clamp(9px,.78vw,12px); color:var(--muted); font-weight:500;
-}
-.rate-bar-track {
-  flex:1; height:clamp(20px,2vh,28px); background:oklch(0.94 0.005 85);
-  border-radius:6px; overflow:hidden; position:relative;
-}
-.rate-bar-fill {
-  height:100%; border-radius:6px;
-  display:flex; align-items:center; justify-content:flex-end;
-  padding-right:8px;
-  transition:width .8s cubic-bezier(.4,0,.2,1);
-}
-.rate-bar-fill.kfw  { background:var(--accent); }
-.rate-bar-fill.markt{ background:oklch(0.82 0.01 250); }
-.rate-val-label {
-  font-family:var(--mono); font-size:clamp(9px,.75vw,11px);
-  font-weight:700; color:#fff; white-space:nowrap;
-  font-variant-numeric:tabular-nums;
-}
-.rate-val-label.dark { color:var(--ink); }
-
+.rate-bar-lbl { min-width:clamp(80px,7vw,110px); flex-shrink:0; font-size:var(--fs-label); color:var(--muted); font-weight:500; }
+.rate-bar-track { flex:1; height:clamp(20px,2.2vh,28px); background:oklch(0.94 0.005 85); border-radius:6px; overflow:hidden; }
+.rate-bar-fill { height:100%; border-radius:6px; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; transition:width .8s cubic-bezier(.4,0,.2,1); }
+.rate-bar-fill.kfw   { background:var(--accent); }
+.rate-bar-fill.markt { background:oklch(0.82 0.01 250); }
+.rate-val-lbl { font-family:var(--mono); font-size:var(--fs-label); font-weight:700; color:#fff; white-space:nowrap; }
+.rate-val-lbl.dark { color:var(--ink); }
 .vorteil-row {
   padding:clamp(8px,1.1vh,13px) clamp(14px,1.5vw,20px);
   border-top:1px solid var(--border);
   display:flex; align-items:center; justify-content:space-between;
   background:oklch(from var(--accent) 0.97 0.02 h);
 }
-.vorteil-lbl { font-size:clamp(10px,.82vw,13px); font-weight:600; color:var(--ink); }
-.vorteil-val {
-  font-family:var(--mono); font-size:clamp(11px,.95vw,15px);
-  font-weight:900; color:var(--accent); font-variant-numeric:tabular-nums;
-}
+.vorteil-lbl { font-size:var(--fs-body); font-weight:600; color:var(--ink); }
+.vorteil-val { font-family:var(--mono); font-size:var(--fs-mono); font-weight:900; color:var(--accent); font-variant-numeric:tabular-nums; }
 
-/* Ersparnis-Block */
-.savings-block {
-  flex:1; min-height:0;
-  background:var(--surface); border:1px solid var(--border);
+/* Ersparnis */
+.savings {
+  flex-shrink:0; background:var(--surface); border:1px solid var(--border);
   border-radius:16px; overflow:hidden; display:flex;
 }
 .sav-left {
-  flex:1; padding:clamp(12px,1.8vh,22px) clamp(14px,1.5vw,20px);
-  display:flex; flex-direction:column; justify-content:center; gap:clamp(6px,1vh,12px);
-  border-right:1px solid var(--border);
+  flex:1; padding:clamp(12px,1.6vh,20px) clamp(14px,1.5vw,20px);
+  display:flex; flex-direction:column; justify-content:center;
+  gap:clamp(6px,.9vh,10px); border-right:1px solid var(--border);
 }
-.sav-title { font-size:clamp(9px,.72vw,11px); font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--subtle); margin-bottom:2px; }
-.sav-row { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
-.sav-lbl { font-size:clamp(10px,.82vw,13px); color:var(--muted); }
-.sav-val { font-family:var(--mono); font-size:clamp(11px,.92vw,14px); font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums; }
-.sav-row.sep { border-top:1px solid var(--border); padding-top:clamp(6px,.9vh,10px); margin-top:clamp(2px,.3vh,4px); }
-
+.sav-title { font-size:var(--fs-label); font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--subtle); }
+.sav-row   { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+.sav-lbl   { font-size:var(--fs-body); color:var(--muted); }
+.sav-val   { font-family:var(--mono); font-size:var(--fs-mono); font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums; }
+.sav-sep   { border-top:1px solid var(--border); padding-top:clamp(6px,.9vh,10px); margin-top:clamp(2px,.3vh,4px); }
 .sav-right {
-  flex-shrink:0; width:clamp(120px,14vw,180px);
+  flex-shrink:0; width:clamp(110px,13vw,170px);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:4px; padding:clamp(12px,1.8vh,22px);
+  gap:4px; padding:clamp(12px,1.6vh,20px);
   background:oklch(from var(--pos) 0.97 0.02 h);
 }
-.sav-hero-lbl { font-size:clamp(8px,.65vw,10px); font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:oklch(from var(--pos) 0.55 0.12 h); text-align:center; }
-.sav-hero-val {
-  font-family:var(--mono); font-size:clamp(1.4rem,2.6vw,3rem);
-  font-weight:900; letter-spacing:-.02em; color:var(--pos);
-  font-variant-numeric:tabular-nums; text-align:center; line-height:1;
-}
-.sav-hero-sub { font-size:clamp(8px,.65vw,10px); color:oklch(from var(--pos) 0.55 0.12 h); text-align:center; }
+.sav-hero-lbl { font-size:var(--fs-label); font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:oklch(from var(--pos) 0.48 0.12 h); text-align:center; }
+.sav-hero-val { font-family:var(--mono); font-size:var(--fs-kpiSm); font-weight:900; letter-spacing:-.02em; color:var(--pos); font-variant-numeric:tabular-nums; text-align:center; line-height:1; }
+.sav-hero-sub { font-size:var(--fs-label); color:oklch(from var(--pos) 0.48 0.12 h); text-align:center; }
 
-/* ── ANIMATIONEN ────────────────────────────────────────────── */
-@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+/* ── ANIMATIONEN ─────────────────────────────────────────── */
+@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 @keyframes fade { from{opacity:0} to{opacity:1} }
 
-.header        { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
-.eyebrow       { animation:up   .55s cubic-bezier(.22,1,.36,1) .1s  both }
-.headline      { animation:up   .65s cubic-bezier(.22,1,.36,1) .18s both }
-.intro-text    { animation:up   .55s cubic-bezier(.22,1,.36,1) .26s both }
-.kfw-note      { animation:up   .55s cubic-bezier(.22,1,.36,1) .3s  both }
-.energy-pill   { animation:up   .55s cubic-bezier(.22,1,.36,1) .34s both }
-.disclaimer    { animation:fade .4s  ease                       .44s both }
-.footer-left   { animation:fade .4s  ease                       .5s  both }
-.prog-cards    { animation:up   .6s  cubic-bezier(.22,1,.36,1) .2s  both }
-.rate-compare  { animation:up   .6s  cubic-bezier(.22,1,.36,1) .32s both }
-.savings-block { animation:up   .6s  cubic-bezier(.22,1,.36,1) .42s both }
+.header       { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
+.eyebrow      { animation:up   .55s cubic-bezier(.22,1,.36,1) .12s both }
+.headline     { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
+.subline      { animation:up   .55s cubic-bezier(.22,1,.36,1) .28s both }
+.energy-pill  { animation:up   .5s  cubic-bezier(.22,1,.36,1) .34s both }
+.kfw-note     { animation:up   .5s  cubic-bezier(.22,1,.36,1) .40s both }
+.disclaimer   { animation:fade .4s  ease                       .48s both }
+.footer-left  { animation:fade .4s  ease                       .54s both }
+.prog-cards   { animation:up   .6s  cubic-bezier(.22,1,.36,1) .20s both }
+.rate-compare { animation:up   .6s  cubic-bezier(.22,1,.36,1) .32s both }
+.savings      { animation:up   .6s  cubic-bezier(.22,1,.36,1) .42s both }
 
 @media (prefers-reduced-motion:reduce) {
-  *{animation:none!important;opacity:1!important;transform:none!important}
+  * { animation:none !important; opacity:1 !important; transform:none !important }
 }
 </style>
 </head>
@@ -295,78 +262,84 @@ html, body {
   <div class="col-left">
     <div class="header">
       <img class="dev-logo" id="devLogo" src="" alt="">
-      <span class="slide-num">KfW</span>
+      <span class="slide-label">KfW</span>
     </div>
     <div class="content">
-      <div class="eyebrow" id="eyebrowText">KfW-F&#246;rderung</div>
-      <h2 class="headline" id="headline">—</h2>
-      <p  class="intro-text" id="introText">—</p>
-
+      <div class="eyebrow" id="eyebrowTxt">KfW-F&#246;rderung</div>
+      <h2 class="headline" id="headline">&#8212;</h2>
+      <p  class="subline"  id="subline">&#8212;</p>
       <div class="energy-pill">
         <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        <span class="energy-pill-text" id="energyText">—</span>
-        <span class="energy-pill-tag" id="energyTag">—</span>
+        <span class="energy-pill-txt">Gef&#246;rdert als</span>
+        <span class="energy-pill-tag" id="energyTag">&#8212;</span>
       </div>
-
       <div class="kfw-note">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <div class="kfw-note-text" id="kfwNoteText">—</div>
+        <div class="kfw-note-txt" id="kfwNote">&#8212;</div>
+      </div>
+      <div class="disclaimer">
+        <strong>Hinweis:</strong> <span id="disclaimerTxt">&#8212;</span>
       </div>
     </div>
-    <div class="disclaimer" id="disclaimerEl">
-      <strong>Hinweis:</strong> <span id="disclaimerText">—</span>
-    </div>
     <div class="footer-left">
-      <span class="address" id="address">—</span>
+      <span class="address" id="address">&#8212;</span>
     </div>
   </div>
 
   <!-- RECHTS -->
   <div class="col-right">
-
-    <!-- Programm-Karten -->
-    <div class="prog-cards" id="progCards"></div>
-
-    <!-- Zinsvergleich -->
+    <div class="prog-cards"   id="progCards"></div>
     <div class="rate-compare">
       <div class="rate-compare-hdr">Zinsvergleich</div>
-      <div class="rate-bars" id="rateBars"></div>
+      <div class="rate-bars"  id="rateBars"></div>
       <div class="vorteil-row">
-        <span class="vorteil-lbl" id="vorteilLbl">Zinsvorteil KfW</span>
-        <span class="vorteil-val" id="vorteilVal">—</span>
+        <span class="vorteil-lbl" id="vorteilLbl">Zinsvorteil</span>
+        <span class="vorteil-val" id="vorteilVal">&#8212;</span>
       </div>
     </div>
-
-    <!-- Ersparnis-Berechnung -->
-    <div class="savings-block">
+    <div class="savings">
       <div class="sav-left">
-        <div class="sav-title" id="savTitle">Ersparnis bei 100.000 € KfW-Darlehen</div>
+        <div class="sav-title" id="savTitle">&#8212;</div>
         <div class="sav-row">
-          <span class="sav-lbl" id="savMktLbl">Marktdarlehen — Zinsen / Jahr</span>
-          <span class="sav-val" id="savMktVal">—</span>
+          <span class="sav-lbl" id="savMktLbl">Marktdarlehen</span>
+          <span class="sav-val" id="savMktVal">&#8212;</span>
         </div>
         <div class="sav-row">
-          <span class="sav-lbl" id="savKfwLbl">KfW-Darlehen — Zinsen / Jahr</span>
-          <span class="sav-val" id="savKfwVal">—</span>
+          <span class="sav-lbl" id="savKfwLbl">KfW-Darlehen</span>
+          <span class="sav-val" id="savKfwVal">&#8212;</span>
         </div>
-        <div class="sav-row sep">
+        <div class="sav-row sav-sep">
           <span class="sav-lbl" style="font-weight:600;color:var(--ink)">Zinsvorteil / Jahr</span>
-          <span class="sav-val" style="color:var(--pos)" id="savYearVal">—</span>
+          <span class="sav-val" style="color:var(--pos)" id="savYearVal">&#8212;</span>
         </div>
       </div>
       <div class="sav-right">
         <span class="sav-hero-lbl">Ersparnis<br>pro Monat</span>
-        <div class="sav-hero-val" id="savHeroVal">—</div>
-        <span class="sav-hero-sub" id="savHeroSub">—</span>
+        <div class="sav-hero-val" id="savHeroVal">&#8212;</div>
+        <span class="sav-hero-sub">vs. Markt</span>
       </div>
     </div>
-
   </div>
-</div>
 
+</div>
 <script>
-function fmtPct(n) { return n.toLocaleString('de',{minimumFractionDigits:2,maximumFractionDigits:2}) + '\u00a0%'; }
-function fmtEur(n) { return Math.round(n).toLocaleString('de') + '\u00a0€'; }
+function applyUITokens(ui) {
+  if (!ui) return;
+  const r = document.documentElement;
+  if (ui.fontSans)   r.style.setProperty('--font',        ui.fontSans);
+  if (ui.fontMono)   r.style.setProperty('--font-mono',   ui.fontMono);
+  if (ui.logoHeader) r.style.setProperty('--logo-header', ui.logoHeader);
+  if (ui.type) Object.entries(ui.type).forEach(([k, v]) =>
+    r.style.setProperty('--fs-' + k, v)
+  );
+}
+
+function fmtPct(n, d=2) {
+  return n.toLocaleString('de', {minimumFractionDigits:d, maximumFractionDigits:d}) + '\u00a0%';
+}
+function fmtEur(n) {
+  return Math.round(n).toLocaleString('de') + '\u00a0\u20ac';
+}
 
 function applyProject(P) {
   const r = document.documentElement;
@@ -378,107 +351,106 @@ function applyProject(P) {
   $('devLogo').alt = P.developer     || '';
   $('address').textContent = P.address || '';
 
-  // KA oder EN
   const isEN = P.audience === 'EN';
   const kfw  = isEN ? P.en?.kfw : P.ka?.kfw;
   if (!kfw) return;
 
-  $('eyebrowText').textContent = isEN ? 'KfW-F\u00f6rderung f\u00fcr K\u00e4ufer' : 'KfW-F\u00f6rderung';
-  $('headline').textContent    = kfw.headline || 'KfW-F\u00f6rderung.';
-  $('introText').textContent   = kfw.intro    || '';
+  $('eyebrowTxt').textContent    = isEN ? 'KfW-F\u00f6rderung f\u00fcr K\u00e4ufer' : 'KfW-F\u00f6rderung';
+  $('headline').textContent      = kfw.headline || 'KfW-F\u00f6rderung.';
+  $('subline').textContent       = kfw.intro    || '';
+  $('energyTag').textContent     = P.energyStandard || 'KfW\u00a040';
+  $('disclaimerTxt').textContent = kfw.disclaimer || '';
 
-  // Energy-Pill
-  $('energyText').textContent = 'Gef\u00f6rdert als';
-  $('energyTag').textContent  = P.energyStandard || 'KfW\u00a040';
-
-  // KfW-Hinweis
   const latestDate = kfw.programs?.find(p=>p.rateDate)?.rateDate || '';
-  const noteEl = $('kfwNoteText');
-  noteEl.innerHTML = 'Konditionen Stand: <strong>' + (latestDate || 'aktuell') + '</strong>'
-    + ' \u00b7 Aktuelle Zinss\u00e4tze immer unter '
-    + '<a href="' + (kfw.kfwUrl||'https://www.kfw.de') + '" target="_blank">kfw.de</a> pr\u00fcfen.';
+  $('kfwNote').innerHTML =
+    'Konditionen Stand: <strong>' + (latestDate||'aktuell') + '</strong>' +
+    ' \u00b7 Stets unter <a href="' + (kfw.kfwUrl||'https://www.kfw.de') +
+    '" target="_blank">kfw.de</a> pr\u00fcfen.';
 
-  $('disclaimerText').textContent = kfw.disclaimer || '';
-
-  // ── Programm-Karten ────────────────────────────────────────
+  // Programm-Karten
   const cards = $('progCards');
   cards.innerHTML = '';
-  (kfw.programs || []).forEach(prog => {
+  (kfw.programs||[]).forEach(prog => {
     const card = document.createElement('div');
     card.className = 'prog-card' + (prog.highlight ? ' highlight' : '');
-    card.innerHTML = `
-      <div class="prog-name-row">
-        <span class="prog-name">${prog.name}</span>
-        ${prog.eligible ? `<span class="prog-eligible yes">\u2713 F\u00f6rderf\u00e4hig</span>` : ''}
-      </div>
-      <div class="prog-title">${prog.title || ''}</div>
-      <div>
-        <div class="prog-rate-block">
-          <span class="prog-rate">${(prog.rate||0).toLocaleString('de',{minimumFractionDigits:2,maximumFractionDigits:2})}</span>
-          <span class="prog-rate-sfx">\u00a0%</span>
-        </div>
-        <div class="prog-rate-date">Stand: ${prog.rateDate || 'aktuell'}</div>
-      </div>
-      <div class="prog-max"></div>
-      <div class="prog-condition">
-        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        ${prog.condition || ''}
-      </div>`;
-    // fix template literal issue
-    card.querySelector('.prog-max').innerHTML =
-      'Darlehen bis <strong>' + (prog.maxLoan||0).toLocaleString('de') + '\u00a0\u20ac</strong> pro Wohneinheit';
+    const maxText = prog.maxLoan
+      ? 'Darlehen bis <strong>' + prog.maxLoan.toLocaleString('de') + '\u00a0\u20ac</strong> pro WE'
+      : '';
+    card.innerHTML =
+      '<div class="prog-name-row">' +
+        '<span class="prog-name">' + (prog.name||'') + '</span>' +
+        (prog.eligible ? '<span class="prog-eligible">\u2713\u00a0F\u00f6rderf\u00e4hig</span>' : '') +
+      '</div>' +
+      '<div class="prog-title">' + (prog.title||'') + '</div>' +
+      '<div>' +
+        '<div class="prog-rate-block">' +
+          '<span class="prog-rate">' +
+            (prog.rate||0).toLocaleString('de',{minimumFractionDigits:2,maximumFractionDigits:2}) +
+          '</span>' +
+          '<span class="prog-rate-sfx">\u00a0%</span>' +
+        '</div>' +
+        '<div class="prog-rate-date">Stand: ' + (prog.rateDate||'aktuell') + '</div>' +
+      '</div>' +
+      '<div class="prog-max">' + maxText + '</div>' +
+      '<div class="prog-condition">' +
+        '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' +
+        (prog.condition||'') +
+      '</div>';
     cards.appendChild(card);
   });
 
-  // ── Zinsvergleich ──────────────────────────────────────────
-  const marketRate = kfw.marketRate || 3.80;
-  const kfwRate    = kfw.programs?.find(p=>p.highlight)?.rate
-                   || kfw.programs?.[0]?.rate || 2.85;
-  const vorteil    = marketRate - kfwRate;
+  // Zinsvergleich
+  const mktRate = kfw.marketRate || 4.00;
+  const kfwRate = kfw.programs?.find(p=>p.highlight)?.rate || kfw.programs?.[0]?.rate || 1.70;
+  const vorteil = mktRate - kfwRate;
+  const maxScale = mktRate * 1.15;
 
   const barsEl = $('rateBars');
   barsEl.innerHTML = '';
-  const maxScale = marketRate * 1.15;
-
   [
-    { lbl:'Marktdarlehen', rate:marketRate, cls:'markt', dark:true },
-    { lbl:'KfW-Darlehen',  rate:kfwRate,   cls:'kfw',   dark:false },
+    { lbl:'Marktdarlehen', rate:mktRate, cls:'markt', dark:true },
+    { lbl:'KfW-Darlehen',  rate:kfwRate, cls:'kfw',  dark:false },
   ].forEach(b => {
+    const pct = Math.round(b.rate / maxScale * 100);
     const row = document.createElement('div');
     row.className = 'rate-bar-row';
-    const pct = Math.round(b.rate / maxScale * 100);
-    row.innerHTML = `
-      <span class="rate-bar-lbl">${b.lbl}</span>
-      <div class="rate-bar-track">
-        <div class="rate-bar-fill ${b.cls}" style="width:${pct}%">
-          <span class="rate-val-label${b.dark?' dark':''}">${fmtPct(b.rate)}</span>
-        </div>
-      </div>`;
+    row.innerHTML =
+      '<span class="rate-bar-lbl">' + b.lbl + '</span>' +
+      '<div class="rate-bar-track">' +
+        '<div class="rate-bar-fill ' + b.cls + '" style="width:' + pct + '%">' +
+          '<span class="rate-val-lbl' + (b.dark?' dark':'') + '">' + fmtPct(b.rate) + '</span>' +
+        '</div>' +
+      '</div>';
     barsEl.appendChild(row);
   });
 
   $('vorteilLbl').textContent = kfw.savings || 'Zinsvorteil KfW vs. Markt';
   $('vorteilVal').textContent = '\u2212\u00a0' + fmtPct(vorteil);
 
-  // ── Ersparnis ──────────────────────────────────────────────
-  const refLoan = kfw.programs?.find(p=>p.highlight)?.maxLoan
-                || kfw.programs?.[0]?.maxLoan || 100000;
-  const savYear = refLoan * vorteil / 100;
-  const savMonth= savYear / 12;
+  // Ersparnis
+  const refLoan  = kfw.programs?.find(p=>p.highlight)?.maxLoan || kfw.programs?.[0]?.maxLoan || 150000;
+  const savYear  = refLoan * vorteil / 100;
+  const savMonth = savYear / 12;
 
-  $('savTitle').textContent    = 'Ersparnis bei ' + refLoan.toLocaleString('de') + '\u00a0\u20ac KfW-Darlehen';
-  $('savMktLbl').textContent   = 'Marktdarlehen \u00b7 ' + fmtPct(marketRate) + ' Zinsen / Jahr';
-  $('savKfwLbl').textContent   = 'KfW-Darlehen \u00b7 ' + fmtPct(kfwRate) + ' Zinsen / Jahr';
-  $('savMktVal').textContent   = fmtEur(refLoan * marketRate / 100);
-  $('savKfwVal').textContent   = fmtEur(refLoan * kfwRate   / 100);
-  $('savYearVal').textContent  = '+\u00a0' + fmtEur(savYear);
-  $('savHeroVal').textContent  = '+\u00a0' + Math.round(savMonth) + '\u00a0€';
-  $('savHeroSub').textContent  = 'vs. Marktdarlehen';
+  $('savTitle').textContent   = 'Ersparnis bei ' + refLoan.toLocaleString('de') + '\u00a0\u20ac KfW-Darlehen';
+  $('savMktLbl').textContent  = 'Marktdarlehen \u00b7 ' + fmtPct(mktRate) + ' Zinsen / Jahr';
+  $('savKfwLbl').textContent  = 'KfW-Darlehen \u00b7 '  + fmtPct(kfwRate) + ' Zinsen / Jahr';
+  $('savMktVal').textContent  = fmtEur(refLoan * mktRate / 100);
+  $('savKfwVal').textContent  = fmtEur(refLoan * kfwRate / 100);
+  $('savYearVal').textContent = '+\u00a0' + fmtEur(savYear);
+  $('savHeroVal').textContent = '+\u00a0' + Math.round(savMonth) + '\u00a0\u20ac';
 }
 
-try { if (window.parent?.PROJECT) applyProject(window.parent.PROJECT); } catch(e){}
+try { if (window.parent?.PROJECT) {
+  applyProject(window.parent.PROJECT);
+  applyUITokens(window.parent.PROJECT?.ui);
+}} catch(e) {}
+
 window.addEventListener('message', e => {
-  if (e.data?.type === 'PROJECT_DATA') applyProject(e.data.data);
+  if (e.data?.type === 'PROJECT_DATA') {
+    applyProject(e.data.data);
+    applyUITokens(e.data.ui);
+  }
 });
 </script>
 </body>
