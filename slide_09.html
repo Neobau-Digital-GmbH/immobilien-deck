@@ -84,28 +84,39 @@ html, body {
 .headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0; }
 .subline  { font-size:var(--fs-subline);  font-weight:400; color:var(--muted); line-height:1.6; flex-shrink:0; }
 
-/* Bento-Grid: 4 KPI-Kacheln */
+/* Bento-Grid: 4 KPI-Kacheln — visuell stark */
 .stats-bento {
   display:grid; grid-template-columns:1fr 1fr;
-  gap:clamp(6px,.9vh,10px); flex-shrink:0;
+  gap:clamp(7px,1vh,12px); flex-shrink:0;
 }
 .stat-tile {
-  display:flex; flex-direction:column; gap:3px;
-  padding:clamp(10px,1.4vh,16px) clamp(11px,1.2vw,15px);
-  background:var(--surface); border:1px solid var(--border); border-radius:13px;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; text-align:center;
+  gap:clamp(5px,.7vh,8px);
+  padding:clamp(14px,2vh,24px) clamp(12px,1.2vw,16px);
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
   position:relative; overflow:hidden;
 }
 .stat-tile.accent {
-  background:oklch(from var(--accent) 0.98 0.01 h);
-  border-color:oklch(from var(--accent) l c h / .25);
+  background:oklch(from var(--accent) 0.97 0.02 h);
+  border-color:oklch(from var(--accent) l c h / .3);
 }
 .stat-tile::before {
-  content:''; position:absolute; top:0; left:8%; right:8%; height:1px;
+  content:''; position:absolute; top:0; left:8%; right:8%; height:2px;
   background:linear-gradient(90deg, transparent, oklch(0.84 0.005 85), transparent);
 }
 .stat-tile.accent::before {
-  background:linear-gradient(90deg, transparent, oklch(from var(--accent) l c h / .3), transparent);
+  background:linear-gradient(90deg, transparent, oklch(from var(--accent) l c h / .4), transparent);
 }
+/* Icon oben in jeder Kachel */
+.stat-icon {
+  width:clamp(28px,3vw,40px); height:clamp(28px,3vw,40px);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  background:oklch(from var(--accent) l c h / .1);
+  border:1px solid oklch(from var(--accent) l c h / .2);
+  border-radius:10px;
+}
+.stat-icon svg { width:55%; height:55%; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
 .stat-v {
   font-family:var(--mono); font-size:var(--fs-kpiSm); font-weight:900;
   letter-spacing:-.02em; color:var(--ink); line-height:1;
@@ -307,15 +318,22 @@ function applyProject(P) {
     : (df.founded || '\u2014');
   const bento = $('statsBento');
   bento.innerHTML = '';
+  const STAT_ICONS = [
+    '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
+    '<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>',
+    '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+  ];
   [
     { v:founded,                    l:'Erfahrung', accent:true },
     { v:(df.projects||'\u2014')+'', l:'Projekte' },
     { v:(df.units||'\u2014')+'',    l:'Wohneinheiten' },
     { v: df.warranty || '\u2014',   l:'Gew\u00e4hrleistung' },
-  ].forEach(s => {
+  ].forEach((s, i) => {
     const d = document.createElement('div');
     d.className = 'stat-tile' + (s.accent ? ' accent' : '');
     d.innerHTML =
+      '<div class="stat-icon"><svg viewBox="0 0 24 24">' + STAT_ICONS[i] + '</svg></div>' +
       '<div class="stat-v">' + s.v + '</div>' +
       '<div class="stat-l">' + s.l + '</div>';
     bento.appendChild(d);
