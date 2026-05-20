@@ -30,6 +30,7 @@
   --pad-v:       clamp(24px, 3.5vh, 48px);
   --pad-h:       clamp(28px, 3.5vw, 56px);
   --header-gap:  clamp(20px, 3.5vh, 44px);
+  --content-gap: clamp(8px, 1.2vh, 16px);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html, body {
@@ -78,7 +79,7 @@ html, body {
 .content {
   position:relative; z-index:1;
   display:flex; flex-direction:column;
-  gap:clamp(8px, 1.2vh, 14px);
+  gap:var(--content-gap);
   flex:1; min-height:0;
 }
 
