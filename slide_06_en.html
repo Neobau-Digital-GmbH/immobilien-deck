@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miete vs. Kaufen</title>
+<style>
+:root {
+  --bg:       oklch(0.98 0.005 85);
+  --surface:  oklch(0.995 0.003 85);
+  --ink:      oklch(0.18 0.02 250);
+  --muted:    oklch(0.45 0.02 250);
+  --subtle:   oklch(0.65 0.01 250);
+  --border:   oklch(0.88 0.01 85);
+  --accent:   oklch(0.55 0.13 160);
+  --pos:      oklch(0.46 0.14 155);
+  --neg:      oklch(0.52 0.17 38);
+  --font:     "Roboto", system-ui, -apple-system, sans-serif;
+  --mono:     ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --logo-header:  clamp(22px, 2.6vh, 38px);
+  --pad-v:        clamp(24px, 3.5vh, 48px);
+  --pad-h:        clamp(28px, 3.5vw, 56px);
+  --header-gap:   clamp(14px, 2vh, 24px);
+  --content-gap:  clamp(8px, 1.2vh, 16px);
+  --fs-eyebrow:   clamp(9px, 0.75vw, 11px);
+  --fs-headline:  clamp(1.2rem, 1.9vw, 2.2rem);
+  --fs-subline:   clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:      clamp(0.82rem, 0.95vw, 1.05rem);
+  --fs-label:     clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:     clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:     clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:      clamp(11px, 0.95vw, 14px);
+  --fs-monoLg:    clamp(1.3rem, 2.1vw, 2.6rem);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100vw; height:100vh; overflow:hidden; background:var(--bg); font-family:var(--font); -webkit-font-smoothing:antialiased; color:var(--ink); }
+.slide { display:grid; grid-template-columns:38fr 62fr; width:100vw; height:100vh; }
+
+/* LINKS */
+.col-left {
+  display:flex; flex-direction:column;
+  padding:var(--pad-v) var(--pad-h);
+  position:relative; overflow:hidden; border-right:1px solid var(--border);
+}
+.col-left::before { content:''; position:absolute; inset:0; pointer-events:none; background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px); background-size:28px 28px; mask-image:linear-gradient(160deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,0) 55%); -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,0) 55%); }
+.col-left::after { content:''; position:absolute; left:0; top:20%; bottom:20%; width:3px; border-radius:0 3px 3px 0; background:var(--accent); opacity:.5; }
+
+.header { position:relative; z-index:1; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--header-gap); }
+.dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
+.slide-label { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
+
+.intro { position:relative; z-index:1; flex-shrink:0; margin-bottom:clamp(8px,1.4vh,18px); }
+.eyebrow { display:flex; align-items:center; gap:8px; margin-bottom:5px; font-size:var(--fs-eyebrow); font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); }
+.eyebrow::before { content:''; width:clamp(12px,1.4vw,20px); height:2px; background:var(--accent); border-radius:2px; flex-shrink:0; }
+.headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); }
+
+/* Inputs */
+.inputs { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; gap:clamp(5px,.8vh,9px); min-height:0; }
+.lbl { font-size:var(--fs-label); font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--subtle); display:block; margin-bottom:3px; }
+.price-wrap { position:relative; }
+.price-input { width:100%; padding:clamp(8px,1.1vh,13px) 32px clamp(8px,1.1vh,13px) clamp(10px,1vw,14px); background:var(--surface); border:1.5px solid var(--border); border-radius:10px; font-family:var(--mono); font-size:clamp(13px,1.3vw,18px); font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums; transition:border-color .2s; }
+.price-input:focus { outline:none; border-color:var(--accent); }
+.price-sfx { position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:var(--fs-label); font-weight:700; color:var(--subtle); pointer-events:none; }
+.row2 { display:flex; gap:8px; }
+.row2>.ib { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+.num-wrap { position:relative; }
+.num-input { width:100%; padding:clamp(7px,.95vh,11px) 28px clamp(7px,.95vh,11px) clamp(9px,.9vw,13px); background:var(--surface); border:1px solid var(--border); border-radius:10px; font-family:var(--mono); font-size:var(--fs-mono); font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; transition:border-color .2s; }
+.num-input:focus { outline:none; border-color:var(--accent); }
+.num-sfx { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:var(--fs-label); font-weight:700; color:var(--subtle); pointer-events:none; }
+.stepper-row { display:flex; align-items:center; gap:8px; }
+.stepper-row .lbl { flex:1; margin-bottom:0; }
+.stepper { display:flex; align-items:center; border:1px solid var(--border); border-radius:10px; background:var(--surface); overflow:hidden; flex-shrink:0; }
+.s-btn { width:clamp(26px,2.3vw,34px); height:clamp(28px,2.8vh,36px); display:flex; align-items:center; justify-content:center; background:none; border:none; cursor:pointer; color:var(--muted); font-size:15px; transition:background .15s, color .15s; }
+.s-btn:hover { background:oklch(from var(--accent) l c h/.1); color:var(--accent); }
+.s-val { min-width:clamp(34px,3vw,46px); text-align:center; font-family:var(--mono); font-size:var(--fs-mono); font-weight:700; color:var(--ink); border-left:1px solid var(--border); border-right:1px solid var(--border); padding:0 3px; }
+
+.footer-left { position:relative; z-index:1; flex-shrink:0; margin-top:clamp(8px,1.2vh,14px); padding-top:clamp(8px,1.2vh,14px); border-top:1px solid var(--border); }
+.address { font-size:var(--fs-label); color:var(--subtle); }
+
+/* RECHTS */
+.col-right { display:flex; flex-direction:column; padding:var(--pad-v) var(--pad-h); gap:clamp(8px,1.2vh,14px); }
+
+.calc-hdr { flex-shrink:0; display:flex; align-items:center; justify-content:space-between; }
+.calc-title { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
+
+/* Vergleichs-Hero */
+.compare-hero { flex-shrink:0; display:flex; gap:clamp(8px,1vw,14px); }
+.hero-card {
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:4px; padding:clamp(14px,2vh,24px) clamp(12px,1.3vw,18px);
+  background:var(--surface); border:1px solid var(--border); border-radius:16px;
+  text-align:center; position:relative; overflow:hidden;
+}
+.hero-card.buy { border-color:oklch(from var(--accent) l c h/.35); background:oklch(from var(--accent) 0.98 0.01 h); }
+.hero-card::before { content:''; position:absolute; top:0; left:8%; right:8%; height:2px; background:linear-gradient(90deg,transparent,oklch(0.84 0.005 85),transparent); }
+.hero-card.buy::before { background:var(--accent); opacity:.8; }
+.hero-type { font-size:var(--fs-label); font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--subtle); }
+.hero-card.buy .hero-type { color:var(--accent); }
+.hero-val { font-family:var(--mono); font-size:var(--fs-kpiLg); font-weight:900; letter-spacing:-.03em; color:var(--ink); line-height:1; font-variant-numeric:tabular-nums; }
+.hero-card.buy .hero-val { color:var(--accent); }
+.hero-sub { font-size:var(--fs-label); color:var(--muted); }
+.vs-divider { display:flex; align-items:center; justify-content:center; flex-shrink:0; width:clamp(28px,2.5vw,38px); }
+.vs-txt { font-size:var(--fs-label); font-weight:700; color:var(--subtle); }
+
+/* Waterfall */
+.waterfall { flex-shrink:0; background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+.wr { display:flex; align-items:center; justify-content:space-between; padding:clamp(7px,1vh,11px) clamp(14px,1.5vw,20px); border-bottom:1px solid var(--border); gap:8px; }
+.wr:last-child { border-bottom:none; }
+.wr.res { background:var(--bg); border-top:2px solid var(--border); border-bottom:2px solid var(--border); }
+.wr.pos-row { background:oklch(from var(--pos) 0.97 0.02 h); }
+.wl { font-size:var(--fs-body); color:var(--muted); flex:1; }
+.wl.b { font-weight:700; color:var(--ink); }
+.wl.p { font-weight:600; color:var(--pos); }
+.wv { font-family:var(--mono); font-size:var(--fs-mono); font-weight:700; text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.wv.pos { color:var(--pos); }
+.wv.neg { color:var(--neg); }
+
+/* KPI Chips */
+.kpi-row { flex-shrink:0; display:flex; gap:clamp(6px,.8vw,10px); }
+.kpi { flex:1; display:flex; flex-direction:column; gap:2px; padding:clamp(7px,1vh,11px) clamp(8px,.9vw,12px); background:var(--surface); border:1px solid var(--border); border-radius:10px; min-width:0; }
+.kpi-v { font-family:var(--mono); font-size:var(--fs-mono); font-weight:900; color:var(--ink); font-variant-numeric:tabular-nums; }
+.kpi-l { font-size:clamp(8px,.6vw,10px); font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--subtle); }
+
+/* Disclaimer */
+.disclaimer { flex-shrink:0; padding:clamp(6px,.9vh,10px) clamp(12px,1.3vw,18px); background:oklch(0.965 0.005 85); border:1px solid var(--border); border-radius:10px; }
+.disclaimer-text { font-size:clamp(8px,.6vw,10px); color:var(--subtle); line-height:1.5; }
+.disclaimer-text strong { color:var(--muted); }
+
+@keyframes up   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+@keyframes fade { from{opacity:0} to{opacity:1} }
+.header       { animation:up   .5s cubic-bezier(.22,1,.36,1) .05s both }
+.intro        { animation:up   .5s cubic-bezier(.22,1,.36,1) .1s  both }
+.inputs       { animation:up   .5s cubic-bezier(.22,1,.36,1) .16s both }
+.footer-left  { animation:fade .4s ease .4s both }
+.calc-hdr     { animation:fade .4s ease .1s both }
+.compare-hero { animation:up   .6s cubic-bezier(.22,1,.36,1) .18s both }
+.waterfall    { animation:up   .6s cubic-bezier(.22,1,.36,1) .28s both }
+.kpi-row      { animation:up   .6s cubic-bezier(.22,1,.36,1) .36s both }
+@media(prefers-reduced-motion:reduce){*{animation:none!important;opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<div class="slide">
+  <!-- LINKS -->
+  <div class="col-left">
+    <div class="header">
+      <img class="dev-logo" id="devLogo" src="" alt="">
+      <span class="slide-label">Miete vs. Kaufen</span>
+    </div>
+    <div class="intro">
+      <div class="eyebrow">Ihre pers&#246;nliche Rechnung</div>
+      <h2 class="headline">Was kostet Sie das wirklich?</h2>
+    </div>
+    <div class="inputs">
+      <div><span class="lbl">Kaufpreis</span>
+        <div class="price-wrap">
+          <input class="price-input" id="kpIn" type="text" inputmode="numeric" value="0">
+          <span class="price-sfx">&#8364;</span>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="ib"><span class="lbl">Wohnfl&#228;che</span>
+          <div class="num-wrap"><input class="num-input" id="sqmIn" type="number" min="20" max="300" step="1" value="60"><span class="num-sfx">m&#178;</span></div>
+        </div>
+        <div class="ib"><span class="lbl">Nebenkosten</span>
+          <div class="num-wrap"><input class="num-input" id="nkIn" type="number" min="3" max="15" step="0.5" value="8"><span class="num-sfx">%</span></div>
+        </div>
+      </div>
+      <div class="stepper-row">
+        <span class="lbl">Eigenkapital</span>
+        <div class="stepper">
+          <button class="s-btn" id="ekMinus">&#8722;</button>
+          <span class="s-val" id="ekDisp">20%</span>
+          <button class="s-btn" id="ekPlus">+</button>
+        </div>
+      </div>
+      <div class="stepper-row">
+        <span class="lbl">Zinssatz</span>
+        <div class="stepper">
+          <button class="s-btn" id="zinsMinus">&#8722;</button>
+          <span class="s-val" id="zinsDisp">3,50%</span>
+          <button class="s-btn" id="zinsPlus">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-left"><span class="address" id="address">&#8212;</span></div>
+  </div>
+
+  <!-- RECHTS -->
+  <div class="col-right">
+    <div class="calc-hdr">
+      <span class="calc-title">Monatliche Betrachtung</span>
+    </div>
+    <div class="compare-hero">
+      <div class="hero-card">
+        <span class="hero-type">Vergleichsmiete</span>
+        <div class="hero-val" id="heroMiete">&#8212;</div>
+        <span class="hero-sub">&#47; Monat f&#252;r &#228;quivalente Fl&#228;che</span>
+      </div>
+      <div class="vs-divider"><span class="vs-txt">vs.</span></div>
+      <div class="hero-card buy">
+        <span class="hero-type">Eigentumsrate</span>
+        <div class="hero-val" id="heroKauf">&#8212;</div>
+        <span class="hero-sub">&#47; Monat inkl. Tilgung</span>
+      </div>
+    </div>
+    <div class="waterfall">
+      <div class="wr"><span class="wl">Vergleichsmiete / Monat</span><span class="wv" id="r-miete">&#8212;</span></div>
+      <div class="wr"><span class="wl">Eigentumsrate (Zins + Tilgung)</span><span class="wv neg" id="r-rate">&#8212;</span></div>
+      <div class="wr res"><span class="wl b">Monatliche Differenz</span><span class="wv" id="r-diff">&#8212;</span></div>
+      <div class="wr pos-row"><span class="wl p">+ Tilgung als Verm&#246;gensaufbau</span><span class="wv pos" id="r-tilg">&#8212;</span></div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><span class="kpi-v" id="r-zinsvorteil">&#8212;</span><span class="kpi-l">KfW-Vorteil/Monat</span></div>
+      <div class="kpi"><span class="kpi-v" id="r-brutto">&#8212;</span><span class="kpi-l">Heizkosten-Ersparnis/Monat</span></div>
+      <div class="kpi"><span class="kpi-v" id="r-darlehen">&#8212;</span><span class="kpi-l">Darlehensbetrag</span></div>
+    </div>
+    <div class="disclaimer">
+      <p class="disclaimer-text"><strong>Hinweis:</strong> Vereinfachte Musterrechnung. Tats&#228;chliche Konditionen k&#246;nnen abweichen. Bitte mit Finanzierungsberater abstimmen.</p>
+    </div>
+  </div>
+</div>
+<script>
+function applyUITokens(ui) {
+  if (!ui) return;
+  const r = document.documentElement;
+  if (ui.fontSans)   r.style.setProperty('--font',        ui.fontSans);
+  if (ui.fontMono)   r.style.setProperty('--font-mono',   ui.fontMono);
+  if (ui.logoHeader) r.style.setProperty('--logo-header', ui.logoHeader);
+  if (ui.type) Object.entries(ui.type).forEach(([k,v]) => r.style.setProperty('--fs-'+k,v));
+}
+
+let P=null, ekPct=20, zinsRate=3.5;
+const $=id=>document.getElementById(id);
+function parseDE(s){return parseFloat(String(s).replace(/\./g,'').replace(',','.'))||0;}
+function fmtM(n){const a=Math.abs(Math.round(n));const sg=n>=0?'+\u00a0':'\u2212\u00a0';return sg+a.toLocaleString('de')+'\u00a0\u20ac';}
+function fmtK(n){n=Math.round(n);return Math.abs(n)>=1000?Math.round(n/1000).toLocaleString('de')+'\u00a0T\u20ac':n.toLocaleString('de')+'\u00a0\u20ac';}
+
+function calc() {
+  if(!P) return;
+  const kp  = parseDE($('kpIn').value);
+  const sqm = parseFloat($('sqmIn').value)||60;
+  const nk  = parseFloat($('nkIn').value)||8;
+  const gesamtk = kp*(1+nk/100);
+  const ekEur = kp*ekPct/100;
+  const darlehen = gesamtk-ekEur;
+
+  // KfW split (aus PROJECT.ka.kfw)
+  const kfwMax  = P.ka?.kfw?.programs?.find(p=>p.highlight)?.maxLoan||P.ka?.kfw?.programs?.[0]?.maxLoan||100000;
+  const kfwR    = P.ka?.kfw?.programs?.find(p=>p.highlight)?.rate||P.ka?.kfw?.programs?.[0]?.rate||1.70;
+  const kfwA    = Math.min(kfwMax, darlehen);
+  const mainA   = Math.max(0, darlehen-kfwA);
+  const tilgPct = 2.0;
+
+  const rateM = (kfwA*(kfwR/100+tilgPct/100) + mainA*(zinsRate/100+tilgPct/100))/12;
+  const tilgM = (kfwA*tilgPct/100 + mainA*tilgPct/100)/12;
+
+  // Vergleichsmiete
+  const rentSqm = P.en?.localRentPerSqm||P.ka?.rentPerSqm||14;
+  const mieteM  = sqm*rentSqm;
+
+  const diff = mieteM - rateM;
+
+  // KfW-Vorteil
+  const mktRate = P.ka?.kfw?.marketRate||zinsRate;
+  const kfwVorteil = kfwA*(mktRate-kfwR)/100/12;
+
+  // Heizkosten
+  const heatNew = P.en?.heatingCostNew||1.2;
+  const heatOld = P.en?.heatingCostOld||3.8;
+  const heatSav = (heatOld-heatNew)*sqm;
+
+  // Hero
+  $('heroMiete').textContent = Math.round(mieteM).toLocaleString('de')+'\u00a0\u20ac';
+  $('heroKauf').textContent  = Math.round(rateM).toLocaleString('de')+'\u00a0\u20ac';
+
+  $('r-miete').textContent = '+\u00a0'+Math.round(mieteM).toLocaleString('de')+'\u00a0\u20ac';
+  $('r-rate').textContent  = '\u2212\u00a0'+Math.round(rateM).toLocaleString('de')+'\u00a0\u20ac';
+  const diffEl=$('r-diff'); diffEl.textContent=fmtM(diff); diffEl.className='wv '+(diff>=0?'pos':'neg');
+  $('r-tilg').textContent  = '+\u00a0'+Math.round(tilgM).toLocaleString('de')+'\u00a0\u20ac';
+
+  $('r-zinsvorteil').textContent = '+\u00a0'+Math.round(kfwVorteil).toLocaleString('de')+'\u00a0\u20ac';
+  $('r-brutto').textContent      = '+\u00a0'+Math.round(heatSav).toLocaleString('de')+'\u00a0\u20ac';
+  $('r-darlehen').textContent    = fmtK(darlehen);
+}
+
+function applyProject(proj) {
+  P=proj;
+  const r=document.documentElement;
+  if(P.accent)    r.style.setProperty('--accent',    P.accent);
+  if(P.accentHex) r.style.setProperty('--accent-hex',P.accentHex);
+  $('devLogo').src=P.developerLogo||''; $('devLogo').alt=P.developer||'';
+  $('address').textContent=P.address||'';
+  // Defaults
+  const units=P.unitTypes||[];
+  const u=units[Math.floor(units.length/2)];
+  if(u){
+    const priceMid=(()=>{const f=+u.priceFrom?.replace(/\./g,''),t=+u.priceTo?.replace(/\./g,'');return f&&t?(f+t)/2:f||400000;})();
+    const sqmMid=(()=>{const m=u.sqm?.match(/(\d+)[^\d]+(\d+)/);return m?(+m[1]+ +m[2])/2:60;})();
+    $('kpIn').value=Math.round(priceMid).toLocaleString('de');
+    $('sqmIn').value=sqmMid.toFixed(0);
+  }
+  const ka=P.ka||{};
+  if(ka.hauptDarlehen?.rate){zinsRate=ka.hauptDarlehen.rate;$('zinsDisp').textContent=zinsRate.toLocaleString('de',{minimumFractionDigits:2})+'%';}
+  calc();
+}
+
+$('kpIn').addEventListener('blur',e=>{e.target.value=parseDE(e.target.value).toLocaleString('de');calc();});
+$('kpIn').addEventListener('focus',e=>{e.target.value=String(parseDE(e.target.value));});
+$('kpIn').addEventListener('input',calc);
+$('sqmIn').addEventListener('input',calc);
+$('nkIn').addEventListener('input',calc);
+$('ekMinus').addEventListener('click',()=>{ekPct=Math.max(5,ekPct-5);$('ekDisp').textContent=ekPct+'%';calc();});
+$('ekPlus').addEventListener('click',()=>{ekPct=Math.min(50,ekPct+5);$('ekDisp').textContent=ekPct+'%';calc();});
+$('zinsMinus').addEventListener('click',()=>{zinsRate=Math.max(1,parseFloat((zinsRate-0.25).toFixed(2)));$('zinsDisp').textContent=zinsRate.toLocaleString('de',{minimumFractionDigits:2})+'%';calc();});
+$('zinsPlus').addEventListener('click',()=>{zinsRate=Math.min(8,parseFloat((zinsRate+0.25).toFixed(2)));$('zinsDisp').textContent=zinsRate.toLocaleString('de',{minimumFractionDigits:2})+'%';calc();});
+
+try{if(window.parent?.PROJECT){applyProject(window.parent.PROJECT);applyUITokens(window.parent.PROJECT?.ui);}}catch(e){}
+window.addEventListener('message',e=>{if(e.data?.type==='PROJECT_DATA'){applyProject(e.data.data);applyUITokens(e.data.ui);}});
+</script>
+</body>
+</html>
