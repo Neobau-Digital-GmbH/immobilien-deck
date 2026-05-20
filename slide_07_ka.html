@@ -6,16 +6,30 @@
 <title>Steuervorteile</title>
 <style>
 :root {
-  --bg:      oklch(0.98 0.005 85);
-  --surface: oklch(0.995 0.003 85);
-  --ink:     oklch(0.18 0.02 250);
-  --muted:   oklch(0.50 0.02 250);
-  --subtle:  oklch(0.70 0.01 250);
-  --border:  oklch(0.88 0.01 85);
-  --accent:  oklch(0.55 0.13 160);
-  --pos:     oklch(0.48 0.15 155);
-  --font:    "Roboto", system-ui, -apple-system, sans-serif;
-  --mono:    ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --bg:       oklch(0.98 0.005 85);
+  --surface:  oklch(0.995 0.003 85);
+  --ink:      oklch(0.18 0.02 250);
+  --muted:    oklch(0.45 0.02 250);
+  --subtle:   oklch(0.65 0.01 250);
+  --border:   oklch(0.88 0.01 85);
+  --accent:   oklch(0.55 0.13 160);
+  --pos:      oklch(0.46 0.14 155);
+  --font:     "Roboto", system-ui, -apple-system, sans-serif;
+  --mono:     ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --logo-header:  clamp(22px, 2.6vh, 38px);
+  --pad-v:        clamp(24px, 3.5vh, 48px);
+  --pad-h:        clamp(28px, 3.5vw, 56px);
+  --header-gap:   clamp(20px, 3.5vh, 44px);
+  --content-gap:  clamp(8px, 1.2vh, 16px);
+  --fs-eyebrow:   clamp(9px, 0.75vw, 11px);
+  --fs-headline:  clamp(1.5rem, 2.5vw, 3rem);
+  --fs-subline:   clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:      clamp(0.85rem, 1vw, 1.12rem);
+  --fs-label:     clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:     clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:     clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:      clamp(11px, 0.95vw, 14px);
+  --fs-monoLg:    clamp(1.3rem, 2.1vw, 2.6rem);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html, body {
@@ -23,243 +37,211 @@ html, body {
   background:var(--bg); font-family:var(--font);
   -webkit-font-smoothing:antialiased; color:var(--ink);
 }
-.slide {
-  display:grid; grid-template-columns:36fr 64fr;
-  width:100vw; height:100vh;
-}
+.slide { display:grid; grid-template-columns:36fr 64fr; width:100vw; height:100vh; }
 
-/* ── LINKS ─────────────────────────────────────────────────── */
+/* ── LINKE SPALTE ─────────────────────────────────────────── */
 .col-left {
   display:flex; flex-direction:column;
-  padding:clamp(22px,3.2vh,46px) clamp(22px,2.8vw,44px);
+  padding:var(--pad-v) var(--pad-h);
   position:relative; overflow:hidden;
   border-right:1px solid var(--border);
 }
 .col-left::before {
   content:''; position:absolute; inset:0; pointer-events:none;
-  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px);
+  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px, transparent 1.2px);
   background-size:28px 28px;
-  mask-image:linear-gradient(160deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 55%);
-  -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 55%);
+  mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
+  -webkit-mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
 }
 .col-left::after {
   content:''; position:absolute; left:0; top:20%; bottom:20%;
-  width:3px; border-radius:0 3px 3px 0;
-  background:var(--accent); opacity:.5;
+  width:3px; border-radius:0 3px 3px 0; background:var(--accent); opacity:.5;
 }
 
+/* HEADER */
 .header {
   position:relative; z-index:1; flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:clamp(16px,2.8vh,36px);
+  margin-bottom:var(--header-gap);
 }
-.dev-logo  { height:clamp(22px,2.6vh,38px); width:auto; object-fit:contain; }
-.slide-num { font-size:clamp(9px,.72vw,11px); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
+.dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
+.slide-label { font-size:var(--fs-label); font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--subtle); }
 
+/* CONTENT */
 .content {
-  position:relative; z-index:1; flex:1; display:flex;
-  flex-direction:column; justify-content:center; gap:clamp(12px,1.8vh,22px);
+  position:relative; z-index:1;
+  flex:1; display:flex; flex-direction:column;
+  gap:var(--content-gap); min-height:0;
 }
 .eyebrow {
-  display:flex; align-items:center; gap:8px;
-  font-size:clamp(9px,.75vw,12px); font-weight:700;
+  display:flex; align-items:center; gap:8px; flex-shrink:0;
+  font-size:var(--fs-eyebrow); font-weight:700;
   letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
 }
 .eyebrow::before {
   content:''; width:clamp(14px,1.6vw,22px); height:2px;
   background:var(--accent); border-radius:2px; flex-shrink:0;
 }
-.headline {
-  font-size:clamp(1.3rem,2.2vw,2.6rem); font-weight:900;
-  letter-spacing:-.025em; line-height:1.05; color:var(--ink);
-}
-.intro-text {
-  font-size:clamp(.82rem,1vw,1.08rem); font-weight:300;
-  color:var(--muted); line-height:1.65;
-}
+.headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0; }
+.subline  { font-size:var(--fs-subline);  font-weight:400; color:var(--muted); line-height:1.6; flex-shrink:0; }
 
-/* Gesetzliche Basis-Chips */
-.law-chips { display:flex; flex-direction:column; gap:7px; }
+/* Gesetzes-Chips */
+.law-chips { display:flex; flex-direction:column; gap:clamp(6px,.9vh,10px); }
 .law-chip {
-  display:flex; align-items:flex-start; gap:9px;
-  padding:clamp(8px,1.1vh,13px) clamp(10px,1.1vw,15px);
+  display:flex; align-items:flex-start; gap:10px; flex-shrink:0;
+  padding:clamp(9px,1.2vh,14px) clamp(11px,1.2vw,15px);
   background:var(--surface); border:1px solid var(--border); border-radius:12px;
 }
 .law-icon {
-  flex-shrink:0; width:clamp(18px,1.7vw,24px); height:clamp(18px,1.7vw,24px);
+  flex-shrink:0; width:clamp(20px,1.9vw,26px); height:clamp(20px,1.9vw,26px);
   display:flex; align-items:center; justify-content:center;
   background:oklch(from var(--accent) l c h / .1);
-  border:1px solid oklch(from var(--accent) l c h / .25);
-  border-radius:6px;
+  border:1px solid oklch(from var(--accent) l c h / .22); border-radius:7px;
 }
-.law-icon svg { width:60%; height:60%; stroke:var(--accent); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
-.law-info { display:flex; flex-direction:column; gap:2px; }
-.law-name { font-size:clamp(10px,.85vw,13px); font-weight:700; color:var(--ink); }
-.law-para { font-size:clamp(8px,.65vw,10px); font-weight:600; letter-spacing:.06em; color:var(--accent); }
-.law-desc { font-size:clamp(9px,.72vw,11px); color:var(--muted); line-height:1.4; }
+.law-icon svg { width:58%; height:58%; stroke:var(--accent); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.law-info  { display:flex; flex-direction:column; gap:2px; }
+.law-name  { font-size:var(--fs-body); font-weight:700; color:var(--ink); }
+.law-para  { font-size:var(--fs-label); font-weight:700; letter-spacing:.06em; color:var(--accent); }
+.law-desc  { font-size:var(--fs-label); color:var(--muted); line-height:1.4; }
 
 /* Disclaimer */
 .disclaimer {
-  position:relative; z-index:1; flex-shrink:0;
-  padding:clamp(8px,1.1vh,12px) clamp(10px,1.1vw,14px);
-  background:oklch(0.96 0.005 85); border:1px solid var(--border); border-radius:10px;
-  font-size:clamp(8px,.62vw,10px); color:var(--subtle); line-height:1.5;
+  flex-shrink:0; padding:clamp(8px,1.1vh,12px) clamp(10px,1.1vw,14px);
+  background:oklch(0.965 0.005 85); border:1px solid var(--border);
+  border-radius:10px; font-size:clamp(8px,.62vw,10px); color:var(--subtle); line-height:1.5;
 }
 .disclaimer strong { color:var(--muted); }
 
+/* FOOTER */
 .footer-left {
   position:relative; z-index:1; flex-shrink:0;
-  padding-top:clamp(8px,1.2vh,14px); border-top:1px solid var(--border);
-  margin-top:clamp(8px,1.2vh,14px);
+  margin-top:clamp(12px,2vh,24px); padding-top:clamp(10px,1.5vh,18px);
+  border-top:1px solid var(--border);
 }
-.address { font-size:clamp(9px,.72vw,12px); color:var(--subtle); }
+.address { font-size:var(--fs-label); color:var(--subtle); }
 
-/* ── RECHTS ─────────────────────────────────────────────────── */
+/* ── RECHTE SPALTE ────────────────────────────────────────── */
 .col-right {
   display:flex; flex-direction:column;
-  padding:clamp(22px,3.2vh,46px) clamp(22px,2.8vw,48px);
-  gap:clamp(10px,1.6vh,18px);
+  padding:var(--pad-v) var(--pad-h);
+  gap:clamp(10px, 1.6vh, 20px);
+  justify-content:center;              /* Blöcke vertikal zentrieren */
 }
 
-/* AfA-Typ-Cards */
+/* 2 AfA-Karten nebeneinander */
 .afa-cards { display:flex; gap:clamp(8px,1vw,14px); flex-shrink:0; }
 .afa-card {
-  flex:1; display:flex; flex-direction:column; gap:clamp(8px,1.2vh,14px);
-  padding:clamp(14px,2vh,22px) clamp(14px,1.5vw,20px);
+  flex:1; display:flex; flex-direction:column;
+  gap:clamp(8px,1.1vh,14px);
+  padding:clamp(14px,1.8vh,22px) clamp(14px,1.5vw,20px);
   background:var(--surface); border:1px solid var(--border);
   border-radius:16px; position:relative; overflow:hidden;
 }
+.afa-card.featured {
+  border-color:oklch(from var(--accent) l c h / .35);
+  background:oklch(from var(--accent) 0.99 0.006 h);
+}
 .afa-card::before {
   content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:linear-gradient(90deg,transparent,oklch(from var(--accent) l c h / .4),transparent);
+  background:linear-gradient(90deg, transparent, oklch(from var(--accent) l c h / .3), transparent);
 }
-.afa-card.featured { border-color:oklch(from var(--accent) l c h / .3); }
-.afa-card.featured::before { background:var(--accent); opacity:.7; }
+.afa-card.featured::before { background:var(--accent); opacity:.8; }
 
-.afa-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
-.afa-type-lbl {
-  font-size:clamp(8px,.65vw,10px); font-weight:700;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--subtle);
-}
-.afa-law {
+.afa-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.afa-type { font-size:var(--fs-label); font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--subtle); }
+.afa-law  {
   font-size:clamp(8px,.62vw,9px); font-weight:700; letter-spacing:.06em;
   color:var(--accent); padding:2px 6px; border-radius:5px;
   background:oklch(from var(--accent) l c h / .1);
-  border:1px solid oklch(from var(--accent) l c h / .2);
-  white-space:nowrap;
+  border:1px solid oklch(from var(--accent) l c h / .2); white-space:nowrap;
 }
-
 .afa-rate {
-  font-family:var(--mono); font-size:clamp(2rem,3.5vw,4rem);
-  font-weight:900; letter-spacing:-.03em; color:var(--accent); line-height:1;
+  font-family:var(--mono); font-size:var(--fs-kpiLg); font-weight:900;
+  letter-spacing:-.03em; color:var(--accent); line-height:1;
 }
-.afa-rate-sfx { font-size:clamp(.85rem,1.4vw,1.6rem); font-weight:700; color:var(--accent); }
-.afa-rate-sub {
-  font-size:clamp(9px,.75vw,12px); color:var(--muted); margin-top:2px;
-}
-
-.afa-info { font-size:clamp(9px,.75vw,12px); color:var(--muted); line-height:1.45; }
-
+.afa-rate-sfx { font-size:var(--fs-kpiSm); font-weight:700; color:var(--accent); }
+.afa-rate-sub { font-size:var(--fs-label); color:var(--muted); margin-top:2px; }
+.afa-info { font-size:var(--fs-label); color:var(--muted); line-height:1.45; }
 .eligible-badge {
-  display:inline-flex; align-items:center; gap:5px;
+  display:inline-flex; align-items:center; gap:4px;
   padding:3px 9px; border-radius:50px;
-  font-size:clamp(8px,.65vw,10px); font-weight:700; flex-shrink:0;
-}
-.eligible-badge.yes {
-  background:oklch(from var(--pos) l c h / .1);
-  color:var(--pos);
+  font-size:var(--fs-label); font-weight:700;
+  background:oklch(from var(--pos) l c h / .1); color:var(--pos);
   border:1px solid oklch(from var(--pos) l c h / .25);
 }
-.eligible-badge.check { font-size:.85em; }
 
 /* Kombinierter Effekt */
-.combined-block {
-  flex-shrink:0;
-  display:flex; align-items:center; gap:clamp(14px,2vw,28px);
-  padding:clamp(12px,1.8vh,20px) clamp(16px,1.8vw,26px);
+.combined {
+  flex-shrink:0; display:flex; align-items:center;
+  gap:clamp(14px,2vw,28px);
+  padding:clamp(12px,1.6vh,20px) clamp(16px,1.8vw,26px);
   background:oklch(from var(--accent) 0.97 0.03 h);
   border:1px solid oklch(from var(--accent) l c h / .25);
   border-radius:16px; position:relative; overflow:hidden;
 }
-.combined-block::before {
+.combined::before {
   content:''; position:absolute; top:0; left:0; right:0; height:2px;
   background:var(--accent);
 }
-.combined-big {
-  display:flex; align-items:baseline; gap:4px; flex-shrink:0;
-}
+.combined-big { display:flex; align-items:baseline; gap:4px; flex-shrink:0; }
 .combined-num {
-  font-family:var(--mono); font-size:clamp(2.2rem,4vw,5rem);
-  font-weight:900; letter-spacing:-.03em; color:var(--accent); line-height:1;
+  font-family:var(--mono); font-size:var(--fs-kpiLg); font-weight:900;
+  letter-spacing:-.03em; color:var(--accent); line-height:1;
 }
-.combined-sfx { font-size:clamp(.9rem,1.6vw,2rem); font-weight:700; color:var(--accent); }
-.combined-text { display:flex; flex-direction:column; gap:4px; }
-.combined-label {
-  font-size:clamp(10px,.85vw,14px); font-weight:700; color:var(--ink); line-height:1.2;
-}
-.combined-sub { font-size:clamp(9px,.75vw,12px); color:var(--muted); line-height:1.4; }
+.combined-sfx { font-size:var(--fs-kpiSm); font-weight:700; color:var(--accent); }
+.combined-text { display:flex; flex-direction:column; gap:4px; flex:1; }
+.combined-label { font-size:var(--fs-body); font-weight:700; color:var(--ink); line-height:1.2; }
+.combined-sub   { font-size:var(--fs-label); color:var(--muted); line-height:1.4; }
 
-/* Jahresstreifen */
+/* Jahresbalken */
 .year-bars { display:flex; gap:4px; flex-shrink:0; align-items:flex-end; }
-.year-bar { display:flex; flex-direction:column; align-items:center; gap:3px; }
-.year-bar-inner { width:clamp(22px,2vw,32px); border-radius:4px 4px 0 0; transition:height .3s; }
-.year-bar-lbl { font-size:clamp(8px,.62vw,9px); font-weight:600; color:var(--subtle); }
+.year-bar  { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.year-bar-inner { width:clamp(20px,1.8vw,28px); border-radius:4px 4px 0 0; }
+.year-bar-lbl   { font-size:clamp(8px,.6vw,9px); font-weight:600; color:var(--subtle); }
 
 /* Beispielrechnung */
-.example-block {
-  flex:1; min-height:0;
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:16px; overflow:hidden; display:flex; flex-direction:column;
+.example {
+  flex-shrink:0; background:var(--surface); border:1px solid var(--border);
+  border-radius:16px; overflow:hidden;
 }
-.example-hdr {
-  padding:clamp(10px,1.4vh,16px) clamp(14px,1.5vw,20px);
+.ex-hdr {
+  padding:clamp(9px,1.2vh,14px) clamp(14px,1.5vw,20px);
   border-bottom:1px solid var(--border);
   display:flex; align-items:center; justify-content:space-between;
 }
-.example-title {
-  font-size:clamp(9px,.72vw,11px); font-weight:700;
-  letter-spacing:.16em; text-transform:uppercase; color:var(--subtle);
-}
-.example-price {
-  font-family:var(--mono); font-size:clamp(10px,.82vw,13px);
-  font-weight:700; color:var(--accent);
-}
-.example-rows { flex:1; display:flex; flex-direction:column; }
+.ex-title { font-size:var(--fs-label); font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--subtle); }
+.ex-price { font-family:var(--mono); font-size:var(--fs-mono); font-weight:700; color:var(--accent); }
+.ex-rows  { display:flex; flex-direction:column; }
 .ex-row {
   display:flex; align-items:center; justify-content:space-between;
-  padding:clamp(8px,1.1vh,13px) clamp(14px,1.5vw,20px);
+  padding:clamp(7px,1vh,12px) clamp(14px,1.5vw,20px);
   border-bottom:1px solid var(--border); gap:8px;
 }
 .ex-row:last-child { border-bottom:none; }
-.ex-row.result {
-  background:oklch(from var(--pos) 0.97 0.02 h);
-  border-top:2px solid oklch(from var(--pos) l c h / .3);
-}
-.ex-lbl { font-size:clamp(10px,.82vw,13px); color:var(--muted); flex:1; }
+.ex-row.result { background:oklch(from var(--pos) 0.97 0.02 h); border-top:2px solid oklch(from var(--pos) l c h / .3); }
+.ex-lbl   { font-size:var(--fs-body); color:var(--muted); flex:1; }
 .ex-lbl.b { font-weight:700; color:var(--ink); }
-.ex-val { font-family:var(--mono); font-size:clamp(11px,.92vw,14px); font-weight:700; color:var(--ink); white-space:nowrap; font-variant-numeric:tabular-nums; }
+.ex-val   { font-family:var(--mono); font-size:var(--fs-mono); font-weight:700; color:var(--ink); white-space:nowrap; font-variant-numeric:tabular-nums; }
 .ex-val.acc { color:var(--accent); }
 .ex-val.pos { color:var(--pos); }
-.ex-sub { font-size:clamp(9px,.7vw,11px); color:var(--subtle); text-align:right; }
 
-/* ── ANIMATIONEN ────────────────────────────────────────────── */
-@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+/* ── ANIMATIONEN ─────────────────────────────────────────── */
+@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 @keyframes fade { from{opacity:0} to{opacity:1} }
 
-.header        { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
-.eyebrow       { animation:up   .55s cubic-bezier(.22,1,.36,1) .1s  both }
-.headline      { animation:up   .65s cubic-bezier(.22,1,.36,1) .18s both }
-.intro-text    { animation:up   .55s cubic-bezier(.22,1,.36,1) .26s both }
-.law-chips     { animation:up   .55s cubic-bezier(.22,1,.36,1) .32s both }
-.disclaimer    { animation:fade .4s  ease                       .42s both }
-.footer-left   { animation:fade .4s  ease                       .48s both }
-
-.afa-cards     { animation:up   .6s  cubic-bezier(.22,1,.36,1) .2s  both }
-.combined-block{ animation:up   .6s  cubic-bezier(.22,1,.36,1) .32s both }
-.example-block { animation:up   .6s  cubic-bezier(.22,1,.36,1) .42s both }
+.header      { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
+.eyebrow     { animation:up   .55s cubic-bezier(.22,1,.36,1) .12s both }
+.headline    { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
+.subline     { animation:up   .55s cubic-bezier(.22,1,.36,1) .28s both }
+.law-chips   { animation:up   .55s cubic-bezier(.22,1,.36,1) .34s both }
+.disclaimer  { animation:fade .4s  ease                       .44s both }
+.footer-left { animation:fade .4s  ease                       .50s both }
+.afa-cards   { animation:up   .6s  cubic-bezier(.22,1,.36,1) .20s both }
+.combined    { animation:up   .6s  cubic-bezier(.22,1,.36,1) .32s both }
+.example     { animation:up   .6s  cubic-bezier(.22,1,.36,1) .42s both }
 
 @media (prefers-reduced-motion:reduce) {
-  *{animation:none!important;opacity:1!important;transform:none!important}
+  * { animation:none !important; opacity:1 !important; transform:none !important }
 }
 </style>
 </head>
@@ -270,54 +252,58 @@ html, body {
   <div class="col-left">
     <div class="header">
       <img class="dev-logo" id="devLogo" src="" alt="">
-      <span class="slide-num">Steuern</span>
+      <span class="slide-label">Steuern</span>
     </div>
     <div class="content">
       <div class="eyebrow">Steuervorteile</div>
-      <h2 class="headline" id="headline">—</h2>
-      <p  class="intro-text" id="introText">—</p>
+      <h2 class="headline" id="headline">&#8212;</h2>
+      <p  class="subline"  id="subline">&#8212;</p>
       <div class="law-chips" id="lawChips"></div>
-    </div>
-    <div class="disclaimer" id="disclaimer">
-      <strong>Hinweis:</strong> <span id="disclaimerText">—</span>
+      <div class="disclaimer">
+        <strong>Hinweis:</strong> <span id="disclaimerText">&#8212;</span>
+      </div>
     </div>
     <div class="footer-left">
-      <span class="address" id="address">—</span>
+      <span class="address" id="address">&#8212;</span>
     </div>
   </div>
 
   <!-- RECHTS -->
   <div class="col-right">
-
-    <!-- Zwei AfA-Karten -->
-    <div class="afa-cards" id="afaCards"></div>
-
-    <!-- Kombinierter Effekt + Jahresbalken -->
-    <div class="combined-block" id="combinedBlock">
+    <div class="afa-cards"  id="afaCards"></div>
+    <div class="combined"   id="combinedBlock">
       <div class="combined-big">
-        <span class="combined-num" id="combinedRate">—</span>
+        <span class="combined-num" id="combinedRate">&#8212;</span>
         <span class="combined-sfx">%</span>
       </div>
       <div class="combined-text">
-        <span class="combined-label" id="combinedLabel">—</span>
-        <span class="combined-sub" id="combinedSub">—</span>
+        <span class="combined-label" id="combinedLabel">&#8212;</span>
+        <span class="combined-sub"   id="combinedSub">&#8212;</span>
       </div>
       <div class="year-bars" id="yearBars"></div>
     </div>
-
-    <!-- Beispielrechnung -->
-    <div class="example-block">
-      <div class="example-hdr">
-        <span class="example-title">Beispielrechnung</span>
-        <span class="example-price" id="exPrice">—</span>
+    <div class="example">
+      <div class="ex-hdr">
+        <span class="ex-title">Beispielrechnung</span>
+        <span class="ex-price" id="exPrice">&#8212;</span>
       </div>
-      <div class="example-rows" id="exRows"></div>
+      <div class="ex-rows" id="exRows"></div>
     </div>
-
   </div>
-</div>
 
+</div>
 <script>
+function applyUITokens(ui) {
+  if (!ui) return;
+  const r = document.documentElement;
+  if (ui.fontSans)   r.style.setProperty('--font',        ui.fontSans);
+  if (ui.fontMono)   r.style.setProperty('--font-mono',   ui.fontMono);
+  if (ui.logoHeader) r.style.setProperty('--logo-header', ui.logoHeader);
+  if (ui.type) Object.entries(ui.type).forEach(([k, v]) =>
+    r.style.setProperty('--fs-' + k, v)
+  );
+}
+
 function applyProject(P) {
   const r = document.documentElement;
   if (P.accent)    r.style.setProperty('--accent',     P.accent);
@@ -329,162 +315,163 @@ function applyProject(P) {
   $('address').textContent = P.address || '';
 
   const afa = P.ka?.afa || {};
+  // QNG steuert Sonder-AfA
+  const qng = P.qng !== false;
 
-  // Texte links
-  $('headline').textContent  = afa.headline  || 'Steuervorteile f\u00fcr Neubau 2026.';
-  $('introText').textContent = afa.intro     || '';
+  $('headline').textContent     = afa.headline  || 'Steuervorteile f\u00fcr Neubau 2026.';
+  $('subline').textContent      = afa.intro     || '';
   $('disclaimerText').textContent = afa.disclaimer || '';
 
-  // Gesetzliche Basis-Chips
+  // Gesetzes-Chips
   const chips = $('lawChips');
   chips.innerHTML = '';
-  const laws = [
+  [
     afa.degressiv && {
-      name:  afa.degressiv.label || 'Degressive AfA',
-      para:  afa.degressiv.law   || '\u00a7 7 Abs. 5a EStG',
-      desc:  afa.degressiv.info  || '',
+      name: afa.degressiv.label || 'Degressive AfA',
+      para: afa.degressiv.law   || '\u00a7\u00a07 Abs.\u00a05a EStG',
+      desc: afa.degressiv.info  || '',
     },
-    afa.spezial && {
-      name:  afa.spezial.label  || 'Sonder-AfA',
-      para:  afa.spezial.law    || '\u00a7 7b EStG',
-      desc:  (afa.spezial.condition || '') + (afa.spezial.info ? ' \u00b7 ' + afa.spezial.info : ''),
+    (qng && afa.spezial) && {
+      name: afa.spezial.label  || 'Sonder-AfA',
+      para: afa.spezial.law    || '\u00a7\u00a07b EStG',
+      desc: (afa.spezial.condition||'') + (afa.spezial.info ? ' \u00b7 ' + afa.spezial.info : ''),
     },
-  ].filter(Boolean);
-
-  laws.forEach(l => {
+  ].filter(Boolean).forEach(l => {
     const chip = document.createElement('div');
     chip.className = 'law-chip';
-    chip.innerHTML = `
-      <div class="law-icon">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
-      </div>
-      <div class="law-info">
-        <span class="law-name">${l.name}</span>
-        <span class="law-para">${l.para}</span>
-        <span class="law-desc">${l.desc}</span>
-      </div>`;
+    chip.innerHTML =
+      '<div class="law-icon">' +
+        '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>' +
+        '<polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>' +
+      '</div>' +
+      '<div class="law-info">' +
+        '<span class="law-name">' + l.name + '</span>' +
+        '<span class="law-para">' + l.para + '</span>' +
+        '<span class="law-desc">' + l.desc + '</span>' +
+      '</div>';
     chips.appendChild(chip);
   });
 
-  // ── AfA-Karten ─────────────────────────────────────────────
+  // AfA-Karten
   const afaCards = $('afaCards');
   afaCards.innerHTML = '';
-
-  const cardData = [
+  const cards = [
     afa.degressiv && {
-      label:    afa.degressiv.label || 'Degressive AfA',
-      law:      afa.degressiv.law   || '\u00a7 7 Abs. 5a EStG',
-      rate:     afa.degressiv.rate  || 5,
-      rateSub:  'vom Restwert / Jahr',
-      info:     afa.degressiv.info  || '',
-      featured: false,
-      eligible: true,
-      eligibleNote: '',
+      label: afa.degressiv.label || 'Degressive AfA',
+      law:   afa.degressiv.law   || '\u00a7 7 Abs. 5a EStG',
+      rate:  afa.degressiv.rate  || 5,
+      sub:   'vom Restwert / Jahr',
+      info:  afa.degressiv.info  || '',
+      feat:  false, eligible: true, note: '',
     },
-    afa.spezial && {
-      label:    afa.spezial.label  || 'Sonder-AfA',
-      law:      afa.spezial.law    || '\u00a7 7b EStG',
-      rate:     afa.spezial.rate   || 5,
-      rateSub:  '\u00d7 ' + (afa.spezial.years || 4) + ' Jahre zus\u00e4tzlich',
-      info:     afa.spezial.condition || '',
-      featured: true,
-      eligible: afa.spezial.eligible !== false,
-      eligibleNote: afa.spezial.eligible !== false
-        ? 'Dieses Projekt qualifiziert sich'
-        : 'Voraussetzungen pr\u00fcfen',
+    (qng && afa.spezial) && {
+      label: afa.spezial.label  || 'Sonder-AfA',
+      law:   afa.spezial.law    || '\u00a7 7b EStG',
+      rate:  afa.spezial.rate   || 5,
+      sub:   '\u00d7 ' + (afa.spezial.years||4) + ' Jahre zus\u00e4tzlich',
+      info:  afa.spezial.condition || '',
+      feat:  true,
+      eligible: true,
+      note: 'Projekt qualifiziert sich',
     },
   ].filter(Boolean);
 
-  cardData.forEach(c => {
+  cards.forEach(c => {
     const card = document.createElement('div');
-    card.className = 'afa-card' + (c.featured ? ' featured' : '');
-    card.innerHTML = `
-      <div class="afa-card-top">
-        <span class="afa-type-lbl">${c.label}</span>
-        <span class="afa-law">${c.law}</span>
-      </div>
-      <div>
-        <div class="afa-rate">${c.rate}<span class="afa-rate-sfx">\u00a0%</span></div>
-        <div class="afa-rate-sub">${c.rateSub}</div>
-      </div>
-      <div class="afa-info">${c.info}</div>
-      ${c.eligibleNote ? `<div class="eligible-badge yes"><span class="check">\u2713</span>${c.eligibleNote}</div>` : ''}
-    `;
+    card.className = 'afa-card' + (c.feat ? ' featured' : '');
+    card.innerHTML =
+      '<div class="afa-top">' +
+        '<span class="afa-type">' + c.label + '</span>' +
+        '<span class="afa-law">'  + c.law   + '</span>' +
+      '</div>' +
+      '<div>' +
+        '<span class="afa-rate">' + c.rate + '<span class="afa-rate-sfx">\u00a0%</span></span>' +
+        '<div class="afa-rate-sub">' + c.sub + '</div>' +
+      '</div>' +
+      '<div class="afa-info">' + c.info + '</div>' +
+      (c.eligible && c.note
+        ? '<div class="eligible-badge">\u2713\u00a0' + c.note + '</div>' : '');
     afaCards.appendChild(card);
   });
 
-  // ── Kombinierter Effekt ─────────────────────────────────────
-  const degressivR = afa.degressiv?.rate || 5;
-  const spezialR   = afa.spezial?.eligible !== false ? (afa.spezial?.rate || 5) : 0;
-  const combined   = degressivR + spezialR;
-  const years      = afa.spezial?.years || 4;
+  // Kombinierter Effekt
+  const degR  = afa.degressiv?.rate || 5;
+  const spezR = (qng && afa.spezial) ? (afa.spezial.rate||5) : 0;
+  const comb  = degR + spezR;
+  const years = afa.spezial?.years || 4;
 
-  $('combinedRate').textContent = combined;
+  $('combinedRate').textContent  = comb;
   $('combinedLabel').textContent = 'AfA gesamt p.a. \u00b7 Jahre 1\u2013' + years;
-  $('combinedSub').textContent =
-    '= ' + (combined * years) + '\u00a0% der AHK in ' + years + ' Jahren \u00b7 '
-    + 'anschlie\u00dfend ' + degressivR + '\u00a0% degressiv';
+  $('combinedSub').textContent   =
+    '= ' + (comb*years) + '\u00a0% der AHK in ' + years + ' Jahren \u00b7 '
+    + 'danach ' + degR + '\u00a0% degressiv';
 
-  // Jahresbalken — visuell
-  const bars = $('yearBars');
-  bars.innerHTML = '';
-  const maxH = 44;
-  const barYears = [1,2,3,4,5,6];
-  barYears.forEach(y => {
-    const rate  = y <= years ? combined : degressivR;
-    const h     = Math.round(rate / combined * maxH);
-    const bar   = document.createElement('div');
+  // Jahresbalken
+  const barsEl = $('yearBars');
+  barsEl.innerHTML = '';
+  const maxH = 40;
+  [1,2,3,4,5,6].forEach(y => {
+    const h = Math.round((y <= years ? comb : degR) / comb * maxH);
+    const bar = document.createElement('div');
     bar.className = 'year-bar';
     bar.innerHTML =
-      `<div class="year-bar-inner" style="height:${h}px;background:${y<=years?'var(--accent)':'oklch(from var(--accent) l c h / .4)'}"></div>` +
-      `<span class="year-bar-lbl">J${y}</span>`;
-    bars.appendChild(bar);
+      '<div class="year-bar-inner" style="height:' + h + 'px;background:' +
+        (y <= years ? 'var(--accent)' : 'oklch(from var(--accent) l c h / .4)') +
+      '"></div>' +
+      '<span class="year-bar-lbl">J' + y + '</span>';
+    barsEl.appendChild(bar);
   });
   // Legende
   const leg = document.createElement('div');
   leg.style.cssText = 'display:flex;flex-direction:column;gap:3px;margin-left:4px;justify-content:flex-end;padding-bottom:16px';
   leg.innerHTML =
-    `<span style="font-size:clamp(8px,.62vw,9px);color:var(--accent);font-weight:700">${combined}\u00a0%</span>` +
-    `<span style="font-size:clamp(8px,.62vw,9px);color:oklch(from var(--accent) l c h / .7);font-weight:600">${degressivR}\u00a0%</span>`;
-  bars.appendChild(leg);
+    '<span style="font-size:clamp(8px,.62vw,9px);color:var(--accent);font-weight:700">' + comb + '\u00a0%</span>' +
+    '<span style="font-size:clamp(8px,.62vw,9px);color:oklch(from var(--accent) l c h / .7);font-weight:600">' + degR + '\u00a0%</span>';
+  barsEl.appendChild(leg);
 
-  // ── Beispielrechnung ────────────────────────────────────────
-  const exPrice  = afa.examplePrice  || P.priceFrom || 450000;
-  const exSteu   = afa.exampleTaxRate || 42;
-  const bShare   = (afa.buildingShare || 85) / 100;
-  const afaBase  = exPrice * bShare;
-  const afaAnnual = afaBase * combined / 100;
-  const steuerErs = afaAnnual * exSteu / 100;
-  const steuerM   = steuerErs / 12;
+  // Beispielrechnung
+  const exP  = afa.examplePrice  || P.priceFrom || 450000;
+  const exSt = afa.exampleTaxRate || 42;
+  const bShare  = (afa.buildingShare||85) / 100;
+  const gesamtk = exP * (1 + (P.ka?.nebenkostenPct||8)/100);
+  const afaBase = gesamtk * bShare;
+  const afaAnn  = afaBase * comb / 100;
+  const steuerErs = afaAnn * exSt / 100;
 
-  $('exPrice').textContent = exPrice.toLocaleString('de') + '\u00a0\u20ac Kaufpreis';
+  $('exPrice').textContent = exP.toLocaleString('de') + '\u00a0\u20ac Kaufpreis';
 
   const rows = [
-    { lbl: 'Geb\u00e4udeanteil (' + Math.round(bShare*100) + '\u00a0%)',                      val: afaBase.toLocaleString('de')+'\u00a0\u20ac',   cls:'acc' },
-    { lbl: 'AfA gesamt (' + combined + '\u00a0% p.a.)',                                         val: afaAnnual.toLocaleString('de')+'\u00a0\u20ac / Jahr', cls:'' },
-    { lbl: 'Grenzsteuersatz (Annahme)',                                                          val: exSteu + '\u00a0%',                            cls:'' },
-    { lbl: 'Steuerersparnis / Jahr', bold:true, result:true,                                     val: '+\u00a0' + Math.round(steuerErs).toLocaleString('de')+'\u00a0\u20ac', cls:'pos' },
-    { lbl: 'entspricht monatlich', sub: 'Jahre 1\u2013' + years,                                val: '+\u00a0' + Math.round(steuerM).toLocaleString('de')+'\u00a0\u20ac / Monat', cls:'pos' },
+    { lbl:'Geb\u00e4udeanteil (Gesamtkosten \u00d7 ' + Math.round(bShare*100) + '\u00a0%)', val:Math.round(afaBase).toLocaleString('de')+'\u00a0\u20ac', cls:'acc' },
+    { lbl:'AfA gesamt ('+comb+'\u00a0% p.a.)',  val:Math.round(afaAnn).toLocaleString('de')+'\u00a0\u20ac / Jahr', cls:'' },
+    { lbl:'Grenzsteuersatz (Annahme)',            val:exSt+'\u00a0%',                                              cls:'' },
+    { lbl:'Steuerersparnis / Jahr', bold:true, result:true, val:'+\u00a0'+Math.round(steuerErs).toLocaleString('de')+'\u00a0\u20ac', cls:'pos' },
+    { lbl:'entspricht / Monat',    sub:'Jahre 1\u2013'+years, val:'+\u00a0'+Math.round(steuerErs/12).toLocaleString('de')+'\u00a0\u20ac / Monat', cls:'pos' },
   ];
-
   const exRowsEl = $('exRows');
   exRowsEl.innerHTML = '';
   rows.forEach(row => {
     const div = document.createElement('div');
     div.className = 'ex-row' + (row.result ? ' result' : '');
     div.innerHTML =
-      `<div>` +
-        `<div class="ex-lbl${row.bold?' b':''}">${row.lbl}</div>` +
-        (row.sub ? `<div class="ex-sub">${row.sub}</div>` : '') +
-      `</div>` +
-      `<span class="ex-val${row.cls?' '+row.cls:''}">${row.val}</span>`;
+      '<div>' +
+        '<div class="ex-lbl' + (row.bold?' b':'') + '">' + row.lbl + '</div>' +
+        (row.sub ? '<div style="font-size:clamp(8px,.62vw,10px);color:var(--subtle)">' + row.sub + '</div>' : '') +
+      '</div>' +
+      '<span class="ex-val' + (row.cls?' '+row.cls:'') + '">' + row.val + '</span>';
     exRowsEl.appendChild(div);
   });
 }
 
-try { if (window.parent?.PROJECT) applyProject(window.parent.PROJECT); } catch(e){}
+try { if (window.parent?.PROJECT) {
+  applyProject(window.parent.PROJECT);
+  applyUITokens(window.parent.PROJECT?.ui);
+}} catch(e) {}
+
 window.addEventListener('message', e => {
-  if (e.data?.type === 'PROJECT_DATA') applyProject(e.data.data);
+  if (e.data?.type === 'PROJECT_DATA') {
+    applyProject(e.data.data);
+    applyUITokens(e.data.ui);
+  }
 });
 </script>
 </body>
