@@ -6,16 +6,29 @@
 <title>Das Projekt</title>
 <style>
 :root {
-  --bg:      oklch(0.98 0.005 85);
-  --surface: oklch(0.995 0.003 85);
-  --ink:     oklch(0.18 0.02 250);
-  --muted:   oklch(0.50 0.02 250);
-  --subtle:  oklch(0.70 0.01 250);
-  --border:  oklch(0.88 0.01 85);
-  --accent:  oklch(0.55 0.13 160);
-  --font:    "Roboto", system-ui, -apple-system, sans-serif;
-  --mono:    ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --img-bg:  oklch(0.80 0.04 65);
+  --bg:       oklch(0.98 0.005 85);
+  --surface:  oklch(0.995 0.003 85);
+  --ink:      oklch(0.18 0.02 250);
+  --muted:    oklch(0.45 0.02 250);
+  --subtle:   oklch(0.65 0.01 250);
+  --border:   oklch(0.88 0.01 85);
+  --accent:   oklch(0.55 0.13 160);
+  --img-bg:   oklch(0.80 0.04 65);
+  --font:     "Roboto", system-ui, -apple-system, sans-serif;
+  --mono:     ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --logo-header: clamp(22px, 2.6vh, 38px);
+  --fs-eyebrow:  clamp(9px, 0.75vw, 11px);
+  --fs-headline: clamp(1.5rem, 2.5vw, 3rem);
+  --fs-subline:  clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:     clamp(0.85rem, 1vw, 1.12rem);
+  --fs-label:    clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:    clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:    clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:     clamp(11px, 0.95vw, 14px);
+  --fs-monoLg:   clamp(1.3rem, 2.1vw, 2.6rem);
+  --pad-v:       clamp(24px, 3.5vh, 48px);
+  --pad-h:       clamp(28px, 3.5vw, 56px);
+  --header-gap:  clamp(20px, 3.5vh, 44px);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html, body {
@@ -23,27 +36,24 @@ html, body {
   background:var(--bg); font-family:var(--font);
   -webkit-font-smoothing:antialiased; color:var(--ink);
 }
-
-/* ── LAYOUT ──────────────────────────────────────────────── */
 .slide {
-  display:grid;
-  grid-template-columns:46fr 54fr;
+  display:grid; grid-template-columns:46fr 54fr;
   width:100vw; height:100vh;
 }
 
-/* ── LINKS ───────────────────────────────────────────────── */
+/* ── LINKE SPALTE ─────────────────────────────────────────── */
 .col-left {
   display:flex; flex-direction:column;
-  padding:clamp(24px,3.5vh,48px) clamp(24px,3vw,48px);
+  padding:var(--pad-v) var(--pad-h);
   position:relative; overflow:hidden;
   border-right:1px solid var(--border);
 }
 .col-left::before {
   content:''; position:absolute; inset:0; pointer-events:none;
-  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px);
+  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px, transparent 1.2px);
   background-size:28px 28px;
-  mask-image:linear-gradient(160deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 55%);
-  -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 55%);
+  mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
+  -webkit-mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
 }
 .col-left::after {
   content:''; position:absolute; left:0; top:20%; bottom:20%;
@@ -51,27 +61,28 @@ html, body {
   background:var(--accent); opacity:.5;
 }
 
-/* Header */
+/* HEADER */
 .header {
   position:relative; z-index:1; flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:clamp(14px,2.5vh,32px);
+  margin-bottom:var(--header-gap);
 }
-.dev-logo  { height:clamp(22px,2.6vh,38px); width:auto; object-fit:contain; }
-.slide-num {
-  font-size:clamp(9px,.72vw,11px); font-weight:700;
+.dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
+.slide-label {
+  font-size:var(--fs-label); font-weight:700;
   letter-spacing:.18em; text-transform:uppercase; color:var(--subtle);
 }
 
-/* Intro */
-.intro-block {
-  position:relative; z-index:1; flex-shrink:0;
-  margin-bottom:clamp(12px,2vh,24px);
-  display:flex; flex-direction:column; gap:clamp(6px,1vh,10px);
+/* CONTENT */
+.content {
+  position:relative; z-index:1;
+  flex:1; display:flex; flex-direction:column;
+  gap:clamp(10px, 1.5vh, 20px); min-height:0;
 }
+
 .eyebrow {
-  display:flex; align-items:center; gap:8px;
-  font-size:clamp(9px,.75vw,12px); font-weight:700;
+  display:flex; align-items:center; gap:8px; flex-shrink:0;
+  font-size:var(--fs-eyebrow); font-weight:700;
   letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
 }
 .eyebrow::before {
@@ -79,60 +90,52 @@ html, body {
   background:var(--accent); border-radius:2px; flex-shrink:0;
 }
 .headline {
-  font-size:clamp(1.4rem,2.4vw,2.8rem); font-weight:900;
-  letter-spacing:-.025em; line-height:1.05; color:var(--ink);
+  font-size:var(--fs-headline); font-weight:900;
+  letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0;
 }
-.sub-headline {
-  font-size:clamp(.85rem,1.05vw,1.15rem); font-weight:300;
-  color:var(--muted); line-height:1.5;
+.subline {
+  font-size:var(--fs-subline); font-weight:400;
+  color:var(--muted); line-height:1.5; flex-shrink:0;
 }
 
-/* Key-Stats — 4er Bento-Row */
+/* Key-Stats: 4 Kacheln in einer Reihe */
 .key-stats {
-  position:relative; z-index:1; flex-shrink:0;
-  display:flex; gap:clamp(6px,.8vw,10px);
-  margin-bottom:clamp(12px,2vh,22px);
+  display:flex; gap:clamp(6px,.8vw,10px); flex-shrink:0;
 }
 .key-stat {
-  flex:1; display:flex; flex-direction:column; gap:2px;
-  padding:clamp(9px,1.2vh,14px) clamp(8px,.9vw,13px);
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:12px; min-width:0;
+  flex:1; display:flex; flex-direction:column; gap:3px;
+  padding:clamp(9px,1.2vh,14px) clamp(9px,1vw,13px);
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  min-width:0;
 }
-.key-stat.accent-stat {
+.key-stat.accent {
   background:oklch(from var(--accent) 0.98 0.01 h);
   border-color:oklch(from var(--accent) l c h / .25);
 }
 .key-stat-v {
-  font-family:var(--mono); font-size:clamp(11px,1.1vw,15px);
-  font-weight:900; color:var(--ink); line-height:1.1;
-  font-variant-numeric:tabular-nums; white-space:nowrap;
-}
-.key-stat.accent-stat .key-stat-v { color:var(--accent); }
-.key-stat-l {
-  font-size:clamp(8px,.6vw,10px); font-weight:600;
-  letter-spacing:.09em; text-transform:uppercase; color:var(--subtle);
+  font-family:var(--mono); font-size:var(--fs-mono); font-weight:900;
+  color:var(--ink); line-height:1.1; font-variant-numeric:tabular-nums;
   white-space:nowrap;
 }
+.key-stat.accent .key-stat-v { color:var(--accent); }
+.key-stat-l {
+  font-size:var(--fs-label); font-weight:600;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--subtle);
+}
 
-/* Divider mit Label */
+/* Ausstattungs-Sektion */
 .section-divider {
-  position:relative; z-index:1; flex-shrink:0;
-  display:flex; align-items:center; gap:10px;
-  margin-bottom:clamp(10px,1.6vh,18px);
+  display:flex; align-items:center; gap:10px; flex-shrink:0;
 }
 .section-label {
-  font-size:clamp(9px,.72vw,11px); font-weight:700;
-  letter-spacing:.18em; text-transform:uppercase; color:var(--subtle);
+  font-size:var(--fs-label); font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--subtle);
   white-space:nowrap;
 }
-.section-line {
-  flex:1; height:1px; background:var(--border);
-}
+.section-line { flex:1; height:1px; background:var(--border); }
 
-/* Features — 2-Spalten-Liste */
+/* Features 2-Spalten */
 .features-grid {
-  position:relative; z-index:1;
   flex:1; display:grid;
   grid-template-columns:1fr 1fr;
   gap:clamp(6px,.9vh,10px);
@@ -140,37 +143,36 @@ html, body {
 }
 .feature-item {
   display:flex; align-items:flex-start; gap:8px;
-  padding:clamp(7px,1vh,11px) clamp(8px,.9vw,13px);
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:10px;
+  padding:clamp(8px,1.1vh,13px) clamp(9px,1vw,13px);
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
 }
 .feature-check {
-  flex-shrink:0; width:clamp(14px,1.3vw,18px); height:clamp(14px,1.3vw,18px);
+  flex-shrink:0;
+  width:clamp(15px,1.4vw,19px); height:clamp(15px,1.4vw,19px);
   background:oklch(from var(--accent) l c h / .10);
   border:1px solid oklch(from var(--accent) l c h / .25);
   border-radius:50%; display:flex; align-items:center; justify-content:center;
   margin-top:1px;
 }
 .feature-check svg {
-  width:60%; height:60%;
-  stroke:var(--accent); stroke-width:2.5; fill:none;
+  width:58%; height:58%; stroke:var(--accent); stroke-width:2.5; fill:none;
   stroke-linecap:round; stroke-linejoin:round;
 }
 .feature-text {
-  font-size:clamp(9px,.78vw,12px); font-weight:400;
+  font-size:var(--fs-body); font-weight:400;
   color:var(--muted); line-height:1.35;
 }
 
-/* Footer */
+/* FOOTER */
 .footer-left {
   position:relative; z-index:1; flex-shrink:0;
-  padding-top:clamp(10px,1.5vh,16px);
+  margin-top:clamp(12px,2vh,24px);
+  padding-top:clamp(10px,1.5vh,18px);
   border-top:1px solid var(--border);
-  margin-top:clamp(10px,1.5vh,16px);
 }
-.address { font-size:clamp(10px,.8vw,13px); color:var(--subtle); }
+.address { font-size:var(--fs-label); color:var(--subtle); }
 
-/* ── RECHTS — RENDERING ───────────────────────────────────── */
+/* ── RECHTE SPALTE: RENDERING ─────────────────────────────── */
 .col-right {
   position:relative; overflow:hidden;
   background:var(--img-bg);
@@ -192,50 +194,49 @@ html, body {
     linear-gradient(to top,   oklch(0.15 0.02 250 / .25) 0%, transparent 30%);
 }
 
-/* Preis-Pill unten links im Bild */
+/* Preis-Pill */
 .price-pill {
-  position:absolute; bottom:clamp(14px,2.2vh,26px); left:clamp(14px,2vw,26px);
+  position:absolute; bottom:clamp(16px,2.5vh,28px); left:clamp(16px,2vw,28px);
   display:flex; flex-direction:column; gap:2px;
-  padding:clamp(8px,1.1vh,13px) clamp(14px,1.6vw,22px);
+  padding:clamp(8px,1.2vh,14px) clamp(14px,1.6vw,22px);
   background:oklch(0.995 0 0 / .88);
   backdrop-filter:blur(16px) saturate(180%);
   -webkit-backdrop-filter:blur(16px) saturate(180%);
-  border:1px solid oklch(1 0 0 / .5);
-  border-radius:14px;
+  border:1px solid oklch(1 0 0 / .5); border-radius:14px;
   box-shadow:0 2px 16px oklch(0.2 0 0 / .10);
 }
 .price-pill-l {
-  font-size:clamp(8px,.65vw,10px); font-weight:700;
-  letter-spacing:.12em; text-transform:uppercase; color:var(--subtle);
+  font-size:var(--fs-label); font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--subtle);
 }
 .price-pill-v {
-  font-family:var(--mono); font-size:clamp(12px,1.1vw,16px);
-  font-weight:900; color:var(--ink); font-variant-numeric:tabular-nums;
+  font-family:var(--mono); font-size:var(--fs-mono); font-weight:900;
+  color:var(--ink); font-variant-numeric:tabular-nums;
 }
 
-/* ── ANIMATIONEN ──────────────────────────────────────────── */
-@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+/* ── ANIMATIONEN ─────────────────────────────────────────── */
+@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 @keyframes fade { from{opacity:0} to{opacity:1} }
 
 .header          { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
-.eyebrow         { animation:up   .55s cubic-bezier(.22,1,.36,1) .10s both }
-.headline        { animation:up   .65s cubic-bezier(.22,1,.36,1) .18s both }
-.sub-headline    { animation:up   .55s cubic-bezier(.22,1,.36,1) .25s both }
-.key-stats       { animation:up   .55s cubic-bezier(.22,1,.36,1) .32s both }
-.section-divider { animation:fade .4s  ease                       .38s both }
+.eyebrow         { animation:up   .55s cubic-bezier(.22,1,.36,1) .12s both }
+.headline        { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
+.subline         { animation:up   .55s cubic-bezier(.22,1,.36,1) .28s both }
+.key-stats       { animation:up   .55s cubic-bezier(.22,1,.36,1) .34s both }
+.section-divider { animation:fade .4s  ease                       .40s both }
 .footer-left     { animation:fade .4s  ease                       .62s both }
 .col-right       { animation:fade .8s  ease                       0s   both }
-.price-pill      { animation:up   .55s cubic-bezier(.22,1,.36,1) .7s  both }
+.price-pill      { animation:up   .55s cubic-bezier(.22,1,.36,1) .68s both }
 
-.feature-item:nth-child(1) { animation:up .5s cubic-bezier(.22,1,.36,1) .40s both }
-.feature-item:nth-child(2) { animation:up .5s cubic-bezier(.22,1,.36,1) .46s both }
+.feature-item:nth-child(1) { animation:up .5s cubic-bezier(.22,1,.36,1) .42s both }
+.feature-item:nth-child(2) { animation:up .5s cubic-bezier(.22,1,.36,1) .47s both }
 .feature-item:nth-child(3) { animation:up .5s cubic-bezier(.22,1,.36,1) .52s both }
-.feature-item:nth-child(4) { animation:up .5s cubic-bezier(.22,1,.36,1) .58s both }
-.feature-item:nth-child(5) { animation:up .5s cubic-bezier(.22,1,.36,1) .64s both }
-.feature-item:nth-child(6) { animation:up .5s cubic-bezier(.22,1,.36,1) .70s both }
+.feature-item:nth-child(4) { animation:up .5s cubic-bezier(.22,1,.36,1) .57s both }
+.feature-item:nth-child(5) { animation:up .5s cubic-bezier(.22,1,.36,1) .62s both }
+.feature-item:nth-child(6) { animation:up .5s cubic-bezier(.22,1,.36,1) .67s both }
 
 @media (prefers-reduced-motion:reduce) {
-  * { animation:none!important; opacity:1!important; transform:none!important }
+  * { animation:none !important; opacity:1 !important; transform:none !important }
 }
 </style>
 </head>
@@ -244,52 +245,55 @@ html, body {
 
   <!-- LINKS -->
   <div class="col-left">
-
     <div class="header">
       <img class="dev-logo" id="devLogo" src="" alt="">
-      <span class="slide-num">Das Projekt</span>
+      <span class="slide-label">Das Projekt</span>
     </div>
-
-    <div class="intro-block">
+    <div class="content">
       <div class="eyebrow">Projektübersicht</div>
-      <h2 class="headline" id="headline">—</h2>
-      <p  class="sub-headline" id="subHeadline">—</p>
+      <h2 class="headline" id="headline">&#8212;</h2>
+      <p  class="subline"  id="subline">&#8212;</p>
+      <div class="key-stats" id="keyStats"></div>
+      <div class="section-divider">
+        <span class="section-label">Ausstattung</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="features-grid" id="featuresGrid"></div>
     </div>
-
-    <!-- 4 Key-Stats -->
-    <div class="key-stats" id="keyStats"></div>
-
-    <!-- Features -->
-    <div class="section-divider">
-      <span class="section-label">Ausstattung</span>
-      <div class="section-line"></div>
-    </div>
-    <div class="features-grid" id="featuresGrid"></div>
-
     <div class="footer-left">
-      <span class="address" id="address">—</span>
+      <span class="address" id="address">&#8212;</span>
     </div>
   </div>
 
-  <!-- RECHTS -->
+  <!-- RECHTS: RENDERING -->
   <div class="col-right">
     <div class="img-placeholder"></div>
     <img class="rendering-img" id="renderingImg" src="" alt="" loading="eager">
     <div class="img-overlay"></div>
     <div class="price-pill">
       <span class="price-pill-l">Kaufpreis</span>
-      <span class="price-pill-v" id="priceRange">—</span>
+      <span class="price-pill-v" id="priceRange">&#8212;</span>
     </div>
   </div>
 
 </div>
-
 <script>
-function fmt(n) {
+function applyUITokens(ui) {
+  if (!ui) return;
+  const r = document.documentElement;
+  if (ui.fontSans)   r.style.setProperty('--font',        ui.fontSans);
+  if (ui.fontMono)   r.style.setProperty('--font-mono',   ui.fontMono);
+  if (ui.logoHeader) r.style.setProperty('--logo-header', ui.logoHeader);
+  if (ui.type) Object.entries(ui.type).forEach(([k, v]) =>
+    r.style.setProperty('--fs-' + k, v)
+  );
+}
+
+function fmtK(n) {
   if (!n) return '\u2014';
   return n >= 1000000
-    ? (n/1000000).toLocaleString('de',{maximumFractionDigits:1})+'\u00a0Mio.\u00a0\u20ac'
-    : Math.round(n/1000).toLocaleString('de')+'\u00a0T\u20ac';
+    ? (n/1000000).toLocaleString('de', {maximumFractionDigits:1}) + '\u00a0Mio.'
+    : Math.round(n/1000).toLocaleString('de') + '\u00a0T\u20ac';
 }
 
 function applyProject(P) {
@@ -302,31 +306,27 @@ function applyProject(P) {
   $('devLogo').alt = P.developer     || '';
   $('address').textContent = P.address || '';
 
-  // Headline
-  $('headline').textContent =
-    (P.units || '\u2014') + ' Eigentumswohnungen.';
-  $('subHeadline').textContent =
+  $('headline').textContent = (P.units || '\u2014') + ' Eigentumswohnungen.';
+  $('subline').textContent  =
     (P.rooms || '') +
     (P.sizesFrom && P.sizesTo
-      ? ' \u00b7 ' + P.sizesFrom + '\u2013' + P.sizesTo + '\u00a0m\u00b2'
-      : '') +
+      ? ' \u00b7 ' + P.sizesFrom + '\u2013' + P.sizesTo + '\u00a0m\u00b2' : '') +
     (P.location ? ' \u00b7 ' + P.location : '');
 
   // Key-Stats
-  const stats = [
-    { v: P.units + '\u00a0WE',               l:'Einheiten' },
-    { v: P.sizesFrom+'\u2013'+P.sizesTo+'\u00a0m\u00b2', l:'Wohnfl\u00e4che' },
-    { v: P.energyStandard || '\u2014',        l:'Standard',  accent:true },
-    { v: P.completionDate  || '\u2014',        l:'Erstbezug' },
-  ];
   const statsEl = $('keyStats');
   statsEl.innerHTML = '';
-  stats.forEach(s => {
+  [
+    { v: P.units + '\u00a0WE',                                       l:'Einheiten' },
+    { v: P.sizesFrom + '\u2013' + P.sizesTo + '\u00a0m\u00b2',       l:'Wohnfl\u00e4che' },
+    { v: P.energyStandard || '\u2014',                                l:'Standard', accent:true },
+    { v: P.completionDate  || '\u2014',                               l:'Erstbezug' },
+  ].forEach(s => {
     const d = document.createElement('div');
-    d.className = 'key-stat' + (s.accent ? ' accent-stat' : '');
+    d.className = 'key-stat' + (s.accent ? ' accent' : '');
     d.innerHTML =
-      `<span class="key-stat-v">${s.v}</span>` +
-      `<span class="key-stat-l">${s.l}</span>`;
+      '<span class="key-stat-v">' + s.v + '</span>' +
+      '<span class="key-stat-l">' + s.l + '</span>';
     statsEl.appendChild(d);
   });
 
@@ -337,28 +337,35 @@ function applyProject(P) {
     const item = document.createElement('div');
     item.className = 'feature-item';
     item.innerHTML =
-      `<div class="feature-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>` +
-      `<span class="feature-text">${f}</span>`;
+      '<div class="feature-check">' +
+        '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' +
+      '</div>' +
+      '<span class="feature-text">' + f + '</span>';
     grid.appendChild(item);
   });
 
   // Rendering
   if (P.images?.rendering1) {
-    const img = $('renderingImg');
-    img.src = P.images.rendering1;
-    img.alt = P.name || '';
+    $('renderingImg').src = P.images.rendering1;
+    $('renderingImg').alt = P.name || '';
   }
 
   // Preis-Range
   if (P.priceFrom && P.priceTo) {
-    $('priceRange').textContent =
-      fmt(P.priceFrom) + ' \u2013 ' + fmt(P.priceTo);
+    $('priceRange').textContent = fmtK(P.priceFrom) + ' \u2013 ' + fmtK(P.priceTo);
   }
 }
 
-try { if (window.parent?.PROJECT) applyProject(window.parent.PROJECT); } catch(e){}
+try { if (window.parent?.PROJECT) {
+  applyProject(window.parent.PROJECT);
+  applyUITokens(window.parent.PROJECT?.ui);
+}} catch(e) {}
+
 window.addEventListener('message', e => {
-  if (e.data?.type === 'PROJECT_DATA') applyProject(e.data.data);
+  if (e.data?.type === 'PROJECT_DATA') {
+    applyProject(e.data.data);
+    applyUITokens(e.data.ui);
+  }
 });
 </script>
 </body>
