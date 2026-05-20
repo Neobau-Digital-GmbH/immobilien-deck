@@ -173,15 +173,26 @@ html, body {
 }
 .address { font-size:var(--fs-label); color:var(--subtle); }
 
-/* ── RECHTE SPALTE: RENDERING ─────────────────────────────── */
+/* ── RECHTE SPALTE: GALERIE ───────────────────────────────── */
 .col-right {
   position:relative; overflow:hidden;
   background:var(--img-bg);
   border-radius:20px 0 0 20px;
 }
-.rendering-img {
-  position:absolute; inset:0; width:100%; height:100%;
-  object-fit:cover; object-position:center; display:block;
+/* Slides-Container */
+.gallery-track {
+  position:absolute; inset:0;
+  display:flex; transition:none;
+}
+.gallery-slide {
+  position:absolute; inset:0; opacity:0;
+  transition:opacity .7s cubic-bezier(.4,0,.2,1);
+}
+.gallery-slide.active { opacity:1; z-index:1; }
+.gallery-slide.prev   { opacity:0; z-index:0; }
+
+.gallery-img {
+  width:100%; height:100%; object-fit:cover; object-position:center; display:block;
 }
 .img-placeholder {
   position:absolute; inset:0;
@@ -189,22 +200,22 @@ html, body {
     oklch(0.78 0.06 70) 0%, oklch(0.70 0.08 55) 50%, oklch(0.60 0.06 45) 100%);
 }
 .img-overlay {
-  position:absolute; inset:0; pointer-events:none;
+  position:absolute; inset:0; pointer-events:none; z-index:2;
   background:
     linear-gradient(to right, oklch(0.15 0.02 250 / .12) 0%, transparent 35%),
-    linear-gradient(to top,   oklch(0.15 0.02 250 / .25) 0%, transparent 30%);
+    linear-gradient(to top,   oklch(0.15 0.02 250 / .30) 0%, transparent 35%);
 }
 
 /* Preis-Pill */
 .price-pill {
-  position:absolute; bottom:clamp(16px,2.5vh,28px); left:clamp(16px,2vw,28px);
+  position:absolute; bottom:clamp(56px,9vh,90px); left:clamp(16px,2vw,28px);
   display:flex; flex-direction:column; gap:2px;
   padding:clamp(8px,1.2vh,14px) clamp(14px,1.6vw,22px);
   background:oklch(0.995 0 0 / .88);
   backdrop-filter:blur(16px) saturate(180%);
   -webkit-backdrop-filter:blur(16px) saturate(180%);
   border:1px solid oklch(1 0 0 / .5); border-radius:14px;
-  box-shadow:0 2px 16px oklch(0.2 0 0 / .10);
+  box-shadow:0 2px 16px oklch(0.2 0 0 / .10); z-index:3;
 }
 .price-pill-l {
   font-size:var(--fs-label); font-weight:700;
@@ -214,6 +225,38 @@ html, body {
   font-family:var(--mono); font-size:var(--fs-mono); font-weight:900;
   color:var(--ink); font-variant-numeric:tabular-nums;
 }
+
+/* Thumbnail-Leiste + Autoplay */
+.gallery-bar {
+  position:absolute; bottom:0; left:0; right:0; z-index:4;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  padding:clamp(8px,1.2vh,14px) clamp(12px,1.5vw,20px);
+  background:linear-gradient(to top, oklch(0.1 0.01 250 / .55) 0%, transparent 100%);
+}
+.thumb {
+  width:clamp(32px,3.8vw,52px); height:clamp(22px,2.8vh,36px);
+  border-radius:6px; overflow:hidden; cursor:pointer; flex-shrink:0;
+  border:2px solid oklch(1 0 0 / .25);
+  transition:border-color .2s, transform .2s, opacity .2s;
+  opacity:.65;
+}
+.thumb:hover  { opacity:.9; transform:scale(1.06); }
+.thumb.active { border-color:var(--accent); opacity:1; transform:scale(1.08); }
+.thumb img    { width:100%; height:100%; object-fit:cover; display:block; }
+/* Farb-Platzhalter für Thumbs ohne Bild */
+.thumb-ph { width:100%; height:100%; }
+
+/* Play / Pause */
+.play-btn {
+  width:clamp(24px,2.6vw,34px); height:clamp(24px,2.6vw,34px);
+  border-radius:50%; background:oklch(0.995 0 0 / .2);
+  border:1.5px solid oklch(1 0 0 / .35);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; flex-shrink:0; margin-left:4px;
+  transition:background .2s;
+}
+.play-btn:hover { background:oklch(0.995 0 0 / .35); }
+.play-btn svg { width:45%; height:45%; stroke:none; fill:#fff; }
 
 /* ── ANIMATIONEN ─────────────────────────────────────────── */
 @keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
@@ -266,15 +309,15 @@ html, body {
     </div>
   </div>
 
-  <!-- RECHTS: RENDERING -->
-  <div class="col-right">
-    <div class="img-placeholder"></div>
-    <img class="rendering-img" id="renderingImg" src="" alt="" loading="eager">
+  <!-- RECHTS: GALERIE -->
+  <div class="col-right" id="colRight">
+    <div class="gallery-track" id="galleryTrack"></div>
     <div class="img-overlay"></div>
     <div class="price-pill">
-      <span class="price-pill-l">Kaufpreis</span>
+      <span class="price-pill-l">Kaufpreis ab</span>
       <span class="price-pill-v" id="priceRange">&#8212;</span>
     </div>
+    <div class="gallery-bar" id="galleryBar"></div>
   </div>
 
 </div>
@@ -345,17 +388,87 @@ function applyProject(P) {
     grid.appendChild(item);
   });
 
-  // Rendering
-  if (P.images?.rendering1) {
-    $('renderingImg').src = P.images.rendering1;
-    $('renderingImg').alt = P.name || '';
+  // Preis
+  if (P.priceFrom) {
+    $('priceRange').textContent = fmtK(P.priceFrom) + (P.priceTo ? ' \u2013 ' + fmtK(P.priceTo) : '');
   }
 
-  // Preis-Range
-  if (P.priceFrom && P.priceTo) {
-    $('priceRange').textContent = fmtK(P.priceFrom) + ' \u2013 ' + fmtK(P.priceTo);
-  }
+  // Galerie aufbauen
+  const imgs = P.images || {};
+  const gallery = (imgs.gallery && imgs.gallery.length)
+    ? imgs.gallery.filter(Boolean)
+    : [imgs.rendering1, imgs.rendering2, imgs.rendering3].filter(Boolean);
+  if (gallery.length) buildGallery(gallery);
 }
+
+/* ── Galerie-Logik ───────────────────────────────────────── */
+let _gallery = [], _cur = 0, _timer = null, _playing = true;
+const AUTOPLAY_MS = 4000;
+
+function buildGallery(imgs) {
+  _gallery = imgs;
+  const track = document.getElementById('galleryTrack');
+  const bar   = document.getElementById('galleryBar');
+  track.innerHTML = ''; bar.innerHTML = '';
+
+  // Slides (Crossfade)
+  imgs.forEach((src, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'gallery-slide' + (i === 0 ? ' active' : '');
+    const img = document.createElement('img');
+    img.className = 'gallery-img';
+    img.src = src; img.alt = ''; img.loading = i === 0 ? 'eager' : 'lazy';
+    slide.appendChild(img);
+    track.appendChild(slide);
+  });
+
+  // Thumbnails
+  const tc = ['oklch(0.78 0.06 70)','oklch(0.74 0.05 215)','oklch(0.76 0.06 155)',
+               'oklch(0.72 0.07 30)','oklch(0.80 0.04 280)','oklch(0.75 0.06 120)'];
+  imgs.forEach((src, i) => {
+    const t = document.createElement('div');
+    t.className = 'thumb' + (i === 0 ? ' active' : '');
+    t.onclick = () => { goTo(i); if (_playing) { stopTimer(); startTimer(); } };
+    const img = document.createElement('img');
+    img.src = src; img.alt = ''; img.loading = 'lazy';
+    t.appendChild(img);
+    bar.appendChild(t);
+  });
+
+  // Play/Pause Button
+  const btn = document.createElement('div');
+  btn.className = 'play-btn'; btn.id = 'playBtn';
+  btn.innerHTML = pauseIcon(); btn.onclick = togglePlay;
+  bar.appendChild(btn);
+
+  startTimer();
+
+  // Pause on hover
+  const col = document.getElementById('colRight');
+  col.addEventListener('mouseenter', () => { if (_playing) stopTimer(); });
+  col.addEventListener('mouseleave', () => { if (_playing) startTimer(); });
+}
+
+function goTo(idx) {
+  const slides = document.querySelectorAll('.gallery-slide');
+  const thumbs = document.querySelectorAll('.thumb');
+  if (!slides.length) return;
+  slides[_cur].classList.remove('active');
+  thumbs[_cur] && thumbs[_cur].classList.remove('active');
+  _cur = ((idx % _gallery.length) + _gallery.length) % _gallery.length;
+  slides[_cur].classList.add('active');
+  thumbs[_cur] && thumbs[_cur].classList.add('active');
+}
+function startTimer() { stopTimer(); _timer = setInterval(() => goTo(_cur + 1), AUTOPLAY_MS); }
+function stopTimer()  { clearInterval(_timer); _timer = null; }
+function togglePlay() {
+  _playing = !_playing;
+  const btn = document.getElementById('playBtn');
+  if (_playing) { startTimer(); if (btn) btn.innerHTML = pauseIcon(); }
+  else          { stopTimer();  if (btn) btn.innerHTML = playIcon();  }
+}
+function playIcon()  { return '<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>'; }
+function pauseIcon() { return '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>'; }
 
 try { if (window.parent?.PROJECT) {
   applyProject(window.parent.PROJECT);
