@@ -9,22 +9,30 @@
   --bg:      oklch(0.98 0.005 85);
   --surface: oklch(0.995 0.003 85);
   --ink:     oklch(0.18 0.02 250);
-  --muted:   oklch(0.50 0.02 250);
-  --subtle:  oklch(0.70 0.01 250);
+  --muted:   oklch(0.45 0.02 250);
+  --subtle:  oklch(0.65 0.01 250);
   --border:  oklch(0.88 0.01 85);
   --accent:  oklch(0.55 0.13 160);
   --pos:     oklch(0.46 0.14 155);
   --neg:     oklch(0.52 0.17 38);
   --font:    "Roboto", system-ui, -apple-system, sans-serif;
   --mono:    ui-monospace, "SFMono-Regular", Menlo, monospace;
-  /* Typo-Tokens – werden per postMessage überschrieben */
-  --fs-eyebrow: clamp(9px,.75vw,11px);
-  --fs-headline: clamp(1.2rem,1.9vw,2.2rem);
-  --fs-body:    clamp(0.82rem,.95vw,1.05rem);
-  --fs-label:   clamp(9px,.72vw,11px);
-  --fs-mono:    clamp(11px,.92vw,14px);
-  --fs-monoLg:  clamp(1.4rem,2.4vw,3rem);
-  --logo-header: clamp(22px,2.6vh,38px);
+  --logo-header:  clamp(22px, 2.6vh, 38px);
+  /* Layout-Tokens (Master-Standard) */
+  --pad-v:        clamp(24px, 3.5vh, 48px);
+  --pad-h:        clamp(28px, 3.5vw, 56px);
+  --header-gap:   clamp(14px, 2vh, 24px);   /* kleiner als Master: Tool-Slide, mehr Inhalt */
+  --content-gap:  clamp(8px, 1.2vh, 16px);
+  /* Typo-Tokens (Fallbacks – per postMessage überschreibbar) */
+  --fs-eyebrow:  clamp(9px, 0.75vw, 11px);
+  --fs-headline: clamp(1.2rem, 1.9vw, 2.2rem);
+  --fs-subline:  clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:     clamp(0.82rem, 0.95vw, 1.05rem);
+  --fs-label:    clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:    clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:    clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:     clamp(11px, 0.92vw, 14px);
+  --fs-monoLg:   clamp(1.4rem, 2.4vw, 3rem);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
@@ -33,7 +41,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
 
 /* ── LINKS ───────────────────────────────────────────────── */
 .col-left{display:flex;flex-direction:column;
-  padding:clamp(16px,2.4vh,32px) clamp(16px,2vw,32px);
+  padding:var(--pad-v) var(--pad-h);
   position:relative;overflow:hidden;border-right:1px solid var(--border)}
 .col-left::before{content:'';position:absolute;inset:0;pointer-events:none;
   background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px);
@@ -45,7 +53,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);
 
 .header{position:relative;z-index:1;flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:clamp(10px,1.6vh,20px)}
+  margin-bottom:var(--header-gap)}
 .dev-logo{height:var(--logo-header);width:auto;object-fit:contain}
 .slide-num{font-size:var(--fs-eyebrow);font-weight:700;letter-spacing:.18em;
   text-transform:uppercase;color:var(--subtle)}
@@ -1071,7 +1079,10 @@ function applyProject(proj) {
   syncEKfromModus();
 }
 
-try { if (window.parent?.PROJECT) applyProject(window.parent.PROJECT); } catch(e){}
+try { if (window.parent?.PROJECT) {
+  applyProject(window.parent.PROJECT);
+  applyUITokens(window.parent.PROJECT?.ui);
+}} catch(e){}
 window.addEventListener('message', e => {
   if (e.data?.type === 'PROJECT_DATA') {
     applyProject(e.data.data);
