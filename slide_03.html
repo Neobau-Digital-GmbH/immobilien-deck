@@ -6,15 +6,28 @@
 <title>Standort</title>
 <style>
 :root {
-  --bg:      oklch(0.98 0.005 85);
-  --surface: oklch(0.995 0.003 85);
-  --ink:     oklch(0.18 0.02 250);
-  --muted:   oklch(0.50 0.02 250);
-  --subtle:  oklch(0.70 0.01 250);
-  --border:  oklch(0.88 0.01 85);
-  --accent:  oklch(0.55 0.13 160);
-  --font:    "Roboto", system-ui, -apple-system, sans-serif;
-  --map-bg:  oklch(0.88 0.02 180);
+  --bg:       oklch(0.98 0.005 85);
+  --surface:  oklch(0.995 0.003 85);
+  --ink:      oklch(0.18 0.02 250);
+  --muted:    oklch(0.45 0.02 250);
+  --subtle:   oklch(0.65 0.01 250);
+  --border:   oklch(0.88 0.01 85);
+  --accent:   oklch(0.55 0.13 160);
+  --map-bg:   oklch(0.88 0.02 180);
+  --font:     "Roboto", system-ui, -apple-system, sans-serif;
+  --logo-header: clamp(22px, 2.6vh, 38px);
+  --fs-eyebrow:  clamp(9px, 0.75vw, 11px);
+  --fs-headline: clamp(1.5rem, 2.5vw, 3rem);
+  --fs-subline:  clamp(0.9rem, 1.1vw, 1.25rem);
+  --fs-body:     clamp(0.85rem, 1vw, 1.12rem);
+  --fs-label:    clamp(9px, 0.72vw, 11px);
+  --fs-kpiLg:    clamp(1.8rem, 3.2vw, 3.8rem);
+  --fs-kpiSm:    clamp(1.1rem, 1.9vw, 2.2rem);
+  --fs-mono:     clamp(11px, 0.95vw, 14px);
+  --fs-monoLg:   clamp(1.3rem, 2.1vw, 2.6rem);
+  --pad-v:       clamp(24px, 3.5vh, 48px);
+  --pad-h:       clamp(28px, 3.5vw, 56px);
+  --header-gap:  clamp(20px, 3.5vh, 44px);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html, body {
@@ -22,27 +35,24 @@ html, body {
   background:var(--bg); font-family:var(--font);
   -webkit-font-smoothing:antialiased; color:var(--ink);
 }
-
-/* ── LAYOUT ───────────────────────────────────────────────── */
 .slide {
-  display:grid;
-  grid-template-columns: 44fr 56fr;
+  display:grid; grid-template-columns:44fr 56fr;
   width:100vw; height:100vh;
 }
 
-/* ── LINKS ────────────────────────────────────────────────── */
+/* ── LINKE SPALTE ─────────────────────────────────────────── */
 .col-left {
   display:flex; flex-direction:column;
-  padding:clamp(24px,3.5vh,48px) clamp(24px,3vw,48px);
+  padding:var(--pad-v) var(--pad-h);
   position:relative; overflow:hidden;
   border-right:1px solid var(--border);
 }
 .col-left::before {
   content:''; position:absolute; inset:0; pointer-events:none;
-  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px,transparent 1.2px);
+  background-image:radial-gradient(oklch(0.84 0.005 85) 1.2px, transparent 1.2px);
   background-size:28px 28px;
-  mask-image:linear-gradient(160deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 55%);
-  -webkit-mask-image:linear-gradient(160deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 55%);
+  mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
+  -webkit-mask-image:linear-gradient(160deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 55%);
 }
 .col-left::after {
   content:''; position:absolute; left:0; top:20%; bottom:20%;
@@ -50,26 +60,28 @@ html, body {
   background:var(--accent); opacity:.5;
 }
 
+/* HEADER */
 .header {
   position:relative; z-index:1; flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:clamp(16px,2.8vh,36px);
+  margin-bottom:var(--header-gap);
 }
-.dev-logo { height:clamp(22px,2.6vh,38px); width:auto; object-fit:contain; }
-.slide-num {
-  font-size:clamp(9px,.72vw,11px); font-weight:700;
+.dev-logo    { height:var(--logo-header); width:auto; object-fit:contain; }
+.slide-label {
+  font-size:var(--fs-label); font-weight:700;
   letter-spacing:.18em; text-transform:uppercase; color:var(--subtle);
 }
 
-/* Intro */
-.intro-block {
-  position:relative; z-index:1; flex-shrink:0;
-  margin-bottom:clamp(14px,2.2vh,28px);
-  display:flex; flex-direction:column; gap:clamp(8px,1.2vh,14px);
+/* CONTENT: oben, kein Zentrieren */
+.content {
+  position:relative; z-index:1;
+  flex:1; display:flex; flex-direction:column;
+  gap:clamp(8px, 1.2vh, 16px); min-height:0;
 }
+
 .eyebrow {
-  display:flex; align-items:center; gap:8px;
-  font-size:clamp(9px,.75vw,12px); font-weight:700;
+  display:flex; align-items:center; gap:8px; flex-shrink:0;
+  font-size:var(--fs-eyebrow); font-weight:700;
   letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
 }
 .eyebrow::before {
@@ -77,72 +89,69 @@ html, body {
   background:var(--accent); border-radius:2px; flex-shrink:0;
 }
 .headline {
-  font-size:clamp(1.4rem,2.4vw,2.8rem); font-weight:900;
-  letter-spacing:-.025em; line-height:1.05; color:var(--ink);
+  font-size:var(--fs-headline); font-weight:900;
+  letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0;
 }
-.intro-text {
-  font-size:clamp(.82rem,1vw,1.08rem); font-weight:300;
-  color:var(--muted); line-height:1.6;
+.subline {
+  font-size:var(--fs-subline); font-weight:400;
+  color:var(--muted); line-height:1.55; flex-shrink:0;
 }
 
 /* Fakten-Grid 2×3 */
 .facts-grid {
-  position:relative; z-index:1;
   flex:1; display:grid;
   grid-template-columns:1fr 1fr;
-  gap:clamp(7px,.9vh,11px);
-  align-content:start;
-  min-height:0;
+  gap:clamp(7px, 1vh, 12px);
+  align-content:start; min-height:0;
 }
 .fact-card {
-  display:flex; align-items:flex-start; gap:10px;
-  padding:clamp(9px,1.2vh,14px) clamp(10px,1.1vw,15px);
+  display:flex; align-items:flex-start; gap:clamp(10px, 1.1vw, 14px);
+  padding:clamp(10px, 1.3vh, 16px) clamp(12px, 1.2vw, 16px);
   background:var(--surface); border:1px solid var(--border);
-  border-radius:12px; min-height:0;
+  border-radius:12px;
 }
 .fact-icon {
-  flex-shrink:0; width:clamp(16px,1.5vw,22px); height:clamp(16px,1.5vw,22px);
-  margin-top:1px;
+  flex-shrink:0;
+  width:clamp(18px, 1.8vw, 26px); height:clamp(18px, 1.8vw, 26px);
+  display:flex; align-items:center; justify-content:center;
+  background:oklch(from var(--accent) l c h / .09);
+  border:1px solid oklch(from var(--accent) l c h / .22);
+  border-radius:7px; margin-top:1px;
 }
 .fact-icon svg {
-  width:100%; height:100%;
+  width:58%; height:58%;
   stroke:var(--accent); stroke-width:1.8; fill:none;
   stroke-linecap:round; stroke-linejoin:round;
 }
 .fact-text { display:flex; flex-direction:column; gap:2px; min-width:0; }
 .fact-cat {
-  font-size:clamp(8px,.6vw,9.5px); font-weight:700;
+  font-size:var(--fs-label); font-weight:700;
   letter-spacing:.1em; text-transform:uppercase; color:var(--subtle);
   white-space:nowrap;
 }
 .fact-val {
-  font-size:clamp(9px,.78vw,12px); font-weight:500;
+  /* Größer als vorher: --fs-body statt tiny clamp */
+  font-size:var(--fs-body); font-weight:500;
   color:var(--ink); line-height:1.35;
 }
 
-/* Footer */
+/* FOOTER */
 .footer-left {
   position:relative; z-index:1; flex-shrink:0;
-  padding-top:clamp(10px,1.5vh,16px);
+  margin-top:clamp(12px, 2vh, 24px);
+  padding-top:clamp(10px, 1.5vh, 18px);
   border-top:1px solid var(--border);
-  margin-top:clamp(10px,1.5vh,18px);
 }
-.address { font-size:clamp(10px,.8vw,13px); color:var(--subtle); }
+.address { font-size:var(--fs-label); color:var(--subtle); }
 
-/* ── RECHTS — KARTE ───────────────────────────────────────── */
+/* ── RECHTE SPALTE: KARTE ─────────────────────────────────── */
 .col-right {
   position:relative; overflow:hidden;
   background:var(--map-bg);
   border-radius:20px 0 0 20px;
 }
 
-/* Fallback-Bild */
-.map-static {
-  position:absolute; inset:0; width:100%; height:100%;
-  object-fit:cover; display:block;
-}
-
-/* Map-Placeholder wenn kein Embed */
+/* Fallback-Gradient */
 .map-placeholder {
   position:absolute; inset:0;
   background:linear-gradient(145deg,
@@ -151,30 +160,34 @@ html, body {
     oklch(0.78 0.05 185) 100%);
   display:flex; align-items:center; justify-content:center;
 }
-.map-placeholder-icon svg {
-  width:48px; height:48px; opacity:.3;
+.map-placeholder svg {
+  width:52px; height:52px; opacity:.25;
   stroke:var(--ink); stroke-width:1.2; fill:none;
   stroke-linecap:round; stroke-linejoin:round;
+}
+
+/* Statisches Kartenbild */
+.map-static {
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; display:block;
 }
 
 /* Google Maps iframe */
 .map-embed {
   position:absolute; inset:0; width:100%; height:100%;
-  border:none; opacity:0;
-  transition:opacity .5s ease;
+  border:none; opacity:0; transition:opacity .5s ease;
 }
 .map-embed.loaded { opacity:1; }
 
-/* Location-Label unten links über der Karte */
+/* Location-Label */
 .map-label {
-  position:absolute; bottom:clamp(14px,2.2vh,26px); left:clamp(14px,2vw,26px);
+  position:absolute; bottom:clamp(16px,2.5vh,28px); left:clamp(16px,2vw,28px);
   display:flex; align-items:center; gap:8px;
-  padding:clamp(7px,1vh,10px) clamp(12px,1.4vw,18px);
+  padding:clamp(7px,1.1vh,11px) clamp(12px,1.4vw,18px);
   background:oklch(0.995 0 0 / .88);
   backdrop-filter:blur(16px) saturate(180%);
   -webkit-backdrop-filter:blur(16px) saturate(180%);
-  border:1px solid oklch(1 0 0 / .5);
-  border-radius:50px;
+  border:1px solid oklch(1 0 0 / .5); border-radius:50px;
   box-shadow:0 2px 16px oklch(0.2 0 0 / .10);
 }
 .map-dot {
@@ -183,31 +196,30 @@ html, body {
   box-shadow:0 0 0 3px oklch(from var(--accent) l c h / .2);
 }
 .map-label-text {
-  font-size:clamp(10px,.82vw,13px); font-weight:600; color:var(--ink);
-  white-space:nowrap;
+  font-size:var(--fs-label); font-weight:600; color:var(--ink); white-space:nowrap;
 }
 
-/* ── ANIMATIONEN ──────────────────────────────────────────── */
-@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+/* ── ANIMATIONEN ────────────────────────────────────────────── */
+@keyframes up   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 @keyframes fade { from{opacity:0} to{opacity:1} }
 
-.header       { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
-.eyebrow      { animation:up   .55s cubic-bezier(.22,1,.36,1) .1s  both }
-.headline     { animation:up   .65s cubic-bezier(.22,1,.36,1) .18s both }
-.intro-text   { animation:up   .55s cubic-bezier(.22,1,.36,1) .26s both }
-.footer-left  { animation:fade .4s  ease                       .55s both }
-.col-right    { animation:fade .8s  ease                       0s   both }
-.map-label    { animation:up   .55s cubic-bezier(.22,1,.36,1) .7s  both }
+.header      { animation:up   .55s cubic-bezier(.22,1,.36,1) .05s both }
+.eyebrow     { animation:up   .55s cubic-bezier(.22,1,.36,1) .12s both }
+.headline    { animation:up   .65s cubic-bezier(.22,1,.36,1) .20s both }
+.subline     { animation:up   .55s cubic-bezier(.22,1,.36,1) .28s both }
+.footer-left { animation:fade .4s  ease                       .55s both }
+.col-right   { animation:fade .8s  ease                       0s   both }
+.map-label   { animation:up   .55s cubic-bezier(.22,1,.36,1) .65s both }
 
 .fact-card:nth-child(1) { animation:up .5s cubic-bezier(.22,1,.36,1) .32s both }
-.fact-card:nth-child(2) { animation:up .5s cubic-bezier(.22,1,.36,1) .38s both }
-.fact-card:nth-child(3) { animation:up .5s cubic-bezier(.22,1,.36,1) .44s both }
-.fact-card:nth-child(4) { animation:up .5s cubic-bezier(.22,1,.36,1) .50s both }
-.fact-card:nth-child(5) { animation:up .5s cubic-bezier(.22,1,.36,1) .56s both }
-.fact-card:nth-child(6) { animation:up .5s cubic-bezier(.22,1,.36,1) .62s both }
+.fact-card:nth-child(2) { animation:up .5s cubic-bezier(.22,1,.36,1) .37s both }
+.fact-card:nth-child(3) { animation:up .5s cubic-bezier(.22,1,.36,1) .42s both }
+.fact-card:nth-child(4) { animation:up .5s cubic-bezier(.22,1,.36,1) .47s both }
+.fact-card:nth-child(5) { animation:up .5s cubic-bezier(.22,1,.36,1) .52s both }
+.fact-card:nth-child(6) { animation:up .5s cubic-bezier(.22,1,.36,1) .57s both }
 
 @media (prefers-reduced-motion:reduce) {
-  * { animation:none!important; opacity:1!important; transform:none!important }
+  * { animation:none !important; opacity:1 !important; transform:none !important }
 }
 </style>
 </head>
@@ -216,50 +228,52 @@ html, body {
 
   <!-- LINKS -->
   <div class="col-left">
-
     <div class="header">
       <img class="dev-logo" id="devLogo" src="" alt="">
-      <span class="slide-num">Standort</span>
+      <span class="slide-label">Standort</span>
     </div>
-
-    <div class="intro-block">
+    <div class="content">
       <div class="eyebrow" id="eyebrow">Lage &amp; Infrastruktur</div>
-      <h2 class="headline" id="headline">—</h2>
-      <p  class="intro-text" id="introText">—</p>
+      <h2 class="headline" id="headline">&#8212;</h2>
+      <p  class="subline"  id="subline">&#8212;</p>
+      <div class="facts-grid" id="factsGrid"></div>
     </div>
-
-    <div class="facts-grid" id="factsGrid"></div>
-
     <div class="footer-left">
-      <span class="address" id="address">—</span>
+      <span class="address" id="address">&#8212;</span>
     </div>
   </div>
 
-  <!-- RECHTS — KARTE -->
+  <!-- RECHTS: KARTE -->
   <div class="col-right">
     <div class="map-placeholder">
-      <div class="map-placeholder-icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
-          <circle cx="12" cy="10" r="3"/>
-        </svg>
-      </div>
+      <svg viewBox="0 0 24 24">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
     </div>
     <img  class="map-static" id="mapStatic" src="" alt="">
-    <iframe class="map-embed" id="mapEmbed"
-            src="" loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
+    <iframe class="map-embed" id="mapEmbed" src=""
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"
             allowfullscreen></iframe>
     <div class="map-label">
       <div class="map-dot"></div>
-      <span class="map-label-text" id="mapLabelText">—</span>
+      <span class="map-label-text" id="mapLabelText">&#8212;</span>
     </div>
   </div>
 
 </div>
-
 <script>
-// Icon-Definitionen (Lucide-style, inline SVG)
+function applyUITokens(ui) {
+  if (!ui) return;
+  const r = document.documentElement;
+  if (ui.fontSans)   r.style.setProperty('--font',        ui.fontSans);
+  if (ui.fontMono)   r.style.setProperty('--font-mono',   ui.fontMono);
+  if (ui.logoHeader) r.style.setProperty('--logo-header', ui.logoHeader);
+  if (ui.type) Object.entries(ui.type).forEach(([k, v]) =>
+    r.style.setProperty('--fs-' + k, v)
+  );
+}
+
 const ICONS = {
   transit:   '<path d="M8 2h8l2 4H6L8 2z"/><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 18v3M16 18v3M9 12h6"/>',
   city:      '<rect x="3" y="3" width="7" height="18"/><rect x="14" y="8" width="7" height="13"/><path d="M3 21h18"/>',
@@ -268,14 +282,13 @@ const ICONS = {
   employers: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2M12 12v4M10 14h4"/>',
   green:     '<path d="M12 22V8"/><path d="M5 12C5 7 9 3 12 3s7 4 7 9c0 5-7 10-7 10S5 17 5 12z"/>',
 };
-
 const CATS = [
-  { key:'transit',   label:'Anbindung' },
-  { key:'city',      label:'Innenstadt' },
-  { key:'shopping',  label:'Nahversorgung' },
-  { key:'schools',   label:'Bildung' },
-  { key:'employers', label:'Wirtschaft' },
-  { key:'green',     label:'Naherholung' },
+  { key:'transit',   label:'Anbindung'    },
+  { key:'city',      label:'Innenstadt'   },
+  { key:'shopping',  label:'Nahversorgung'},
+  { key:'schools',   label:'Bildung'      },
+  { key:'employers', label:'Wirtschaft'   },
+  { key:'green',     label:'Naherholung'  },
 ];
 
 function applyProject(P) {
@@ -288,19 +301,15 @@ function applyProject(P) {
   $('devLogo').alt = P.developer     || '';
   $('address').textContent = P.address || '';
 
-  // Eyebrow + Headline je nach Zielgruppe
   const isKA = P.audience !== 'EN';
   $('eyebrow').textContent =
-    isKA ? 'Lage & Vermietbarkeit' : 'Lage & Lebensqualit\u00e4t';
-  $('headline').textContent =
-    P.location ? P.location + '.' : '\u2014';
-  $('introText').textContent = P.locationIntro || '';
-
-  // Map-Label
+    isKA ? 'Lage \u0026 Vermietbarkeit' : 'Lage \u0026 Lebensqualit\u00e4t';
+  $('headline').textContent = P.location ? P.location + '.' : '\u2014';
+  $('subline').textContent  = P.locationIntro || '';
   $('mapLabelText').textContent = P.location || '';
 
-  // Karte
-  const lf = P.locationFacts || {};
+  // Fakten-Grid
+  const lf   = P.locationFacts || {};
   const grid = $('factsGrid');
   grid.innerHTML = '';
   CATS.forEach(c => {
@@ -308,22 +317,22 @@ function applyProject(P) {
     const card = document.createElement('div');
     card.className = 'fact-card';
     card.innerHTML =
-      `<div class="fact-icon"><svg viewBox="0 0 24 24">${ICONS[c.key] || ''}</svg></div>` +
-      `<div class="fact-text">` +
-        `<span class="fact-cat">${c.label}</span>` +
-        `<span class="fact-val">${lf[c.key]}</span>` +
-      `</div>`;
+      '<div class="fact-icon">' +
+        '<svg viewBox="0 0 24 24">' + (ICONS[c.key] || '') + '</svg>' +
+      '</div>' +
+      '<div class="fact-text">' +
+        '<span class="fact-cat">' + c.label + '</span>' +
+        '<span class="fact-val">' + lf[c.key]  + '</span>' +
+      '</div>';
     grid.appendChild(card);
   });
 
-  // Statisches Kartenbild
+  // Karte
   if (P.images?.mapStatic) {
     const img = $('mapStatic');
     img.src = P.images.mapStatic;
     img.alt = P.location || '';
   }
-
-  // Google Maps Embed
   if (P.mapEmbedUrl && !P.mapEmbedUrl.includes('PLACEHOLDER')) {
     const iframe = $('mapEmbed');
     iframe.src = P.mapEmbedUrl;
@@ -331,9 +340,16 @@ function applyProject(P) {
   }
 }
 
-try { if (window.parent?.PROJECT) applyProject(window.parent.PROJECT); } catch(e){}
+try { if (window.parent?.PROJECT) {
+  applyProject(window.parent.PROJECT);
+  applyUITokens(window.parent.PROJECT?.ui);
+}} catch(e) {}
+
 window.addEventListener('message', e => {
-  if (e.data?.type === 'PROJECT_DATA') applyProject(e.data.data);
+  if (e.data?.type === 'PROJECT_DATA') {
+    applyProject(e.data.data);
+    applyUITokens(e.data.ui);
+  }
 });
 </script>
 </body>
