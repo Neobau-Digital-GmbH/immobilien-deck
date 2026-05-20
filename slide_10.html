@@ -84,34 +84,58 @@ html, body {
 }
 .headline { font-size:var(--fs-headline); font-weight:900; letter-spacing:-.025em; line-height:1.05; color:var(--ink); flex-shrink:0; }
 
-/* Prozess-Timeline */
+/* Prozess-Timeline — visuell stark */
 .process {
   flex:1; display:flex; flex-direction:column;
   justify-content:center; gap:0; min-height:0;
 }
-.proc-item { display:flex; gap:clamp(12px,1.5vw,20px); }
+.proc-item { display:flex; gap:clamp(14px,1.8vw,24px); }
 .proc-left { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+
+/* Großer Kreis mit Icon */
 .proc-circle {
-  width:clamp(32px,3.2vw,44px); height:clamp(32px,3.2vw,44px);
+  width:clamp(44px,5vw,62px); height:clamp(44px,5vw,62px);
   border-radius:50%; border:2px solid var(--border);
-  display:flex; align-items:center; justify-content:center;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:1px;
   background:var(--surface); flex-shrink:0; position:relative; z-index:1;
+  transition:background .3s, border-color .3s;
 }
-.proc-circle.final { background:var(--accent); border-color:var(--accent); }
+.proc-circle.final {
+  background:var(--accent); border-color:var(--accent);
+  box-shadow:0 4px 16px oklch(from var(--accent) l c h / .3);
+}
+.proc-icon { display:flex; align-items:center; justify-content:center; }
+.proc-icon svg {
+  width:clamp(16px,1.8vw,22px); height:clamp(16px,1.8vw,22px);
+  stroke:var(--accent); stroke-width:1.8; fill:none;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+.proc-circle.final .proc-icon svg { stroke:#fff; }
 .proc-num {
-  font-family:var(--mono); font-size:var(--fs-label);
-  font-weight:900; color:var(--subtle); font-variant-numeric:tabular-nums;
+  font-family:var(--mono); font-size:clamp(8px,.62vw,10px);
+  font-weight:700; color:var(--subtle); font-variant-numeric:tabular-nums;
+  line-height:1;
 }
-.proc-circle.final .proc-num { color:#fff; }
+.proc-circle.final .proc-num { color:oklch(1 0 0 / .7); }
+
+/* Verbindungslinie dicker und akzentuierter */
 .proc-line {
-  width:2px; flex:1; min-height:clamp(16px,2.5vh,32px);
-  background:var(--border); margin:3px 0;
+  width:2px; flex:1; min-height:clamp(18px,3vh,38px);
+  background:var(--border); margin:4px 0;
+  border-radius:2px;
 }
-.proc-content { padding-bottom:clamp(14px,2.2vh,28px); display:flex; flex-direction:column; gap:4px; padding-top:clamp(5px,.8vh,9px); }
+.proc-line.pre-final { background:linear-gradient(to bottom, var(--border), oklch(from var(--accent) l c h / .4)); }
+
+.proc-content {
+  padding-bottom:clamp(14px,2.5vh,32px);
+  display:flex; flex-direction:column; gap:4px;
+  padding-top:clamp(8px,1.2vh,14px);
+}
 .proc-item:last-child .proc-content { padding-bottom:0; }
-.proc-label { font-size:var(--fs-body); font-weight:900; color:var(--ink); line-height:1.1; }
+.proc-label { font-size:var(--fs-subline); font-weight:900; color:var(--ink); line-height:1.1; }
 .proc-item:last-child .proc-label { color:var(--accent); }
-.proc-desc  { font-size:var(--fs-label); color:var(--muted); line-height:1.45; }
+.proc-desc  { font-size:var(--fs-body); color:var(--muted); line-height:1.45; }
 
 /* FOOTER */
 .footer-left {
@@ -342,14 +366,22 @@ function applyProject(P) {
 
   steps.forEach((s, i) => {
     const isFinal = i === steps.length - 1;
+    const STEP_ICONS = [
+      '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="13" x2="12" y2="17"/><line x1="10" y1="15" x2="14" y2="15"/>',
+      '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>',
+      '<path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/>',
+      '<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>',
+    ];
+    const preFinal = i === steps.length - 2;
     const item = document.createElement('div');
     item.className = 'proc-item';
     item.innerHTML =
       '<div class="proc-left">' +
         '<div class="proc-circle' + (isFinal ? ' final' : '') + '">' +
+          '<div class="proc-icon"><svg viewBox="0 0 24 24">' + (STEP_ICONS[i]||STEP_ICONS[0]) + '</svg></div>' +
           '<span class="proc-num">' + (s.step || String(i+1).padStart(2,'0')) + '</span>' +
         '</div>' +
-        (!isFinal ? '<div class="proc-line"></div>' : '') +
+        (!isFinal ? '<div class="proc-line' + (preFinal ? ' pre-final' : '') + '"></div>' : '') +
       '</div>' +
       '<div class="proc-content">' +
         '<div class="proc-label">' + (s.label||'') + '</div>' +
